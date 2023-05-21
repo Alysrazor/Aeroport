@@ -9,6 +9,7 @@ import aeroport.persona.Cliente;
 import aeroport.persona.Reserva;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -108,5 +109,94 @@ public class Vuelo
         this.l_Escalas = p_Escalas;
     }
     
+    /**
+     * Obtiene el identificador del {@link Vuelo}
+     * @return Un {@link String} con el identificador del {@link Vuelo}
+     */
+    public String GetIdentificador()
+    {
+        return this.l_Identificador;
+    }
     
+    /**
+     * Obtiene la {@link PuertaEmbarque} del {@link Vuelo}
+     * @return Una {@link PuertaEmbarque}
+     */
+    public PuertaEmbarque GetPuertaEmbarque()
+    {
+        return this.l_Puerta;
+    }
+    
+    /**
+     * Obtiene el origen del {@link Vuelo}
+     * @return Un {@link String} que contiene el origen del {@link Vuelo}
+     */
+    public String GetOrigen()
+    {
+        return this.l_Origen;
+    }
+    
+    /**
+     * Obtiene el destino del {@link Vuelo}
+     * @return Un {@link String} que contiene el destino del {@link Vuelo}
+     */
+    public String GetDestino()
+    {
+        return this.l_Destino;
+    }
+    
+    /**
+     * Obtiene la Fecha y la Hora del {@link Vuelo}
+     * @return Un {@link LocalDateTime} del {@link Vuelo}
+     */
+    public LocalDateTime GetHoraVuelo()
+    {
+        return this.l_HoraVuelo;
+    }
+    
+    /**
+     * Establece una nueva fecha y hora para el {@link Vuelo}
+     * @param p_Time La nueva fecha y hora del {@link Vuelo}
+     * @throws IllegalArgumentException Si se intenta poner un {@link LocalDateTime} anterior a la fecha y hora del {@link Vuelo}
+     */
+    public void SetHoraVuelo(LocalDateTime p_Time) throws IllegalArgumentException
+    {
+        if (this.l_HoraVuelo.isAfter(p_Time))
+            throw new IllegalArgumentException("Debes especificar una fecha y hora posteriores.");
+        
+        this.l_HoraVuelo = p_Time;
+    }
+    
+    /**
+     * Obtiene las escalas del {@link Vuelo}
+     * @return Un {@link Integer} con el número de escalas del {@link Vuelo}
+     */
+    public int GetEscalas()
+    {
+        return this.l_Escalas;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.l_Identificador);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vuelo other = (Vuelo) obj;
+        return Objects.equals(this.l_Identificador, other.l_Identificador);
+    }
+    
+    //TODO toString
 }
