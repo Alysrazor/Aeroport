@@ -31,12 +31,12 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     /**
      * Terminal donde está instalada esta {@link PuertaEmbarque}
      */
-    private Terminal l_Terminal;
+    //private Terminal l_Terminal;
     
     /**
      * Identificador de la Puerta.
      */
-    private int l_Puerta;
+    private final int l_Puerta;
     
     /**
      * Avión que efectuará el {@link Vuelo}
