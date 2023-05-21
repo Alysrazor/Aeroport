@@ -6,9 +6,6 @@
 package aeroport;
 
 
-import static java.lang.System.*;
-
-
 /**
  *
  * Clase que define las Puertas de Embarque de un {@link Aeroport}
@@ -46,10 +43,9 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
      */
     private Avion l_Avion;
     
-    public PuertaEmbarque(Terminal p_Terminal, Avion p_Avion)
+    public PuertaEmbarque(Avion p_Avion)
     {
         this.l_Puerta = l_Count++;
-        this.l_Terminal = p_Terminal;
         this.l_Avion = p_Avion;
     }
     
@@ -60,6 +56,15 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     public int GetPuerta()
     {
         return this.l_Puerta;
+    }
+    
+    /**
+     * Obtiene la {@link Terminal} donde se encuentra alojada la {@link PuertaEmbarque}
+     * @return Una {@link Terminal}
+     */
+    public Terminal GetTerminal()
+    {
+        return null; //TODO Devolver la Terminal correctamente
     }
     
     /**
