@@ -5,6 +5,8 @@
 
 package aeroport;
 
+import aeroport.persona.Cliente;
+
 
 /**
  *
@@ -17,8 +19,10 @@ package aeroport;
  * </p>
  * 
  * @author Sergio Capilla Cabadés
- * @fecha 19 may 2023 18:17:20
- * @company Ciclo Superior de Informática
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 19 may 2023 18:17:20
+ * @my.company Ciclo Superior de Informática
  */
 
 public class PuertaEmbarque implements Comparable<PuertaEmbarque>

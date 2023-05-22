@@ -4,6 +4,8 @@
  */
 package aeroport.persona;
 
+import aeroport.Aeroport;
+
 import java.time.LocalDate;
 
 import java.util.HashSet;
@@ -11,22 +13,24 @@ import java.util.Objects;
 
 /**
  *
- * Clase que representa a un {@link Cliente} en el {@link Aeropuerto}
+ * Clase que representa a un {@link Cliente} en el {@link Aeroport}
  * 
- * <p>
- *      El {@link Cliente} puede realizar las operaciones básicas y comunes de un {@link Aeropuerto}
- *          <ul>
- *              <li>Realizar una reserva (lo simulamos ya que no podemos acceder aún a una página web)</li>
- *              <li>Revisar, modificar y actualizar sus datos</li>
- *              <li>Modificar las reservas</li>
- *              <li>Ver las reservas realizadas</li>
- *              <li>Registrar su equipaje</li>
- *              <li>Embarcar en su avión</li>
- *          </ul>
- * </p>
+ * 
+ * El {@link Cliente} puede realizar las operaciones básicas y comunes de un {@link Aeroport}
+ *     <ul>
+ *         <li>Realizar una reserva (lo simulamos ya que no podemos acceder aún a una página web)</li>
+ *         <li>Revisar, modificar y actualizar sus datos</li>
+ *         <li>Modificar las reservas</li>
+ *         <li>Ver las reservas realizadas</li>
+ *          <li>Registrar su equipaje</li>
+ *          <li>Embarcar en su avión</li>
+ *     </ul>
+ * 
  * 
  * 
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 19 may 2023 11:51:20
  */
 public class Cliente extends Persona
@@ -146,7 +150,7 @@ public class Cliente extends Persona
     
     /**
      * Obtiene la información completa del equipaje del {@link Cliente}
-     * @return 
+     * @return Un {@link HashSet} de {@link Equipaje}
      */
     public String GetEquipaje()
     {

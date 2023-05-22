@@ -9,7 +9,10 @@ package aeroport.persona;
  * Clase que representa a un equipaje que puede llevar un {@link Cliente}
  * 
  * @author Sergio Capilla Cabadés
+ * @dev.main 
+ * @dev.codevs
  * @my.fecha 19 may 2023 11:54:40
+ * @my.company Ciclo Superior de Informática
  */
 public class Equipaje 
 {
