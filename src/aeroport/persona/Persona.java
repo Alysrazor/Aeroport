@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package aeroport.persona;
 
 import aeroport.Aeroport;
@@ -43,7 +39,9 @@ public abstract class Persona implements Comparable<Persona>, Serializable
      * Atributo que identifica los apellidos de {@link Persona}
      */
     protected String l_Apellidos;
-    
+    /**
+     * Atributo que identifica la fecha de nacimeinto de {@link Persona}
+     */
     protected LocalDate l_FechaNac;
     
     /**
@@ -51,7 +49,7 @@ public abstract class Persona implements Comparable<Persona>, Serializable
      * @param p_DNI El DNI.
      * @param p_Nombre El nombre.
      * @param p_Apellidos Los apellidos.
-     * @param p_FechaNac La my.fecha de nacimiento.
+     * @param p_FechaNac La fecha de nacimiento.
      */
     public Persona(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac)
     {
