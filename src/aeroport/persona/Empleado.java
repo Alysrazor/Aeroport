@@ -1,17 +1,23 @@
 package aeroport.persona;
 
+import aeroport.Company;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 /**
  *
+ * Clase que representa a un {@link Empleado} de un {@link Aeroport}
+ * 
+ * Un {@link Empleado} puede ser a su vez {@link Piloto} y {@link AuxiliarVuelo}
+ * que serán los trabajadores del {@link Aeroport}
+ * 
  * @author Sergio Capilla Cabadés
  * @dev.main Julián Alcázar Escobedo
- * @dev.codevs 
+ * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 22 may 2023 6:27:58
  * @my.company Ciclo Superior de Informática
  */
-
 public class Empleado extends Persona
 {
     /**
@@ -35,10 +41,7 @@ public class Empleado extends Persona
      */
     public Empleado (String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company)
     {
-        this.l_DNI = p_DNI;
-        this.l_Nombre = p_Nombre;
-        this.l_Apellidos = p_Apellidos;
-        this.l_FechaNac = p_FechaNac;
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_CodEmpleado = p_CodEmpleado;
         this.l_Company = p_Company;
     }
@@ -63,6 +66,7 @@ public class Empleado extends Persona
     
     /**
      * Cambia el valor de la {@link Company} de {@link Empleado}
+     * @param p_Company La nueva {@link Company} del {@link Empleado}
      */
     public void SetCompany(Company p_Company) 
     {
