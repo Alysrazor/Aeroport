@@ -26,8 +26,10 @@ import java.util.Objects;
  * </p>
  * 
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 19 may 2023 16:20:03
- * @company Ciclo Superior de Informática
+ * @my.company Ciclo Superior de Informática
  * 
  */
 public class Vuelo 
@@ -67,7 +69,7 @@ public class Vuelo
      * 
      * <p>
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
-     *      por los {@link Clientes}.
+     *      por los {@link Cliente}.
      * </p>
      * @param p_Identificador El identificador único de cada {@link Vuelo}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
@@ -90,7 +92,7 @@ public class Vuelo
      * 
      * <p>
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
-     *      por los {@link Clientes}.
+     *      por los {@link Cliente}.
      * </p>
      * @param p_Identificador El identificador único de cada {@link Vuelo}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}

@@ -18,7 +18,10 @@ package aeroport.persona;
  * 
  * 
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 19 may 2023 12:28:20
+ * @my.company Ciclo Superior de Informática
  */
 public enum TipoBillete
 {

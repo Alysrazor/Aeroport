@@ -4,6 +4,8 @@
  */
 package aeroport.persona;
 
+import aeroport.Aeroport;
+
 import java.io.Serializable;
 
 import java.time.LocalDate;
@@ -11,16 +13,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * Clase que representa a una persona en el {@link Aeropuerto}
+ * Clase que representa a una persona en el {@link Aeroport}
  * 
  * <p>
  *      No se puede instanciar una {@link Persona} porque cada {@link Persona}
- *      tiene su propia funcionalidad, ya sea {@link Cliente} o {@link Piloto}
+ *      tiene su propia funcionalidad, ya sea {@link Cliente} o {@link Empleado}
  * </p>
  * 
  * 
  * @author Sergio Capilla Cabadés
- * @fecha 19 may 23 11:08:10
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 19 may 23 11:08:10
+ * @my.company Ciclo Superior de Informática
  */
 public abstract class Persona implements Comparable<Persona>, Serializable
 {
@@ -46,7 +51,7 @@ public abstract class Persona implements Comparable<Persona>, Serializable
      * @param p_DNI El DNI.
      * @param p_Nombre El nombre.
      * @param p_Apellidos Los apellidos.
-     * @param p_FechaNac La fecha de nacimiento.
+     * @param p_FechaNac La my.fecha de nacimiento.
      */
     public Persona(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac)
     {
@@ -84,7 +89,7 @@ public abstract class Persona implements Comparable<Persona>, Serializable
     }
     
     /**
-     * Obtiene la fecha de nacimiento de la {@link Persona}
+     * Obtiene la my.fecha de nacimiento de la {@link Persona}
      * @return Un {@link LocalDate} formateado con {@link DateTimeFormatter}
      */
     public String GetFechaNacimieneto()

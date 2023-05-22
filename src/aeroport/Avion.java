@@ -6,14 +6,14 @@
 package aeroport;
 
 
-import static java.lang.System.*;
-
 
 /**
  *
  * @author Sergio Capilla Cabadés
- * @fecha 19 may 2023 17:02:10
- * @company Ciclo Superior de Informática
+ * @dev.main
+ * @dev.codevs
+ * @my.fecha 19 may 2023 17:02:10
+ * @my.company Ciclo Superior de Informática
  */
 
 public abstract class Avion 

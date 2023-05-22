@@ -18,8 +18,10 @@ import java.security.NoSuchAlgorithmException;
  * Clase para encriptar las contraseñas del {@link Cliente}
  * 
  * @author Sergio Capilla Cabadés
- * @fecha 19 may 2023 16:35:47
- * @company Ciclo Superior de Informática
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 19 may 2023 16:35:47
+ * @my.company Ciclo Superior de Informática
  */
 public class CryptSHA1 
 {

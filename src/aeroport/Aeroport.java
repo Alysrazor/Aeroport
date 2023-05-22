@@ -7,16 +7,11 @@ package aeroport;
 /**
  *
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 19/05/2023 11:52:50
  */
 public class Aeroport 
 {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
     
 }

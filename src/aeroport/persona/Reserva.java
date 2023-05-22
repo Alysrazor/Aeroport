@@ -18,6 +18,8 @@ import java.util.Objects;
  * </p>
  * 
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 19 may 2023 12:08:50
  */
 public class Reserva 

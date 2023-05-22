@@ -15,15 +15,29 @@ import java.util.TreeSet;
  * estarán las {@link PuertaEmbarque}
  * 
  * @author Sergio Capilla Cabadés
- * @fecha 19 may 2023 18:10:52
- * @company Ciclo Superior de Informática
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 19 may 2023 18:10:52
+ * @my.company Ciclo Superior de Informática
  */
 
 public class Terminal 
 {
+    /**
+     * El nombre de la {@link Terminal}
+     */
     private String l_Nombre;
+    
+    /**
+     * Un {@link TreeSet} de {@link PuertaEmbarque}
+     */
     private TreeSet<PuertaEmbarque> l_Puertas;
     
+    /**
+     * Constructor por defecto de las {@link Terminal} donde cada instancia tendrá sus {@link PuertaEmbarque}
+     * @param p_Nombre El nombre de la {@link Terminal}
+     * @param p_Puertas Un {@link TreeSet} con las {@link PuertaEmbarque}
+     */
     public Terminal(String p_Nombre, TreeSet<PuertaEmbarque> p_Puertas)
     {
         this.l_Nombre = p_Nombre;
