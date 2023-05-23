@@ -1,33 +1,24 @@
 package aeroport;
 
-import aeroport.Avion;
 /**
+ * Clase que representa una {@link PistaPublica} en el {@link Aeroport}
+ * 
  * @author Luis Tomas Sahuquilo
  * @dev.main Luis Tomas Sahuquilo
- * @dev.codevs
+ * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:20:52
  * @my.company Ciclo Superior de Informática
  */
 public class PistaPublica extends Pista{
 
-    public PistaPublica(int ID, String NombrePista, Avion Avion) {
-        super(ID, NombrePista, Avion);
+    /**
+     * Constructor por defecto de {@link PistaPublica}
+     * @param p_ID El identificador
+     * @param p_NombrePista El nombre de la {@link PistaPublica}
+     * @param p_Avion El {@link Avion}
+     */
+    public PistaPublica(int p_ID, String p_NombrePista, Avion p_Avion) 
+    {
+        super(p_ID, p_NombrePista, p_Avion);
     }
-
-    public int getID() {
-        return ID;
-    }
-
-    public String getNombrePista() {
-        return NombrePista;
-    }
-
-    public Avion getAvion() {
-        return Avion;
-    }
-
-    public void setAvion(Avion Avion) {
-        this.Avion = Avion;
-    }
-
 }

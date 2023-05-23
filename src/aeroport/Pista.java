@@ -5,7 +5,7 @@ package aeroport;
  *
  * @author Luis Tomas Sahuquilo
  * @dev.main Luis Tomas Sahuquilo
- * @dev.codevs
+ * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:10:52
  * @my.company Ciclo Superior de Informática
  */
@@ -65,6 +65,18 @@ public abstract class Pista {
     public Avion GetAvion() 
     {
         return this.l_Avion;
+    }
+    
+    /**
+     * Establece el {@link Avion} de la {@link Pista}
+     * @param p_Avion El {@link Avion} que está aterrizando.
+     * @throws Exception Si ya hay un {@link Avion} en la {@link Pista}
+     */
+    public void SetAvion(Avion p_Avion) throws Exception
+    {
+        if (this.l_Avion != null)
+            throw new Exception("No puedes aterrizar si hay un avión en esa pista.");
+        this.l_Avion = p_Avion;
     }
 
     @Override
