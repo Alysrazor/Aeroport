@@ -12,7 +12,7 @@ import aeroport.persona.Piloto;
  * </p>
  *
  * @author Sergio Capilla Cabadés
- * @dev.Julián Alcázar Escobedo
+ * @dev.main Julián Alcázar Escobedo
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 19 may 2023 17:02:10
  * @my.company Ciclo Superior de Informática
