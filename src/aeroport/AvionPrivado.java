@@ -1,8 +1,24 @@
 package aeroport;
 
 import aeroport.persona.Piloto;
+
 import java.util.Objects;
 
+/**
+ *
+ * Clase que representa a un {@link AvionPrivado}
+ * 
+ * <p>
+ *      Un {@link AvionPrivado} tiene menos {@link Asiento} que un {@link AvionPublico}
+ *      y aterriza en las {@link PistaPrivada}
+ * </p>
+ * 
+ * @author Sergio Capilla Cabadés
+ * @dev.main Julián Alcázar Escobezo
+ * @dev.codevs Sergio Capilla Cabadés
+ * @my.fecha 19 may 2023 17:02:10
+ * @my.company Ciclo Superior de Informática
+ */
 public class AvionPrivado extends Avion 
 {
     /**
@@ -42,7 +58,7 @@ public class AvionPrivado extends Avion
     
     /**
      * Obtiene la cantidad de asientos de {@link AvionPrivado}
-     * @return Un {@link Asientos[][]} que contiene la cantidad de asientos de {@link AvionPrivado}
+     * @return Un {@link Asiento} que contiene la cantidad de asientos de {@link AvionPrivado}
      */
     public Asiento[][] GetAsientos() 
     {
@@ -61,15 +77,15 @@ public class AvionPrivado extends Avion
     @Override
     public boolean equals(Object obj) 
     {
-        if (this == obj) {
+        if (this == obj) 
             return true;
-        }
-        if (obj == null) {
+        
+        if (obj == null) 
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        
+        if (getClass() != obj.getClass()) 
             return false;
-        }
+        
         
         final AvionPrivado other = (AvionPrivado) obj;
         return Objects.equals(this.l_Identificador, other.l_Identificador);
