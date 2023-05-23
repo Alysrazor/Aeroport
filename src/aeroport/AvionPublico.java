@@ -1,8 +1,25 @@
 package aeroport;
 
 import aeroport.persona.Piloto;
+
 import java.util.Objects;
 
+/**
+ *
+ * Clase que representa a un {@link AvionPublico}
+ * 
+ * <p>
+ *      Es el tipo de {@link Avion} más común ya que lleva a una mayor cantidad
+ *      de {@link Cliente} que los {@link AvionPrivado}<br><br>
+ *      Solo pueden aterrizar en las {@link PistaPublica}
+ * </p>
+ * 
+ * @author Sergio Capilla Cabadés
+ * @dev.main Julián Alcázar Escobezo
+ * @dev.codevs Sergio Capilla Cabadés
+ * @my.fecha 19 may 2023 17:02:10
+ * @my.company Ciclo Superior de Informática
+ */
 public class AvionPublico extends Avion 
 {
     
@@ -43,7 +60,7 @@ public class AvionPublico extends Avion
     
     /**
      * Obtiene la cantidad de asientos de {@link AvionPublico}
-     * @return Un {@link Asientos[][]} que contiene la cantidad de asientos de {@link AvionPublico}
+     * @return Un {@link Asiento} que contiene la cantidad de asientos de {@link AvionPublico}
      */
     public Asiento[][] GetAsientos() 
     {
