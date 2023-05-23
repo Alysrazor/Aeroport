@@ -8,12 +8,12 @@ import aeroport.persona.Piloto;
  *
  * <p>
  * Esta clase representa un concepto abstracto de un {@link Avion} que puede
- * realizar {@link vuelo} y aterrizar en {@link pista}.
+ * realizar {@link Vuelo} y aterrizar en una {@link Pista}.
  * </p>
  *
  * @author Sergio Capilla Cabadés
  * @dev.Julián Alcázar Escobedo
- * @dev.codevs
+ * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 19 may 2023 17:02:10
  * @my.company Ciclo Superior de Informática
  */
@@ -56,7 +56,7 @@ public abstract class Avion
     
     /**
      * Obtiene el número de serie de {@link Avion}
-     * @return Un {@link int} que contiene el número de serie de {@link Avion}
+     * @return Un {@code int} que contiene el número de serie de {@link Avion}
      */
     public int GetNumSerie() 
     {
@@ -64,7 +64,7 @@ public abstract class Avion
     }
     
     /**
-     * Obtiene el nombre de {@link Avion}
+     * Obtiene el nombre del {@link Avion}
      * @return Un {@link String} que contiene el nombre de {@link Avion}
      */
     public String GetNombre() 
@@ -73,7 +73,7 @@ public abstract class Avion
     }
     
     /**
-     * Obtiene la compañia de {@link Avion}
+     * Obtiene la {@link Company} del {@link Avion}
      * @return Una {@link Company} que es a la que pertenece {@link Avion}
      */
     public Company GetCompany() 
@@ -82,8 +82,8 @@ public abstract class Avion
     }
     
     /**
-     * Obtiene los pilotos de {@link Avion}
-     * @return Un {@link Piloto[]} que contiene los pilotos de {@link Avion}
+     * Obtiene los {@link Piloto} de {@link Avion}
+     * @return Un {@link Piloto} que contiene los pilotos de {@link Avion}
      */
     public Piloto[] GetPilotos() 
     {
