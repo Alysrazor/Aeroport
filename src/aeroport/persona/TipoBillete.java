@@ -38,6 +38,9 @@ public enum TipoBillete
      */
     TOURIST("Clase Turista.");
     
+    /**
+     * Variable para el nombre
+     */
     private String l_Nombre;
     
     private TipoBillete(String p_String)

@@ -50,7 +50,7 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     public PuertaEmbarque(Avion p_Avion)
     {
         this.l_Puerta = l_Count++;
-        this.l_Avion = p_Avion;
+        this.l_Avion = null;
     }
     
     /**

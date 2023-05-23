@@ -9,6 +9,13 @@ package aeroport;
 
 /**
  *
+ * Clase que representa a un {@link Avion}
+ * 
+ * <p>
+ *      Esta clase representa un concepto abstracto de un {@link Avion} que
+ *      puede 
+ * </p>
+ * 
  * @author Sergio Capilla Cabadés
  * @dev.main
  * @dev.codevs
