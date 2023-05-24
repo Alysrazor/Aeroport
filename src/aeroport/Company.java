@@ -21,7 +21,7 @@ import java.util.TreeSet;
  * @fecha 22 may 2023 18:08:30
  * @company Ciclo Superior de Informática
  */
-public class Company implements Serializable
+public class Company implements Comparable<Company>, Serializable
 {
     /**
      * El nombre de la {@link Company}
@@ -92,7 +92,8 @@ public class Company implements Serializable
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.l_Nombre);
         return hash;
@@ -109,5 +110,14 @@ public class Company implements Serializable
         
         final Company other = (Company) obj;
         return Objects.equals(this.l_Nombre, other.l_Nombre);
+    }
+    
+    @Override
+    public int compareTo(Company p_Obj)
+    {
+        if (this.l_Nombre.compareTo(p_Obj.l_Nombre) < 0) return -1;
+        else if (this.l_Nombre.compareTo(p_Obj.l_Nombre) > 0) return 1;
+        
+        return 0;
     }
 }

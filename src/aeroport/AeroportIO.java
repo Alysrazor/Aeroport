@@ -40,47 +40,36 @@ import java.util.TreeSet;
 public class AeroportIO 
 {
     // Aeroport Files
-    private File l_AeroportFile = new File("Aeroport.txt");
     private File l_AeroportFileBin = new File("Aeroport.dat");
     
     // Asiento Files
-    private File l_AsientoFile = new File("Asiento.txt");
     private File l_AsientoFileBin = new File("Asiento.dat");
     
     // Avion Files
-    private File l_AvionFile = new File("Avion.txt");
     private File l_AvionFileBin = new File("Avion.dat");
     
     // Compañía Files
-    private File l_CompanyFile = new File("Company.txt");
     private File l_CompanyFileBin = new File("Company.dat");
     
     // Pista Files
-    private File l_PistaFile = new File("Pista.txt");
-    private File l_PistaFileBin = new File("Pista.dat");
+    private File l_PuertaFileBin = new File("Pista.dat");
     
     // PuertaEmbarqueFiles
-    private File l_PuertasFile = new File("PuertaEmbarque.txt");
     private File l_PuertasFileBin = new File("PuertaEmbarque.dat");
     
     // Terminal Files
-    private File l_TerminalFile = new File("Terminal.txt");
     private File l_TerminalFileBin = new File("Terminal.dat");
     
     // Vuelo Files
-    private File l_VueloFile = new File("Vuelo.txt");
     private File l_VueloFileBin = new File("Vuelo.dat");
     
     // Equipaje Files
-    private File l_EquipajeFile = new File("Equipaje.txt");
     private File l_EquipajeFileBin = new File("Equipaje.dat");
     
     // Persona Files
-    private File l_PersonaFile = new File("Persona.txt");
     private File l_PersonaFileBin = new File("Persona.dat");
     
     // Reserva Files
-    private File l_ReservaFile = new File("Reserva.txt");
     private File l_ReservaFileBin = new File("Reserva.dat");
     
     
@@ -100,43 +89,46 @@ public class AeroportIO
         }
     }
     
+    /**
+     * Comprueba si un archivo está o no vacío.
+     * 
+     * <p>
+     *      Este método comprueba si no hay ningún objeto escrito
+     *      en el archivo para poder usar {@link AeroportOutputStream}
+     * </p>
+     * 
+     * @param p_File El {@link File ha comprobar}
+     * @return <ul>
+     *              <li>{@code true} si está vacío.</li>
+     *              <li>{@code false} si no está vacío.</li>
+     *          </ul>
+     * @see AeroportOutputStream
+     */
+    private boolean IsFileEmpty(File p_File)
+    {
+        try(FileInputStream fis = new FileInputStream(p_File);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            return ois.readObject() == null;
+        }
+        catch(ClassNotFoundException | EOFException e) {}
+        catch(IOException e) {}
+        
+        return false;
+    }
+    
     // Aeroport IORelated
     // Output
     
-    public void GuardarAeroport(Aeroport p_Aeroport)
+    public void GuardarAeroportBin(Aeroport p_Aeroport) throws IOException, SecurityException
     {
-        throw new UnsupportedOperationException("Método no implementado");
+        CreateFileIfNotExists(l_AeroportFileBin);
         
-        /*try(FileWriter p_Writer = new FileWriter(l_AeroportFile))
+        try(FileOutputStream fos = new FileOutputStream(l_AeroportFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_AeroportFileBin) && l_AeroportFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
         {
-            p_Writer.write("");
-        }
-        catch(IOException e)
-        {
-            out.println(e.getMessage());
-        }*/
-    }
-    
-    /**
-     * Intenta guardar en un archivo de extensión .dat una instancia de {@link Aeroport}
-     * @param p_Aeroport El Aeropuerto que se guardará en el archivo .dat
-     */
-    public void GuardarAeroportBin(Aeroport p_Aeroport)
-    {   
-        try
-        {
-            CreateFileIfNotExists(l_AeroportFile);
-            
-            try(FileOutputStream fos = new FileOutputStream(l_AeroportFileBin);
-                    AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
-                    ObjectOutputStream oos = (l_AeroportFileBin.exists()) ? p_AeroportStream : new ObjectOutputStream(fos))
-            {
-                oos.writeObject(p_Aeroport);
-            }
-        }
-        catch(IOException e)
-        {
-            out.println(e.getMessage());
+            oos.writeObject(p_Aeroport);
         }
     }
     
@@ -151,8 +143,11 @@ public class AeroportIO
      * Lee los {@link Aeroport} almacenados en el fichero binario de los {@link Aeroport}
      * y los almacena en un {@link HashSet} que posteriormente se harán para crear los demás {@link Aeroport}
      * @param p_Aeroports El {@link HashSet} donde se guardarán los {@link Aeroport}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Aeroport}
+     * @throws EOFException si llega al final del archivo.
+     * @throws IOException si ocurre algún error relacionado en la lectura del archivo.
      */
-    public void LeerAeroportBin(HashSet<Aeroport> p_Aeroports)
+    public void LeerAeroportBin(HashSet<Aeroport> p_Aeroports) throws ClassNotFoundException, EOFException, IOException
     {
         try(FileInputStream fis = new FileInputStream(l_AeroportFileBin);
                 ObjectInputStream ois = new ObjectInputStream(fis))
@@ -160,50 +155,10 @@ public class AeroportIO
             while (ois.readObject() != null)            
                 p_Aeroports.add((Aeroport)ois.readObject());      
         }
-        catch(EOFException e)
-        {
-            out.println(e.getMessage());
-        }
-        catch(ClassNotFoundException|IOException e)
-        {
-            out.println(e.getMessage());
-        }
     }
     
     // Asientos
     // Output
-    
-    /**
-     * Escribe el código del {@link Asiento} en un fichero de texto para su posterior carga.
-     * 
-     * <p>
-     *      Para evitar la innecesaria carga de muchos ficheros, se usará ún unico fichero para
-     *      cada tipo de {@link Avion}
-     * </p>
-     * @param p_Asientos El array de {@link Asiento}
-     */
-    public void GuardarAsientos(Asiento[][] p_Asientos)
-    {
-        try
-        {
-            CreateFileIfNotExists(l_AsientoFile); 
-        
-            for (Asiento p_AsientoF[] : p_Asientos)
-            {
-                for (Asiento p_AsientoC : p_AsientoF)
-                {
-                    try(FileWriter p_Writer = new FileWriter(l_AsientoFile))
-                    {
-                        p_Writer.write(String.format("%s%n", p_AsientoC.GetCodigoAsiento()));
-                    }
-                }            
-            }
-        }
-        catch(IOException e)
-        {
-            out.println(e.getMessage());
-        }
-    }
     
     /**
      * Guarda las instancias de {@link Asiento} en un archivo de extensión .dat
@@ -217,29 +172,256 @@ public class AeroportIO
      * </p>
      * 
      * @param p_Asientos La matriz de los {@link Asiento}
+     * @throws IOException si ocurre algún error en el guardado de los datos.
      * @see AeroportOutputStream
      * @see FileOutputStream
      * @see ObjectOutputStream
      */
-    public void GuardarAsientosBin(Asiento[][] p_Asientos)
+    public void GuardarAsientosBin(Asiento[][] p_Asientos) throws IOException
     {
-        try 
-        {
-            CreateFileIfNotExists(l_AsientoFileBin);        
 
-            try (FileOutputStream fos = new FileOutputStream(l_AsientoFileBin);
-                 AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
-                    ObjectOutputStream oos = (l_AsientoFileBin.exists()) ? p_AeroportStream : new ObjectOutputStream(fos)) {
+        CreateFileIfNotExists(l_AsientoFileBin);        
 
-                for (Asiento[] p_AsientoF : p_Asientos) 
-                {
-                    for (Asiento p_AsientoC : p_AsientoF)                    
-                        oos.writeObject(p_AsientoC);                    
-                }
+        try (FileOutputStream fos = new FileOutputStream(l_AsientoFileBin);
+             AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_AsientoFileBin) && l_AsientoFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos)) {
+
+            for (Asiento[] p_AsientoF : p_Asientos) 
+            {
+                for (Asiento p_AsientoC : p_AsientoF)                    
+                    oos.writeObject(p_AsientoC);                    
             }
-        } catch (IOException e) 
-        {
-            System.out.println(e.getMessage());
         }
     }
+    
+    // Input
+    
+    /**
+     * Lee los {@link Asiento} de un archivo binario y los añade a la matriz bidimensional que 
+     * se le pasa por parámetro.
+     * @param p_Asientos La matriz bidimensional de tipo {@link Asiento}
+     * @throws ClassNotFoundException en caso de no encontrar la clase {@link Asiento}
+     * @throws EOFException si llega al final del archivo.
+     * @throws IOException si ocurre algún otro error relacionado con la lectura.
+     */
+    public void LeerAsientoBin(Asiento[][] p_Asientos) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_AsientoFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            for (Asiento[] p_AsientoF : p_Asientos)
+            {
+                for (int l_Col = 0; l_Col < p_AsientoF.length; l_Col++)
+                {
+                    Asiento p_Asiento = (Asiento) ois.readObject();
+                    if (p_Asiento != null) p_AsientoF[l_Col] = p_Asiento;
+                }
+            }
+        }
+    }
+    
+    // Avion
+    //Output
+    
+    /**
+     * Guarda los {@link Avion} y sus hijos derivados en un {@link File} a partir de
+     * un {@link HashSet}
+     * 
+     * <p>
+     *      Dado el {@link HashSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Aviones
+     * @throws IOException 
+     */
+    public void GuardarAvionBin(HashSet<Avion> p_Aviones) throws IOException
+    {
+        CreateFileIfNotExists(l_AvionFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_AvionFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_AvionFileBin) && l_AvionFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Avion p_Avion : p_Aviones)
+                oos.writeObject(p_Avion);
+        }
+    }
+    
+    // Input
+    /**
+     * Lee el archivo binario de los {@link Avion} y los añade a un {@link HashSet}
+     * 
+     * @param p_Aviones El {@link HashSet} de los {@link Avion}
+     * @throws ClassNotFoundException en caso de no encontrar la clase {@link Avion}
+     * @throws EOFException si llega al final del archivo.
+     * @throws IOException si se produce algún error con el archivo.
+     */
+    public void LeerAvionBin(HashSet<Avion> p_Aviones) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_AvionFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Avion l_Avion;
+            while((l_Avion = (Avion) ois.readObject()) != null)            
+                p_Aviones.add(l_Avion);
+        }
+    }
+    
+    // Company
+    // Output
+    
+    /**
+     * Guarda la(s) {@link Company} que tenga el {@link Aeroport} en un
+     * fichero binario.
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * 
+     * @param p_Companies Un {@link TreeSet} de {@link Company}
+     * @throws IOException si ocurre algún error con el fichero.
+     */
+    public void GuardarCompanyBin(TreeSet<Company> p_Companies) throws IOException
+    {
+        CreateFileIfNotExists(l_CompanyFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_CompanyFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_CompanyFileBin) && l_CompanyFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Company p_Company : p_Companies)
+                oos.writeObject(p_Company);
+        }
+    }
+    
+    //Input
+    
+    /**
+     * Lee el archivo y carga las {@link Company} al {@link TreeSet} que se le pasa como parámetro.
+     * @param p_Companies El {@link TreeSet} de las {@link Company}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Company}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerCompanyBin(TreeSet<Company> p_Companies) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_CompanyFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Company l_Company;
+            
+            while ((l_Company = (Company)ois.readObject()) != null)
+                p_Companies.add(l_Company);
+        }
+    }
+    
+    //Pista
+    //Output
+    
+    /**
+     * Guarda las {@link Pista} y sus hijos derivados en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Pistas Las {@link Pista} en un {@link TreeSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarPistaBin(TreeSet<Pista> p_Pistas) throws IOException
+    {
+        CreateFileIfNotExists(l_PuertaFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_PuertaFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_PuertaFileBin) && l_PuertaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Pista p_Pista : p_Pistas)
+                oos.writeObject(p_Pista);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga las {@link Pista} al {@link TreeSet} que se le pasa como parámetro.
+     * 
+     * @param p_Pista El {@link TreeSet} de las {@link Pista}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Pista}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerPistaBin(TreeSet<Pista> p_Pista) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_PuertaFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Pista l_Pista;
+            
+            while ((l_Pista = (Pista)ois.readObject()) != null)
+                p_Pista.add(l_Pista);
+        }
+    }
+    
+    // PuertaEmbarque
+    //Output
+    
+    /**
+     * Guarda las {@link PuertaEmbarque} y sus hijos derivados en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Puertas Las {@link PuertaEmbarque} en un {@link TreeSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarPuertaEmbarqueBin(TreeSet<PuertaEmbarque> p_Puertas) throws IOException
+    {
+        CreateFileIfNotExists(l_PuertaFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_PuertaFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_PuertaFileBin) && l_PuertaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (PuertaEmbarque p_Puerta : p_Puertas)
+                oos.writeObject(p_Puerta);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga las {@link PuertaEmbarque} al {@link TreeSet} que se le pasa como parámetro.
+     * 
+     * @param p_Puertas El {@link TreeSet} de las {@link PuertaEmbarque}
+     * @throws ClassNotFoundException si no encuentra la clase {@link PuertaEmbarque}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerPuertaEmbarqueBin(TreeSet<PuertaEmbarque> p_Puertas) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_PuertaFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            PuertaEmbarque l_Puerta;
+            
+            while ((l_Puerta = (PuertaEmbarque)ois.readObject()) != null)
+                p_Puertas.add(l_Puerta);
+        }
+    }
+    
+    // Terminal
+    
+    // Vuelo
+    
+    // Equipaje
+    
+    // Persona
+    
+    // Reserva
+    
 }
