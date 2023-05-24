@@ -5,6 +5,8 @@
 
 package aeroport;
 
+import java.io.Serializable;
+
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -21,7 +23,7 @@ import java.util.TreeSet;
  * @my.company Ciclo Superior de Informática
  */
 
-public class Terminal 
+public class Terminal implements Serializable
 {
     /**
      * El nombre de la {@link Terminal}

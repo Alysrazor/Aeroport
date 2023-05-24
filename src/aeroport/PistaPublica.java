@@ -15,10 +15,21 @@ public class PistaPublica extends Pista{
      * Constructor por defecto de {@link PistaPublica}
      * @param p_ID El identificador
      * @param p_NombrePista El nombre de la {@link PistaPublica}
-     * @param p_Avion El {@link Avion}
      */
-    public PistaPublica(int p_ID, String p_NombrePista, Avion p_Avion) 
+    public PistaPublica(int p_ID, String p_NombrePista) 
     {
-        super(p_ID, p_NombrePista, p_Avion);
+        super(p_ID, p_NombrePista);
+    }
+    
+    @Override
+    public void SetAvion(Avion p_Avion) throws Exception
+    {
+        if (this.GetAvion() != null)
+            throw new IllegalArgumentException("La pista ya está ocupada.");
+        
+        if (p_Avion instanceof AvionPrivado)
+            throw new Exception("No puedes aterrizar en una pista pública. No tienes permiso.");
+        
+        this.l_Avion = p_Avion;
     }
 }

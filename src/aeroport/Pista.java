@@ -1,5 +1,7 @@
 package aeroport;
 
+import java.io.Serializable;
+
 /**
  * Clase que representa una {@link Pista} en el {@link Aeroport}
  *
@@ -9,7 +11,8 @@ package aeroport;
  * @my.fecha 23 may 2023 11:10:52
  * @my.company Ciclo Superior de Informática
  */
-public abstract class Pista {
+public abstract class Pista implements Serializable
+{
     /**
     * Identificador de la pista
     */
@@ -29,9 +32,8 @@ public abstract class Pista {
      * Constructor por defecto de la {@link Pista}
      * @param p_ID El identificador de la {@link Pista}
      * @param p_NombrePista El nombre de la {@link Pista}
-     * @param p_Avion El {@link Avion} que está aterrizando en la {@link Pista}
      */
-    public Pista(int p_ID, String p_NombrePista, Avion p_Avion) {
+    public Pista(int p_ID, String p_NombrePista) {
         this.l_ID = p_ID;
         this.l_NombrePista = p_NombrePista;
         this.l_Avion = null;
@@ -72,12 +74,7 @@ public abstract class Pista {
      * @param p_Avion El {@link Avion} que está aterrizando.
      * @throws Exception Si ya hay un {@link Avion} en la {@link Pista}
      */
-    public void SetAvion(Avion p_Avion) throws Exception
-    {
-        if (this.l_Avion != null)
-            throw new Exception("No puedes aterrizar si hay un avión en esa pista.");
-        this.l_Avion = p_Avion;
-    }
+    public abstract void SetAvion(Avion p_Avion) throws Exception;
 
     @Override
     public int hashCode() 

@@ -6,6 +6,8 @@ package aeroport.persona;
 
 import aeroport.Vuelo;
 
+import java.io.Serializable;
+
 import java.util.Objects;
 
 /**
@@ -22,7 +24,7 @@ import java.util.Objects;
  * @dev.codevs
  * @my.fecha 19 may 2023 12:08:50
  */
-public class Reserva 
+public class Reserva implements Serializable
 {
     /**
      * El {@link Vuelo} que hace referencia esta reserva.

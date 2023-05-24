@@ -2,6 +2,8 @@ package aeroport;
 
 import aeroport.persona.Empleado;
 
+import java.io.Serializable;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.TreeSet;
@@ -19,7 +21,7 @@ import java.util.TreeSet;
  * @fecha 22 may 2023 18:08:30
  * @company Ciclo Superior de Informática
  */
-public class Company 
+public class Company implements Serializable
 {
     /**
      * El nombre de la {@link Company}
