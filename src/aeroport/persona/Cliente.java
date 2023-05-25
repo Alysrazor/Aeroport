@@ -6,6 +6,8 @@ package aeroport.persona;
 
 import aeroport.Aeroport;
 
+import aeroport.crypto.CryptSHA1;
+
 import java.time.LocalDate;
 
 import java.util.HashSet;
@@ -53,7 +55,7 @@ public class Cliente extends Persona
     /**
      * El {@link Equipaje} de {@link Cliente}
      */
-    private HashSet<Equipaje> l_Equipaje;
+    private HashSet<Equipaje> l_Equipaje = new HashSet<>();
     
     /**
      * Las {@link Reserva} que tiene el {@link Cliente}
@@ -84,7 +86,7 @@ public class Cliente extends Persona
         // TODO comprobar si ya existe un dni y / o E-Mail
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_Usuario = p_Usuario;
-        this.l_Password = p_Password;
+        this.l_Password = CryptSHA1.EncryptPassword(p_Password);
         this.l_Email = p_Email;
         if (!p_Equipaje.isEmpty())
             this.l_Equipaje = new HashSet<>(p_Equipaje);
@@ -125,7 +127,7 @@ public class Cliente extends Persona
      */
     public void SetPassword(String p_Password)
     {
-        this.l_Password = p_Password;
+        this.l_Password = CryptSHA1.EncryptPassword(p_Password);
     }
     
     /**
@@ -167,14 +169,13 @@ public class Cliente extends Persona
      */
     public boolean AddReserva(Reserva p_Reserva)
     {
-        if (l_Reservas.add(p_Reserva)) return true;
-        
-        return false;
+        return l_Reservas.add(p_Reserva);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.l_DNI);
         hash = 17 * hash + Objects.hashCode(this.l_Usuario);
         hash = 17 * hash + Objects.hashCode(this.l_Email);
         return hash;
@@ -191,6 +192,7 @@ public class Cliente extends Persona
         
         final Cliente other = (Cliente) obj;
         
+        if (!Objects.equals(this.l_DNI, other.l_DNI)) return false;
         if (!Objects.equals(this.l_Usuario, other.l_Usuario)) return false;
         
         return Objects.equals(this.l_Email, other.l_Email);

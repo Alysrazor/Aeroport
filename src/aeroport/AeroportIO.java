@@ -5,9 +5,15 @@
 
 package aeroport;
 
+import aeroport.crypto.CryptSHA1;
+
+import aeroport.persona.Cliente;
+import aeroport.persona.Empleado;
 import aeroport.persona.Equipaje;
 import aeroport.persona.Persona;
 import aeroport.persona.Reserva;
+
+import aeroport.persona.TipoEquipaje;
 
 import java.io.EOFException;
 import java.io.File;
@@ -19,6 +25,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import static java.lang.System.out;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 import java.util.HashSet;
 import java.util.TreeSet;
@@ -39,6 +48,18 @@ import java.util.TreeSet;
 
 public class AeroportIO 
 {
+    // Aeroport Types and Collections and Sets
+    private Aeroport l_Aeroport;
+    private Asiento[][] l_Asientos;
+    private HashSet<Avion> l_Aviones;
+    private TreeSet<Company> l_Companies;
+    private TreeSet<PuertaEmbarque> l_Puertas;
+    private TreeSet<Terminal> l_Terminales;
+    private TreeSet<Vuelo> l_Vuelos;
+    private HashSet<Equipaje> l_Equipajes;
+    private TreeSet<Persona> l_Personas;
+    private HashSet<Reserva> l_Reservas;
+    
     // Aeroport Files
     private File l_AeroportFileBin = new File("Aeroport.dat");
     
@@ -657,5 +678,17 @@ public class AeroportIO
             while ((l_Reserva = (Reserva)ois.readObject()) != null)
                 p_Reservas.add(l_Reserva);
         }
+    }
+    
+    public void CargarDatosPrincipales()
+    {
+        
+    }
+    
+    private void CargarPersona()
+    {
+        Empleado l_EA = new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A");
+        Equipaje l_EqCA = new Equipaje("CAG65N01", TipoEquipaje.EQUIPAJE_MALETA, 20);
+        Cliente l_CA = new Cliente("15975365N", "Carlos", "Aparicio Garcia", LocalDate.of(1998, Month.DECEMBER, 10), "Carlosag", CryptSHA1.EncryptPassword("carlosap"), "carlosapariciogarcia@gmail.com", null);
     }
 }

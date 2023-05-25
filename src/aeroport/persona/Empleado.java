@@ -25,11 +25,6 @@ public class Empleado extends Persona
      */
     private String l_CodEmpleado;
     
-    /**
-     * Atributo que identifica la compañía de {@link Empleado}
-     */
-    private Company l_Company;
-    
      /**
      * Constructor por defecto de Persona con todos sus parámetros
      * @param p_DNI El DNI.
@@ -37,13 +32,11 @@ public class Empleado extends Persona
      * @param p_Apellidos Los apellidos.
      * @param p_FechaNac La fecha de nacimiento.
      * @param p_CodEmpleado El código del empleado.
-     * @param p_Company La compañía a la que pertenece el empleado.
      */
-    public Empleado (String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company)
+    public Empleado (String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado)
     {
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_CodEmpleado = p_CodEmpleado;
-        this.l_Company = p_Company;
     }
 
     /**
@@ -54,31 +47,12 @@ public class Empleado extends Persona
     {
         return l_CodEmpleado;
     }
-    
-    /**
-     * Obtiene la {@link Company} de la {@link Persona}
-     * @return Una {@link Company} que es a la que pertenece el {@link Empleado}
-     */
-    public Company GetCompany() 
-    {
-        return l_Company;
-    }
-    
-    /**
-     * Cambia el valor de la {@link Company} de {@link Empleado}
-     * @param p_Company La nueva {@link Company} del {@link Empleado}
-     */
-    public void SetCompany(Company p_Company) 
-    {
-        this.l_Company = p_Company;
-    }
 
     @Override
     public int hashCode() 
     {
         int hash = 5;
         hash = 67 * hash + Objects.hashCode(this.l_CodEmpleado);
-        hash = 67 * hash + Objects.hashCode(this.l_Company);
         
         return hash;
     }
@@ -92,8 +66,19 @@ public class Empleado extends Persona
         
         
         final Empleado other = (Empleado) obj;
-        if (!Objects.equals(this.l_CodEmpleado, other.l_CodEmpleado)) return false;
         
-        return Objects.equals(this.l_Company, other.l_Company);
+        return Objects.equals(this.l_CodEmpleado, other.l_CodEmpleado);
     } 
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion del Empleado:%n"
+                + "Codigo de Empleado: %s%n"
+                + "Nombre: %s%n"
+                + "Apellidos: %s%n",
+                this.l_CodEmpleado,
+                super.l_Nombre,
+                super.l_Apellidos);
+    }
 }

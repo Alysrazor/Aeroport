@@ -99,4 +99,14 @@ public abstract class Pista implements Serializable
         final Pista other = (Pista) obj;
         return this.l_ID == other.l_ID;
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion de la Pista:%n"
+                + "Numero de la Pista: %d%n"
+                + "Nombre de la Pista: %s%n",
+                this.l_ID,
+                this.l_NombrePista);
+    }
 }

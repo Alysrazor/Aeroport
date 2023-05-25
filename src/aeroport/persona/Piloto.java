@@ -34,12 +34,11 @@ public class Piloto extends Empleado
      * @param p_Apellidos Los apellidos del {@link Piloto}
      * @param p_FechaNac La fecha de nacimiento del {@link Piloto}
      * @param p_CodEmpleado El código de empleado del {@link Piloto}
-     * @param p_Company La {@link Company} a la que pertenece el {@link Piloto}
      * @param p_Avion El {@link Avion} asignado al {@link Piloto}
      */
-    public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company, Avion p_Avion) 
+    public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Avion p_Avion) 
     {
-        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado, p_Company);
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado);
         this.Avion = p_Avion;
 
     }
@@ -81,6 +80,22 @@ public class Piloto extends Empleado
         
         final Piloto other = (Piloto) obj;
         return Objects.equals(this.Avion, other.Avion);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion del Piloto:%n"
+                + "Codigo de Empleado: %s%n"
+                + "Nombre: %s%n"
+                + "Apellidos: %s%n"
+                + "Compañia: %s%n"
+                + "Avion asignado: %s%n",
+                super.GetCodEmpleado(),
+                super.l_Nombre,
+                super.l_Apellidos,
+                this.Avion.GetCompany(),
+                this.Avion.GetNumSerie());
     }
 }
 

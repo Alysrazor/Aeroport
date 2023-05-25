@@ -90,6 +90,16 @@ public class Company implements Comparable<Company>, Serializable
     {
         return this.l_Empleados;
     }
+    
+    public boolean AddEmpleado(Empleado p_Empleado)
+    {
+        return this.l_Empleados.add(p_Empleado);
+    }
+    
+    public boolean AddAvion(Avion p_Avion)
+    {
+        return this.l_Aviones.add(p_Avion);
+    }
 
     @Override
     public int hashCode() 

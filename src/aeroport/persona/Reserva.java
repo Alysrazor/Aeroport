@@ -126,11 +126,13 @@ public class Reserva implements Serializable
                 + "Nombre Billete: %s%n"
                 + "Origen: %s%n"
                 + "Destino: %s%n"
-                + "Tipo de Billete: %s%n",
+                + "Tipo de Billete: %s%n"
+                + "Reservado por: %s%n",
                 this.l_Vuelo,
                 this.l_NombreReserva,
                 this.l_Vuelo.GetOrigen(),
                 this.l_Vuelo.GetDestino(),
-                this.l_TipoBillete.GetNombre());
+                this.l_TipoBillete.GetNombre(),
+                this.l_Cliente.GetDNI());
     }
 }
