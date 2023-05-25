@@ -62,9 +62,34 @@ public class Cliente extends Persona
      */
     private HashSet<Reserva> l_Reservas = new HashSet<>();
     
-    
     /**
      * Crea un nuevo {@link Cliente} con su nombre de usuario, contraseña y correo electrónico.
+     * 
+     * <p>
+     *  Por lógica, dos clientes no podrán tener el mismo nombre de usuario, por lo cuál un {@link Cliente} no podrá darse de alta si ya existe
+     *  ese nombre de usuario.<br><br>Adicionalmente, no se podrán crear usuarios si el correo electrónico ya está siendo usado por
+     *  otro {@link Cliente}.
+     * </p>
+     * 
+     * @param p_DNI El DNI del {@link Cliente}
+     * @param p_Nombre El Nombre del {@link Cliente}
+     * @param p_Apellidos Los Apellidos del {@link Cliente}
+     * @param p_FechaNac La Fecha de Nacimiento del {@link Cliente}
+     * @param p_Usuario El nombre de usuario del {@link Cliente}
+     * @param p_Password La contraseña del {@link Cliente}
+     * @param p_Email El Email del {@link Cliente}
+     */
+    public Cliente(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_Usuario, String p_Password, String p_Email)
+    {
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
+        this.l_Usuario = p_Usuario;
+        this.l_Password = CryptSHA1.EncryptPassword(p_Password);
+        this.l_Email = p_Email;
+    }
+    
+    
+    /**
+     * Crea un nuevo {@link Cliente} con su nombre de usuario, contraseña, correo electrónico y equipaje.
      * 
      * <p>
      *  Por lógica, dos clientes no podrán tener el mismo nombre de usuario, por lo cuál un {@link Cliente} no podrá darse de alta si ya existe
@@ -83,7 +108,6 @@ public class Cliente extends Persona
      */
     public Cliente(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_Usuario, String p_Password, String p_Email, HashSet<Equipaje> p_Equipaje)
     {
-        // TODO comprobar si ya existe un dni y / o E-Mail
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_Usuario = p_Usuario;
         this.l_Password = CryptSHA1.EncryptPassword(p_Password);

@@ -25,18 +25,25 @@ public class Empleado extends Persona
      */
     private String l_CodEmpleado;
     
+    /**
+     * Atributo que identifica la {@link Company} del {@link Empleado}
+     */
+    private Company l_Company;
+    
      /**
      * Constructor por defecto de Persona con todos sus parámetros
      * @param p_DNI El DNI.
      * @param p_Nombre El nombre.
      * @param p_Apellidos Los apellidos.
      * @param p_FechaNac La fecha de nacimiento.
-     * @param p_CodEmpleado El código del empleado.
+     * @param p_CodEmpleado El código del {@link Empleado}.
+     * @param p_Company La {@link Company} del {@link Empleado}
      */
-    public Empleado (String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado)
+    public Empleado (String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company)
     {
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_CodEmpleado = p_CodEmpleado;
+        this.l_Company = p_Company;
     }
 
     /**
@@ -45,7 +52,28 @@ public class Empleado extends Persona
      */
     public String GetCodEmpleado() 
     {
-        return l_CodEmpleado;
+        return this.l_CodEmpleado;
+    }
+    
+    /**
+     * Obtiene la {@link Company} de esta instancia de {@link Empleado}
+     * @return Una {@link Company}
+     */
+    public Company GetCompany()
+    {
+        return this.l_Company;
+    }
+    
+    /**
+     * Asigna al {@link Empleado} una nueva {@link Company}
+     * @param p_Company La nueva {@link Company}
+     * @throws NullPointerException si el parámetro es {@code null}
+     */
+    public void SetCompany(Company p_Company) throws NullPointerException
+    {
+        if (p_Company == null) throw new NullPointerException("Debes especificar una compañía.");
+        
+        this.l_Company = p_Company;
     }
 
     @Override

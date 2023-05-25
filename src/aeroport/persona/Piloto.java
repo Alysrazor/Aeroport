@@ -34,11 +34,12 @@ public class Piloto extends Empleado
      * @param p_Apellidos Los apellidos del {@link Piloto}
      * @param p_FechaNac La fecha de nacimiento del {@link Piloto}
      * @param p_CodEmpleado El código de empleado del {@link Piloto}
+     * @param p_Company La {@link Company} a la que pertenece el {@link Piloto}
      * @param p_Avion El {@link Avion} asignado al {@link Piloto}
      */
-    public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Avion p_Avion) 
+    public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company, Avion p_Avion) 
     {
-        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado);
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado, p_Company);
         this.Avion = p_Avion;
 
     }
@@ -94,7 +95,7 @@ public class Piloto extends Empleado
                 super.GetCodEmpleado(),
                 super.l_Nombre,
                 super.l_Apellidos,
-                this.Avion.GetCompany(),
+                super.GetCompany(),
                 this.Avion.GetNumSerie());
     }
 }

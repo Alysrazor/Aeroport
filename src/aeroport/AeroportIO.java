@@ -1,11 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package aeroport;
-
-import aeroport.crypto.CryptSHA1;
 
 import aeroport.persona.Cliente;
 import aeroport.persona.Empleado;
@@ -13,23 +6,20 @@ import aeroport.persona.Equipaje;
 import aeroport.persona.Persona;
 import aeroport.persona.Reserva;
 
-import aeroport.persona.TipoEquipaje;
 
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import static java.lang.System.out;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.TreeSet;
 
 
@@ -47,23 +37,12 @@ import java.util.TreeSet;
  */
 
 public class AeroportIO 
-{
-    // Aeroport Types and Collections and Sets
-    private Aeroport l_Aeroport;
-    private Asiento[][] l_Asientos;
-    private HashSet<Avion> l_Aviones;
-    private TreeSet<Company> l_Companies;
-    private TreeSet<PuertaEmbarque> l_Puertas;
-    private TreeSet<Terminal> l_Terminales;
-    private TreeSet<Vuelo> l_Vuelos;
-    private HashSet<Equipaje> l_Equipajes;
-    private TreeSet<Persona> l_Personas;
-    private HashSet<Reserva> l_Reservas;
-    
+{    
     // Aeroport Files
     private File l_AeroportFileBin = new File("Aeroport.dat");
     
     // Asiento Files
+    private File l_AsientoFile = new File("Asiento.txt");
     private File l_AsientoFileBin = new File("Asiento.dat");
     
     // Avion Files
@@ -138,6 +117,33 @@ public class AeroportIO
         return false;
     }
     
+    // TEXT READ-ONLY    
+    // Asiento IO Related
+    /**
+     * Lee los {@link Asiento} de su {@link File}
+     * @param p_Asientos
+     * @throws IOException si ocurre algo con el {@link File}
+     * @throws FileNotFoundException si el {@link File} para los asientos no se encuentra.
+     */
+    public void LeerAsiento(Asiento[][] p_Asientos) throws IOException, FileNotFoundException
+    {
+        if (!l_AsientoFile.exists()) throw new FileNotFoundException("No se ha podido encontrar el archivo. Por favor, póngase en contacto con el desarrollador.");
+        
+        try(Scanner p_Scanner = new Scanner(l_AsientoFile))
+        {
+            for (Asiento[] p_Asiento : p_Asientos) 
+            {
+                for (int l_Col = 0; l_Col < p_Asiento.length; l_Col++) 
+                {
+                    if (p_Scanner.hasNextLine()) 
+                        p_Asiento[l_Col] = new Asiento(p_Scanner.nextLine());
+                }
+            }
+        }
+    }
+    
+    
+    // OBJECTS
     // Aeroport IORelated
     // Output
     
@@ -678,23 +684,5 @@ public class AeroportIO
             while ((l_Reserva = (Reserva)ois.readObject()) != null)
                 p_Reservas.add(l_Reserva);
         }
-    }
-    
-    public void CargarDatosPrincipales()
-    {
-        
-    }
-    
-    private void CargarPersona()
-    {
-        // Empleados
-        this.l_Personas.add(new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A"));
-        this.l_Personas.add(new Empleado("75365489G", "Mario", "Blasco Ibañez", LocalDate.of(1987, Month.JUNE, 12), "MBI9G"));
-        this.l_Personas.add(new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A"));
-        //
-        HashSet<Equipaje> l_Equipajes = new HashSet<Equipaje>();
-        l_Equipajes.add(new Equipaje("CAR65N01", TipoEquipaje.EQUIPAJE_MALETA, 20));
-        Cliente l_CA = new Cliente("15975365N", "Carlos", "Aparicio Garcia", LocalDate.of(1998, Month.DECEMBER, 10), "Carlosag", CryptSHA1.EncryptPassword("carlosap"), "carlosapariciogarcia@gmail.com", l_Equipajes);
-        
     }
 }

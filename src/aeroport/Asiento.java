@@ -1,9 +1,6 @@
 package aeroport;
 
-import aeroport.persona.Cliente;
-import aeroport.persona.Empleado;
 import aeroport.persona.Persona;
-import aeroport.persona.Piloto;
 
 import java.io.Serializable;
 
@@ -20,10 +17,7 @@ import java.util.Objects;
  * 
  * Cada {@link AvionPublico} tiene en cada fila 6 asientos.<br><br>
  * 
- * En el caso de los {@link AvionPublico} solo tienen 2 por cada fila con un máximo de 5 filas.<br><br>
- * 
- * Y por último en el caso de los {@link AvionCarga} solo hay 1 fila de 2 asientos que son lo de los {@link Piloto}<br>
- * Esta última fila mencionada está presente en TODOS los {@link Avion} que será la primera fila de cada {@link Avion}
+ * En el caso de los {@link AvionPrivado} solo tienen 2 por cada fila con un máximo de 5 filas.<br><br>
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés

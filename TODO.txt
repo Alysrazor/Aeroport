@@ -1,0 +1,67 @@
+#### Aeroport ####
+- Comprobar si los Sets son adecuados para cada clase.
+
+#### AeroportIO ####
+- Ver si es viable usar ficheros de texto.
+
+#### AeroportOuputStream ####
+Up to date.
+
+#### Asiento ####
+Up to date.
+
+#### Avion ####
+Up to date.
+
+#### Hijos Avion ####
+- Comprobar si tienen toString()
+
+#### Company ####
+Up to date.
+
+#### Pista ####
+Up to date.
+
+#### Hijos Pista ####
+Up to date.
+
+#### PuertaEmbarque ####
+- Comprobar si es posible obtener la terminal.
+
+#### Terminal ####
+Up to date.
+
+#### Vuelo ####
+- Generar el identificador aleatorio.
+
+#### Cliente ####
+Up to date.
+
+#### Empleado ####
+Up to date.
+
+#### Equipaje ####
+Up to date.
+
+#### Persona ####
+Up to date.
+
+#### Piloto ####
+Up to date.
+
+#### Reserva ####
+- Debatir si debe llevar el atributo Cliente 
+- Generar un toString() mejor
+
+#### TipoBillete ####
+Up to date.
+
+#### TipoEquipaje ####
+Up to date.
+
+
+################
+##### MAIN #####
+################
+- Cargar todo desde los archivos.
+- Cliente debe hacer un login satisfactorio.

@@ -45,6 +45,20 @@ public class Company implements Comparable<Company>, Serializable
      * @param p_Nombre El nombre.
      * @param p_ShortName La abreviación
      * @param p_Aviones Los {@link Avion} que tiene.
+     */
+    public Company(String p_Nombre, String p_ShortName, HashSet<Avion> p_Aviones)
+    {
+        this.l_Nombre = p_Nombre;
+        this.l_ShortName = p_ShortName;
+        this.l_Aviones = new HashSet<>(p_Aviones);
+        this.l_Empleados = new TreeSet<>();
+    }
+    
+    /**
+     * Constructor secundario de la {@link Company} con todos los atributos.
+     * @param p_Nombre El nombre.
+     * @param p_ShortName La abreviación
+     * @param p_Aviones Los {@link Avion} que tiene.
      * @param p_Empleados Los {@link Empleado} que tiene bajo su mando.
      */
     public Company(String p_Nombre, String p_ShortName, HashSet<Avion> p_Aviones, TreeSet<Empleado> p_Empleados)
@@ -91,14 +105,56 @@ public class Company implements Comparable<Company>, Serializable
         return this.l_Empleados;
     }
     
+    /**
+     * Añade un nuevo {@link Empleado} a la {@link Company}
+     * @param p_Empleado El {@link Empleado} ha añadir.
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido añadir</li>
+     *              <li>{@code false} si no ha podido añadir al nuevo {@link Empleado}</li>
+     *          </ul>
+     */
     public boolean AddEmpleado(Empleado p_Empleado)
     {
         return this.l_Empleados.add(p_Empleado);
     }
     
+    /**
+     * Elimina un {@link Empleado} de la {@link Company}
+     * @param p_Empleado El {@link Empleado} ha eliminar.
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido eliminar</li>
+     *              <li>{@code false} si no ha podido eliminar el {@link Empleado}</li>
+     *          </ul>
+     */
+    public boolean RemoveEmpleado(Empleado p_Empleado)
+    {
+        return this.l_Empleados.remove(p_Empleado);
+    }
+    
+    /**
+     * Añade un nuevo {@link Avion} a la {@link Company}
+     * @param p_Avion El {@link Avion} ha añadir.
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido añadir</li>
+     *              <li>{@code false} si no ha podido añadir al nuevo {@link Avion}</li>
+     *          </ul>
+     */
     public boolean AddAvion(Avion p_Avion)
     {
         return this.l_Aviones.add(p_Avion);
+    }
+    
+     /**
+     * Elimina un {@link Avion} de la {@link Company}
+     * @param p_Avion El {@link Avion} ha eliminar.
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido eliminar</li>
+     *              <li>{@code false} si no ha podido eliminar el {@link Avion}</li>
+     *          </ul>
+     */
+    public boolean RemoveAvion(Avion p_Avion)
+    {
+        return this.l_Aviones.remove(p_Avion);
     }
 
     @Override

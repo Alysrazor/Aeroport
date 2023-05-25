@@ -29,11 +29,6 @@ public class AvionCarga extends Avion
     private String l_Identificador;
     
     /**
-     * Atributo que identifica la cantidad de asientos de {@link AvionCarga}
-     */
-    private Asiento[] l_Asientos = new Asiento[2];
-    
-    /**
      *  La carga actual que lleva el {@link AvionCarga}
      */
     private double l_Carga;
@@ -50,13 +45,11 @@ public class AvionCarga extends Avion
      * @param p_Company La compañia a la que pertenece.
      * @param p_Pilotos Los pilotos del Avion.
      * @param p_Identificador El identificador.
-     * @param p_Asientos La cantidad de asientos.
      */
-    public AvionCarga(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos, String p_Identificador, Asiento[] p_Asientos) 
+    public AvionCarga(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos, String p_Identificador) 
     {
         super(p_NumSerie, p_Nombre, p_Company, p_Pilotos);
         this.l_Identificador = p_Identificador;
-        this.l_Asientos = p_Asientos.clone();
         this.l_Carga = 0;
     }
     
@@ -70,15 +63,6 @@ public class AvionCarga extends Avion
     }
     
     /**
-     * Obtiene la cantidad de asientos de {@link AvionCarga}
-     * @return Un {@link Asiento} que contiene la cantidad de asientos de {@link AvionCarga}
-     */
-    public Asiento[] GetAsientos() 
-    {
-        return l_Asientos;
-    }
-    
-    /**
      *  Obtiene la carga actual de esta instancia de {@link AvionCarga}
      *  @return Un {@code double} con la cantidad de la carga actual.
      */
@@ -88,8 +72,10 @@ public class AvionCarga extends Avion
     }
     
     /**
-     *  Añade una determinada cantidad de carga a esta instancia de {@link AvionCarga}
-     *  @throws IllegalArgumentException Si se intenta superar el límite máximo {@link #CARGA_MAX}
+     * Añade una determinada cantidad de carga a esta instancia de {@link AvionCarga}
+     * 
+     * @param p_Carga La nueva carga ha añadir.
+     * @throws IllegalArgumentException Si se intenta superar el límite máximo {@link #CARGA_MAX}
      */
     public void AddCarga(double p_Carga) throws IllegalArgumentException
     {
