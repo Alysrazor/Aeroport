@@ -687,8 +687,14 @@ public class AeroportIO
     
     private void CargarPersona()
     {
-        Empleado l_EA = new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A");
-        Equipaje l_EqCA = new Equipaje("CAG65N01", TipoEquipaje.EQUIPAJE_MALETA, 20);
-        Cliente l_CA = new Cliente("15975365N", "Carlos", "Aparicio Garcia", LocalDate.of(1998, Month.DECEMBER, 10), "Carlosag", CryptSHA1.EncryptPassword("carlosap"), "carlosapariciogarcia@gmail.com", null);
+        // Empleados
+        this.l_Personas.add(new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A"));
+        this.l_Personas.add(new Empleado("75365489G", "Mario", "Blasco Ibañez", LocalDate.of(1987, Month.JUNE, 12), "MBI9G"));
+        this.l_Personas.add(new Empleado("32175398A", "Pablo", "Garcia Gomez", LocalDate.of(1990, Month.MARCH, 15), "PCC8A"));
+        //
+        HashSet<Equipaje> l_Equipajes = new HashSet<Equipaje>();
+        l_Equipajes.add(new Equipaje("CAR65N01", TipoEquipaje.EQUIPAJE_MALETA, 20));
+        Cliente l_CA = new Cliente("15975365N", "Carlos", "Aparicio Garcia", LocalDate.of(1998, Month.DECEMBER, 10), "Carlosag", CryptSHA1.EncryptPassword("carlosap"), "carlosapariciogarcia@gmail.com", l_Equipajes);
+        
     }
 }
