@@ -65,15 +65,6 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
     }
     
     /**
-     * Obtiene la {@link Terminal} donde se encuentra alojada la {@link PuertaEmbarque}
-     * @return Una {@link Terminal}
-     */
-    public Terminal GetTerminal()
-    {
-        return null; //TODO Devolver la Terminal correctamente
-    }
-    
-    /**
      * Obtiene el {@link Avion} estacionado en la {@link PuertaEmbarque}
      * @return Un {@link Avion} que está estacionado.
      */
@@ -116,5 +107,13 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
     public int compareTo(PuertaEmbarque p_Obj)
     {
         return this.l_Puerta < p_Obj.l_Puerta ? this.l_Puerta : p_Obj.l_Puerta;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion de la Puerta de Embarque: %n"
+                + "Numero de Puerta: %d%n",
+                this.l_Puerta);
     }
 }

@@ -415,13 +415,247 @@ public class AeroportIO
     }
     
     // Terminal
+    //Output
+    
+    /**
+     * Guarda las {@link Terminal} en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Terminales Las {@link Terminal} en un {@link TreeSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarTerminalBin(TreeSet<Terminal> p_Terminales) throws IOException
+    {
+        CreateFileIfNotExists(l_TerminalFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_TerminalFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_TerminalFileBin) && l_TerminalFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Terminal p_Terminal : p_Terminales)
+                oos.writeObject(p_Terminal);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga las {@link Terminal} al {@link TreeSet} que se le pasa como parámetro.
+     * 
+     * @param p_Terminales El {@link TreeSet} de las {@link Terminal}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Terminal}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerTerminalBin(TreeSet<Terminal> p_Terminales) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_TerminalFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Terminal l_Terminal;
+            
+            while ((l_Terminal = (Terminal)ois.readObject()) != null)
+                p_Terminales.add(l_Terminal);
+        }
+    }
     
     // Vuelo
+    //Output
+    
+    /**
+     * Guarda los {@link Vuelo} en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Vuelos Los {@link Vuelo} en un {@link TreeSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarVueloBin(TreeSet<Vuelo> p_Vuelos) throws IOException
+    {
+        CreateFileIfNotExists(l_VueloFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_VueloFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_VueloFileBin) && l_VueloFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Vuelo p_Vuelo : p_Vuelos)
+                oos.writeObject(p_Vuelo);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga los {@link Vuelo} al {@link TreeSet} que se le pasa como parámetro.
+     * 
+     * @param p_Vuelos El {@link TreeSet} de los {@link Vuelo}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Vuelo}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerVueloBin(TreeSet<Vuelo> p_Vuelos) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_TerminalFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Vuelo l_Vuelo;
+            
+            while ((l_Vuelo = (Vuelo)ois.readObject()) != null)
+                p_Vuelos.add(l_Vuelo);
+        }
+    }
     
     // Equipaje
+    //Output
+    
+    /**
+     * Guarda los {@link HashSet} en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Equipajes Los {@link Equipaje} en un {@link HashSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarEquipajeBin(HashSet<Equipaje> p_Equipajes) throws IOException
+    {
+        CreateFileIfNotExists(l_EquipajeFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_EquipajeFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_EquipajeFileBin) && l_EquipajeFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Equipaje p_Equipaje : p_Equipajes)
+                oos.writeObject(p_Equipaje);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga los {@link Equipaje} al {@link HashSet} que se le pasa como parámetro.
+     * 
+     * @param p_Equipajes El {@link HashSet} de los {@link Equipaje}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Equipaje}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerEquipajeBin(HashSet<Equipaje> p_Equipajes) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_EquipajeFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Equipaje l_Equipaje;
+            
+            while ((l_Equipaje = (Equipaje)ois.readObject()) != null)
+                p_Equipajes.add(l_Equipaje);
+        }
+    }
     
     // Persona
+    //Output
+    
+    /**
+     * Guarda las {@link Persona} en un {@link File} a partir de
+     * un {@link TreeSet}
+     * 
+     * <p>
+     *      Dado el {@link TreeSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Personas Las {@link Persona} en un {@link TreeSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarPersonaBin(TreeSet<Persona> p_Personas) throws IOException
+    {
+        CreateFileIfNotExists(l_PersonaFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_PersonaFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_PersonaFileBin) && l_PersonaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Persona p_Persona : p_Personas)
+                oos.writeObject(p_Persona);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga los {@link Equipaje} al {@link TreeSet} que se le pasa como parámetro.
+     * 
+     * @param p_Personas El {@link TreeSet} de las {@link Persona}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Persona}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerPersonaBin(TreeSet<Persona> p_Personas) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_EquipajeFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Persona l_Persona;
+            
+            while ((l_Persona = (Persona)ois.readObject()) != null)
+                p_Personas.add(l_Persona);
+        }
+    }
     
     // Reserva
+    //Output
     
+    /**
+     * Guarda las {@link Reserva} en un {@link File} a partir de
+     * un {@link HashSet}
+     * 
+     * <p>
+     *      Dado el {@link HashSet} que se le pasa por parámetro intentará en este try-with-resources
+     *      escribirlo al archivo
+     * </p>
+     * @param p_Reservas Las {@link Reserva} en un {@link HashSet}
+     * @throws IOException si ocurre un error al guardar los datos.
+     */
+    public void GuardarReservaBin(HashSet<Reserva> p_Reservas) throws IOException
+    {
+        CreateFileIfNotExists(l_ReservaFileBin);
+        
+        try(FileOutputStream fos = new FileOutputStream(l_ReservaFileBin);
+                AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
+                ObjectOutputStream oos = (IsFileEmpty(l_ReservaFileBin) && l_ReservaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+        {
+            for (Reserva p_Reserva : p_Reservas)
+                oos.writeObject(p_Reserva);
+        }
+    }
+    
+    // Input
+    
+    /**
+     * Lee el archivo y carga las {@link Reserva} al {@link HashSet} que se le pasa como parámetro.
+     * 
+     * @param p_Reservas El {@link HashSet} de las {@link Reserva}
+     * @throws ClassNotFoundException si no encuentra la clase {@link Reserva}
+     * @throws EOFException si ha terminado de leer el archivo.
+     * @throws IOException si ocurre algún problema con la lectura del archivo.
+     */
+    public void LeerReservaBin(HashSet<Reserva> p_Reservas) throws ClassNotFoundException, EOFException, IOException
+    {
+        try(FileInputStream fis = new FileInputStream(l_ReservaFileBin);
+                ObjectInputStream ois = new ObjectInputStream(fis))
+        {
+            Reserva l_Reserva;
+            
+            while ((l_Reserva = (Reserva)ois.readObject()) != null)
+                p_Reservas.add(l_Reserva);
+        }
+    }
 }

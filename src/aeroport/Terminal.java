@@ -83,4 +83,12 @@ public class Terminal implements Serializable
         
         return Objects.equals(this.l_Nombre, other.l_Nombre);
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion de la Terminal: %n"
+                + "Nombre:%s%n",
+                this.l_Nombre);
+    }
 }

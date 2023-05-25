@@ -43,6 +43,10 @@ public class Vuelo implements Serializable
     private String l_Identificador;
     
     /**
+     * La {@link Terminal}
+     */
+    private Terminal l_Terminal;
+    /**
      * La {@link PuertaEmbarque} que usarán los pasajeros para subirse al {@link Avión}
      */
     private PuertaEmbarque l_Puerta;
@@ -75,14 +79,16 @@ public class Vuelo implements Serializable
      *      por los {@link Cliente}.
      * </p>
      * @param p_Identificador El identificador único de cada {@link Vuelo}
+     * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      */
-    public Vuelo(String p_Identificador, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
+    public Vuelo(String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
     {
         this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
         this.l_Destino = p_Destino;
@@ -98,15 +104,17 @@ public class Vuelo implements Serializable
      *      por los {@link Cliente}.
      * </p>
      * @param p_Identificador El identificador único de cada {@link Vuelo}
+     * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      * @param p_Escalas Las escalas del {@link Vuelo}
      */
-    public Vuelo(String p_Identificador, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
+    public Vuelo(String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
     {
         this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
         this.l_Destino = p_Destino;
@@ -121,6 +129,15 @@ public class Vuelo implements Serializable
     public String GetIdentificador()
     {
         return this.l_Identificador;
+    }
+    
+    /**
+     * Obtiene la {@link Terminal}
+     * @return Una {@link Terminal}
+     */
+    public Terminal GetTerminal()
+    {
+        return this.l_Terminal;
     }
     
     /**
@@ -202,6 +219,24 @@ public class Vuelo implements Serializable
         final Vuelo other = (Vuelo) obj;
         return Objects.equals(this.l_Identificador, other.l_Identificador);
     }
-    
-    //TODO toString
+
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion del Vuelo:%n"
+                + "Identificador: %s%n"
+                + "Terminal: %s%n"
+                + "Puerta de Embarque: %d%n"
+                + "Origen: %s%n"
+                + "Destino: %s%n"
+                + "Hora de Salida: %s%n"
+                + "Escalas: %d%n",
+                this.l_Identificador,
+                this.l_Terminal,
+                this.l_Puerta,
+                this.l_Origen,
+                this.l_Destino,
+                this.l_HoraVuelo.toString(),
+                this.l_Escalas);
+    }
 }

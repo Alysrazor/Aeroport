@@ -120,4 +120,14 @@ public class Company implements Comparable<Company>, Serializable
         
         return 0;
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion de la Compañia: %n"
+                + "Nombre: %s%n"
+                + "Codigo de la Compañia: %s%n",
+                this.l_Nombre,
+                this.l_ShortName);
+    }
 }
