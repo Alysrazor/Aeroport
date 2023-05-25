@@ -7,6 +7,8 @@ package aeroport;
 
 import aeroport.persona.Cliente;
 
+import java.io.Serializable;
+
 
 /**
  *
@@ -25,7 +27,7 @@ import aeroport.persona.Cliente;
  * @my.company Ciclo Superior de Informática
  */
 
-public class PuertaEmbarque implements Comparable<PuertaEmbarque>
+public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
 {
     /**
      * Contador para la {@link PuertaEmbarque}

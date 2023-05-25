@@ -4,6 +4,8 @@
  */
 package aeroport;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Sergio Capilla Cabadés
@@ -11,7 +13,7 @@ package aeroport;
  * @dev.codevs
  * @my.fecha 19/05/2023 11:52:50
  */
-public class Aeroport 
+public class Aeroport implements Serializable
 {
     
 }

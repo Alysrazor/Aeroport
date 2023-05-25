@@ -4,6 +4,8 @@
  */
 package aeroport.persona;
 
+import java.io.Serializable;
+
 import java.util.Objects;
 
 /**
@@ -16,7 +18,7 @@ import java.util.Objects;
  * @my.fecha 22 may 2023 10:24:40
  * @my.company Ciclo Superior de Informática
  */
-public class Equipaje 
+public class Equipaje implements Serializable
 {
     private String CodEquipaje;
     private Cliente Cliente ;

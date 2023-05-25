@@ -8,7 +8,10 @@ package aeroport;
 import aeroport.persona.Cliente;
 import aeroport.persona.Reserva;
 
+import java.io.Serializable;
+
 import java.time.LocalDateTime;
+
 import java.util.Objects;
 
 /**
@@ -32,7 +35,7 @@ import java.util.Objects;
  * @my.company Ciclo Superior de Informática
  * 
  */
-public class Vuelo 
+public class Vuelo implements Serializable
 {
     /**
      * Un identificador único para cada {@link Vuelo}
