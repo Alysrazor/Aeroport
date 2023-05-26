@@ -119,8 +119,14 @@ public class AeroportIO
         {
             return ois.readObject() == null;
         }
-        catch(ClassNotFoundException | EOFException e) {}
-        catch(IOException e) {}
+        catch(EOFException e) 
+        {
+            return true;
+        }
+        catch(ClassNotFoundException | IOException e)
+        {
+            out.println(e.getMessage());
+        }
         
         return false;
     }
