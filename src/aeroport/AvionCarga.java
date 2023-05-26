@@ -110,4 +110,17 @@ public class AvionCarga extends Avion
         final AvionCarga other = (AvionCarga) obj;
         return Objects.equals(this.l_Identificador, other.l_Identificador);
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Información del Avión de Carga:%n"
+                + "%s%n"
+                + "Identificador: %s%n"
+                + "Carga Actual: %.2f"
+                + "Capacidad Disponible: %.2f",
+                super.toString(),
+                this.l_Carga,
+                this.CARGA_MAX - this.l_Carga);
+    }
 }

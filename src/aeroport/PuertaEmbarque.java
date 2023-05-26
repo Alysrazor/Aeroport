@@ -49,7 +49,10 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
      */
     private Avion l_Avion;
     
-    public PuertaEmbarque(Avion p_Avion)
+    /**
+     * Constructor por defecto de {@link PuertaEmbarque}
+     */
+    public PuertaEmbarque()
     {
         this.l_Puerta = l_Count++;
         this.l_Avion = null;

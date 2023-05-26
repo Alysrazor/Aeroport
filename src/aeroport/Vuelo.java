@@ -38,6 +38,21 @@ import java.util.Objects;
 public class Vuelo implements Serializable
 {
     /**
+     * Contador automático.
+     */    
+    private static int l_ID = 1;
+    
+    /**
+     * La {@link Company} que proporciona el {@link Vuelo}
+     */
+    private Company l_Company;
+    
+    /**
+     * El {@link Avion} que realizará el {@link Vuelo}
+     */
+    private Avion l_Avion;
+    
+    /**
      * Un identificador único para cada {@link Vuelo}
      */
     private String l_Identificador;
@@ -78,6 +93,8 @@ public class Vuelo implements Serializable
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
      *      por los {@link Cliente}.
      * </p>
+     * @param p_Company La {@link Company} que ofrece el {@link Vuelo}
+     * @param p_Avion El {@link Avion} que realizará el {@link Vuelo}
      * @param p_Identificador El identificador único de cada {@link Vuelo}
      * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
@@ -85,9 +102,11 @@ public class Vuelo implements Serializable
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      */
-    public Vuelo(String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
+    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
     {
-        this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Company = p_Company;
+        this.l_Avion = p_Avion;
+        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", this.l_ID++)));
         this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
@@ -103,6 +122,8 @@ public class Vuelo implements Serializable
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
      *      por los {@link Cliente}.
      * </p>
+     * @param p_Company La {@link Company} que ofrece el {@link Vuelo}
+     * @param p_Avion El {@link Avion} que realizará el {@link Vuelo}
      * @param p_Identificador El identificador único de cada {@link Vuelo}
      * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
@@ -111,15 +132,35 @@ public class Vuelo implements Serializable
      * @param p_HoraVuelo La hora de despegue.
      * @param p_Escalas Las escalas del {@link Vuelo}
      */
-    public Vuelo(String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
+    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
     {
-        this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Company = p_Company;
+        this.l_Avion = p_Avion;
+        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", l_ID++)));
         this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
         this.l_Destino = p_Destino;
         this.l_HoraVuelo = p_HoraVuelo;
         this.l_Escalas = p_Escalas;
+    }
+    
+    /**
+     * Obtiene la {@link Company} que ofrece el {@link Vuelo}
+     * @return Una {@link Company}
+     */
+    public Company GetCompany()
+    {
+        return this.l_Company;
+    }
+    
+    /**
+     * {@link Avion} que realizará el {@link Vuelo}
+     * @return Un {@link Avion}
+     */
+    public Avion GetAvion()
+    {
+        return this.l_Avion;
     }
     
     /**
@@ -199,14 +240,16 @@ public class Vuelo implements Serializable
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.l_Identificador);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (this == obj) {
             return true;
         }

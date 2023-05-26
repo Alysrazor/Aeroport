@@ -195,6 +195,19 @@ public class Cliente extends Persona
     {
         return l_Reservas.add(p_Reserva);
     }
+    
+    /**
+     * Elimina una {@link Reserva} de las {@link Reserva} del {@link Cliente}
+     * @param p_Reserva La {@link Reserva} que el {@link Cliente} decide cancelar.
+     * @return <ul>
+     *              <li>{@code true} si se ha podido eliminar.</li>
+     *              <li>{@code false} si no se ha podido eliminar.</li>
+     *          </ul>
+     */
+    public boolean RemoveReserva(Reserva p_Reserva)
+    {
+        return l_Reservas.remove(p_Reserva);
+    }
 
     @Override
     public int hashCode() {

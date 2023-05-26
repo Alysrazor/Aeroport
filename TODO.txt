@@ -14,7 +14,7 @@ Up to date.
 Up to date.
 
 #### Hijos Avion ####
-- Comprobar si tienen toString()
+- Comprobar si tienen toString() (DONE)
 
 #### Company ####
 Up to date.
@@ -32,7 +32,7 @@ Up to date.
 Up to date.
 
 #### Vuelo ####
-- Generar el identificador aleatorio.
+- Generar el identificador aleatorio. (DONE)
 
 #### Cliente ####
 Up to date.

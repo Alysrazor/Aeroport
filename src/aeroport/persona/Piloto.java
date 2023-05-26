@@ -25,10 +25,33 @@ public class Piloto extends Empleado
     /**
      * El {@link Avion} asignado al {@link Piloto}
      */
-    private Avion Avion;
-
+    private Avion l_Avion;
+    
     /**
      * Constructor por defecto del {@link Piloto}
+     * 
+     * <p>
+     *      Se crea un nueva instancia de {@link Piloto} con los atributos de {@link Empleado} y
+     *      estableciendo su {@link Avion} a {@code null} porque aún no se le ha asignado ningún
+     *      {@link Avion} aún.
+     * </p>
+     * 
+     * @param p_DNI El DNI del {@link Piloto}
+     * @param p_Nombre El nombre del {@link Piloto}
+     * @param p_Apellidos Los apellidos del {@link Piloto}
+     * @param p_FechaNac La fecha de nacimiento del {@link Piloto}
+     * @param p_CodEmpleado El código de empleado del {@link Piloto}
+     * @param p_Company La {@link Company} a la que pertenece el {@link Piloto}
+     */
+    public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company) 
+    {
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado, p_Company);
+        this.l_Avion = null;
+
+    }
+
+    /**
+     * Constructor secundario del {@link Piloto}
      * @param p_DNI El DNI del {@link Piloto}
      * @param p_Nombre El nombre del {@link Piloto}
      * @param p_Apellidos Los apellidos del {@link Piloto}
@@ -40,7 +63,7 @@ public class Piloto extends Empleado
     public Piloto(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_CodEmpleado, Company p_Company, Avion p_Avion) 
     {
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac, p_CodEmpleado, p_Company);
-        this.Avion = p_Avion;
+        this.l_Avion = p_Avion;
 
     }
     
@@ -50,7 +73,7 @@ public class Piloto extends Empleado
      */
     public Avion GetAvion() 
     {
-        return Avion;
+        return l_Avion;
     }
 
     /**
@@ -59,14 +82,14 @@ public class Piloto extends Empleado
      */
     public void SetAvion(Avion Avion) 
     {
-        this.Avion = Avion;
+        this.l_Avion = Avion;
     }
 
     @Override
     public int hashCode() 
     {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.Avion);
+        hash = 97 * hash + Objects.hashCode(this.l_Avion);
         return hash;
     }
 
@@ -80,7 +103,7 @@ public class Piloto extends Empleado
         if (getClass() != obj.getClass()) return false;
         
         final Piloto other = (Piloto) obj;
-        return Objects.equals(this.Avion, other.Avion);
+        return Objects.equals(this.l_Avion, other.l_Avion);
     }
     
     @Override
@@ -96,7 +119,7 @@ public class Piloto extends Empleado
                 super.l_Nombre,
                 super.l_Apellidos,
                 super.GetCompany(),
-                this.Avion.GetNumSerie());
+                this.l_Avion.GetNumSerie());
     }
 }
 

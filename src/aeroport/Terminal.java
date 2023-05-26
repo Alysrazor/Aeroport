@@ -36,7 +36,17 @@ public class Terminal implements Serializable
     private TreeSet<PuertaEmbarque> l_Puertas;
     
     /**
-     * Constructor por defecto de las {@link Terminal} donde cada instancia tendrá sus {@link PuertaEmbarque}
+     * Constructor por defecto de las {@link Terminal}
+     * @param p_Nombre El nombre de la {@link Terminal}
+     */
+    public Terminal(String p_Nombre)
+    {
+        this.l_Nombre = p_Nombre;
+        this.l_Puertas = new TreeSet<>();
+    }
+    
+    /**
+     * Constructor secundario de las {@link Terminal} donde cada instancia tendrá sus {@link PuertaEmbarque}
      * @param p_Nombre El nombre de la {@link Terminal}
      * @param p_Puertas Un {@link TreeSet} con las {@link PuertaEmbarque}
      */
@@ -62,6 +72,34 @@ public class Terminal implements Serializable
     public TreeSet<PuertaEmbarque> GetPuertasEmbarque()
     {
         return this.l_Puertas;
+    }
+    
+    /**
+     * Añade una {@link PuertaEmbarque} a la {@link Terminal}
+     * @param p_Puerta La {@link PuertaEmbarque}
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido añadir</li>
+     *              <li>{@code false} si no ha podido añadir al nuevo {@link PuertaEmbarque}</li>
+     *          </ul>
+     */
+    public boolean AddPuertaEmbarque(PuertaEmbarque p_Puerta)
+    {
+        return this.l_Puertas.add(p_Puerta);
+    }
+    
+    /**
+     * 
+     * Elimina una {@link PuertaEmbarque} de la {@link Terminal}
+     * 
+     * @param p_Puerta La {@link PuertaEmbarque}
+     * @return <ul>
+     *              <li>{@code true} si lo ha podido añadir</li>
+     *              <li>{@code false} si no ha podido añadir al nuevo {@link PuertaEmbarque}</li>
+     *          </ul> 
+     */
+    public boolean RemovePuertaEmbarque(PuertaEmbarque p_Puerta)
+    {
+        return this.l_Puertas.remove(p_Puerta);
     }
 
     @Override

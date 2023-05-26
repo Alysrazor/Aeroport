@@ -24,7 +24,7 @@ public class Equipaje implements Serializable
     private TipoEquipaje l_TipoEquipaje;
     private double l_Peso;
 
-    public Equipaje(String p_CodEquipaje,  TipoEquipaje p_TipoEquipaje, double p_Peso) 
+    public Equipaje(String p_CodEquipaje, TipoEquipaje p_TipoEquipaje, double p_Peso) 
     {
         this.l_CodEquipaje = p_CodEquipaje;
         this.l_TipoEquipaje = p_TipoEquipaje;

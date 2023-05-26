@@ -1,0 +1,4 @@
+# Para hacer que el Scanner ignore líneas, hay que insertar # al principio de la línea sin espacios por delante.
+# Estructura de Avion
+# NumSerie::Nombre::Company::Pilotos(CodEmpleado)::TipoAvion(Privado, Publico, Carga)::Identificador::Asientos(que se leerá desde asientos solo en caso del público o privado)
+

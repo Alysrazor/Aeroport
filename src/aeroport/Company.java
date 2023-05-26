@@ -44,13 +44,12 @@ public class Company implements Comparable<Company>, Serializable
      * Constructor por defecto de la {@link Company}
      * @param p_Nombre El nombre.
      * @param p_ShortName La abreviación
-     * @param p_Aviones Los {@link Avion} que tiene.
      */
-    public Company(String p_Nombre, String p_ShortName, HashSet<Avion> p_Aviones)
+    public Company(String p_Nombre, String p_ShortName)
     {
         this.l_Nombre = p_Nombre;
         this.l_ShortName = p_ShortName;
-        this.l_Aviones = new HashSet<>(p_Aviones);
+        this.l_Aviones = new HashSet<>();
         this.l_Empleados = new TreeSet<>();
     }
     

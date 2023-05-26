@@ -6,7 +6,6 @@ import aeroport.persona.Equipaje;
 import aeroport.persona.Persona;
 import aeroport.persona.Reserva;
 
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,30 +45,39 @@ public class AeroportIO
     private File l_AsientoFileBin = new File("Asiento.dat");
     
     // Avion Files
+    private File l_AvionFile = new File("Avion.txt");
     private File l_AvionFileBin = new File("Avion.dat");
     
     // Compañía Files
+    private File l_CompanyFile = new File("Company.txt");
     private File l_CompanyFileBin = new File("Company.dat");
     
     // Pista Files
-    private File l_PuertaFileBin = new File("Pista.dat");
+    private File l_PistaFile = new File("Pista.txt");
+    private File l_PistaFileBin = new File("Pista.dat");
     
     // PuertaEmbarqueFiles
-    private File l_PuertasFileBin = new File("PuertaEmbarque.dat");
+    private File l_PuertaFile = new File("PuertaEmbarque.txt");
+    private File l_PuertaFileBin = new File("PuertaEmbarque.dat");
     
     // Terminal Files
+    private File l_TerminalFile = new File("Terminal.txt");
     private File l_TerminalFileBin = new File("Terminal.dat");
     
     // Vuelo Files
+    private File l_VueloFile = new File("Vuelo.txt");
     private File l_VueloFileBin = new File("Vuelo.dat");
     
     // Equipaje Files
+    private File l_EquipajeFile = new File("Equipaje.txt");
     private File l_EquipajeFileBin = new File("Equipaje.dat");
     
     // Persona Files
+    private File l_PersonaFile = new File("Persona.txt");
     private File l_PersonaFileBin = new File("Persona.dat");
     
     // Reserva Files
+    private File l_ReservaFile = new File("Reserva.txt");
     private File l_ReservaFileBin = new File("Reserva.dat");
     
     
@@ -120,13 +128,41 @@ public class AeroportIO
     // TEXT READ-ONLY    
     // Asiento IO Related
     /**
-     * Lee los {@link Asiento} de su {@link File}
-     * @param p_Asientos
-     * @throws IOException si ocurre algo con el {@link File}
+     * Lee los {@link Asiento} de su {@link File} para asignarlos al {@link Avion}
+     * 
+     * <p>
+     *      Para poder invocar este método, se debe invocar dentro de un nuevo constructor de {@link AvionPublico} o
+     *      {@link AvionPrivado}<br>
+     *      El tamaño de la matriz debe existir antes de su implementación y para cada {@link Avion} debe
+     *      seguir la siguiente estructura:
+     * </p>
+     * <ul>
+     *      <li>{@link AvionPublico} Nx6</li>
+     *      <li>{@link AvionPrivado} Nx4</li>
+     * </ul>
+     * 
+     * <p>
+     *      Donde {@code N} es el número de filas que tiene el {@link Avion} de {@link Asiento}
+     *      y obviamente cada fila debe tener su número de {@link Asiento} en columnas o al 
+     *      intentar cargar si es menor los dejará en {@code null} o si supera lanzará 
+     *      la excepción {@link IndexOutOfBoundsException}
+     * </p>
+     * 
+     * @param p_Avion El {@link Avion} para cargar los {@link Asiento}
+     * @param p_Asientos Los {@link Asiento} que se cargarán en el {@link Avion}
+     * 
+     * @return La matriz bidimensional de {@link Asiento} que se le pasa por parámetro.
+     * 
      * @throws FileNotFoundException si el {@link File} para los asientos no se encuentra.
+     * @throws IndexOutOfBoundsException si el rango de la matriz bidimensiona no coincide con la estructura del {@link File}
+     * @throws IOException si ocurre algo con el {@link File}
+     * @throws NullPointerException si intenta acceder a un elemento {@code null}
+     * 
+     * @since JDK 1.18
      */
-    public void LeerAsiento(Asiento[][] p_Asientos) throws IOException, FileNotFoundException
+    public Asiento[][] LeerAsiento(Avion p_Avion, Asiento[][] p_Asientos) throws FileNotFoundException, IndexOutOfBoundsException, IOException, NullPointerException
     {
+        if (p_Avion == null) throw new NullPointerException("Se debe especificar un avión el cual se cargarán los datos.");
         if (!l_AsientoFile.exists()) throw new FileNotFoundException("No se ha podido encontrar el archivo. Por favor, póngase en contacto con el desarrollador.");
         
         try(Scanner p_Scanner = new Scanner(l_AsientoFile))
@@ -135,11 +171,25 @@ public class AeroportIO
             {
                 for (int l_Col = 0; l_Col < p_Asiento.length; l_Col++) 
                 {
-                    if (p_Scanner.hasNextLine()) 
-                        p_Asiento[l_Col] = new Asiento(p_Scanner.nextLine());
+                    String l_NextLine = p_Scanner.nextLine();
+                    String[] l_Values = l_NextLine.split("::");
+                    if (p_Scanner.hasNextLine() && !l_NextLine.startsWith("#")) 
+                    {
+                        if (p_Avion instanceof AvionPublico && l_Values[0].equals("Pb"))
+                            p_Asiento[l_Col] = new Asiento(l_Values[1]);
+                        else if (p_Avion instanceof AvionPrivado && l_Values[0].equals("Pv"))
+                            p_Asiento[l_Col] = new Asiento(l_Values[1]);
+                    }
                 }
             }
         }
+        
+        return p_Asientos;
+    }
+    
+    public void LeerAvion() throws IOException, FileNotFoundException
+    {
+        if (!l_AvionFile.exists()) throw new FileNotFoundException("No se ha podido encontrar el archivo. Por favor, póngase en contacto con el desarrollador.");
     }
     
     
@@ -359,11 +409,11 @@ public class AeroportIO
      */
     public void GuardarPistaBin(TreeSet<Pista> p_Pistas) throws IOException
     {
-        CreateFileIfNotExists(l_PuertaFileBin);
+        CreateFileIfNotExists(l_PistaFileBin);
         
-        try(FileOutputStream fos = new FileOutputStream(l_PuertaFileBin);
+        try(FileOutputStream fos = new FileOutputStream(l_PistaFileBin);
                 AeroportOutputStream p_AeroportStream = new AeroportOutputStream(fos);
-                ObjectOutputStream oos = (IsFileEmpty(l_PuertaFileBin) && l_PuertaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
+                ObjectOutputStream oos = (IsFileEmpty(l_PistaFileBin) && l_PistaFileBin.length() > 0) ? p_AeroportStream : new ObjectOutputStream(fos))
         {
             for (Pista p_Pista : p_Pistas)
                 oos.writeObject(p_Pista);
@@ -382,7 +432,7 @@ public class AeroportIO
      */
     public void LeerPistaBin(TreeSet<Pista> p_Pista) throws ClassNotFoundException, EOFException, IOException
     {
-        try(FileInputStream fis = new FileInputStream(l_PuertaFileBin);
+        try(FileInputStream fis = new FileInputStream(l_PistaFileBin);
                 ObjectInputStream ois = new ObjectInputStream(fis))
         {
             Pista l_Pista;

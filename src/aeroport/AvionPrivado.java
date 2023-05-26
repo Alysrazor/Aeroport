@@ -64,6 +64,22 @@ public class AvionPrivado extends Avion
     {
         return l_Asientos;
     }
+    
+    /**
+     * Obtiene cuantos {@link Asiento} hay disponibles.
+     * @return La cantidad de {@link Asiento} disponibles.
+     */
+    public int GetAsientosLibres()
+    {
+        int l_AsientosLibres = 0;
+        
+        for (Asiento[] p_AsientoF : this.l_Asientos)        
+            for (Asiento p_AsientoC : p_AsientoF)            
+                if (p_AsientoC.GetPersona() != null) 
+                    l_AsientosLibres++;
+        
+        return l_AsientosLibres;
+    }
 
     @Override
     public int hashCode() 
@@ -90,4 +106,16 @@ public class AvionPrivado extends Avion
         final AvionPrivado other = (AvionPrivado) obj;
         return Objects.equals(this.l_Identificador, other.l_Identificador);
     } 
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Información del Avión Privado:%n"
+                + "%s%n"
+                + "Identificador: %s%n"
+                + "Asientos Disponibles: %d%n",
+                super.toString(),
+                this.l_Identificador,
+                this.GetAsientosLibres());
+    }
 }
