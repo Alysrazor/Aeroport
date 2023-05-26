@@ -4,7 +4,6 @@ import aeroport.persona.Cliente;
 import aeroport.persona.Empleado;
 import aeroport.persona.Equipaje;
 import aeroport.persona.Persona;
-import aeroport.persona.Piloto;
 import aeroport.persona.Reserva;
 
 import java.io.EOFException;
@@ -80,6 +79,9 @@ public class AeroportIO
     // Reserva Files
     private File l_ReservaFile = new File("Reserva.txt");
     private File l_ReservaFileBin = new File("Reserva.dat");
+    
+    
+    public AeroportIO() {}
     
     /**
      * Comprueba un {@link File} y crea sus directorios, si los tiene, y crea el {@link File}
@@ -190,6 +192,12 @@ public class AeroportIO
         
         return p_Asientos;
     }
+    
+    public void LeerAvion() throws IOException, FileNotFoundException
+    {
+        if (!l_AvionFile.exists()) throw new FileNotFoundException("No se ha podido encontrar el archivo. Por favor, póngase en contacto con el desarrollador.");
+    }
+    
     
     // OBJECTS
     // Aeroport IORelated
@@ -675,7 +683,7 @@ public class AeroportIO
      */
     public void LeerPersonaBin(TreeSet<Persona> p_Personas) throws ClassNotFoundException, EOFException, IOException
     {
-        try(FileInputStream fis = new FileInputStream(l_PersonaFileBin);
+        try(FileInputStream fis = new FileInputStream(l_EquipajeFileBin);
                 ObjectInputStream ois = new ObjectInputStream(fis))
         {
             Persona l_Persona;
