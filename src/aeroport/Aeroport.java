@@ -28,10 +28,14 @@ import java.util.TreeSet;
  */
 public class Aeroport implements Serializable
 {
+    // Sets
     private TreeSet<Company> l_Companies;
     private TreeSet<Pista> l_Pistas;
     private TreeSet<Terminal> l_Terminales;
     private TreeSet<Cliente> l_Clientes;
+    
+    // Tipos
+    public Asiento[][] l_Asientos;
     
     /**
      * El nombre del {@link Aeroport}
@@ -87,6 +91,34 @@ public class Aeroport implements Serializable
     public TreeSet<Company> GetCompanies()
     {
         return this.l_Companies;
+    }
+    
+    /**
+     * Busca una {@link Company} en el {@link Aeroport}
+     * 
+     * <p>
+     *      Dado un  {@link String} que se le pasa como parámetro el {@link Aeroport}
+     *      intentará buscar una {@link Company} que tenga el mismo nombre, ya que
+     *      como el {@link Aeroport} tiene un {@link TreeSet} de {@link Company} no podrán
+     *      haber repetidas.<br><br>
+     *      Como pueden ser buscadas por minúscula o mayúscula, la búsqueda utilizará el
+     *      método {@code String.equalsIgnoreCase(anotherString)}
+     * </p>
+     * @param p_CompanyName El nombre que se tiene que buscar.
+     * @return <ul>
+     *                  <li>La {@link Company} cuyo nombre sea igual.</li>
+     *                  <li>{@code null} si no encuentra ninguna {@link Company} con ese nombre</li>
+     *              </ul>
+     */
+    public Company BuscarCompany(String p_CompanyName)
+    {
+        for (Company p_Company : l_Companies)
+        {
+            if (p_Company.GetNombre().equalsIgnoreCase(p_CompanyName))
+                return p_Company;
+        }
+        
+        return null;
     }
     
     /**
