@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"aeroport"},{"l":"aeroport.crypto"},{"l":"aeroport.persona"},{"l":"All Packages","u":"allpackages-index.html"}];updateSearchResults();

@@ -7,8 +7,6 @@ package aeroport.crypto;
 
 import aeroport.persona.Cliente;
 
-import java.math.BigInteger;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,18 +32,19 @@ public class CryptSHA1
     {
         try 
         {
-            MessageDigest l_MD = MessageDigest.getInstance("SHA-1");
+            // Obtener la instancia de MessageDigest para SHA-1
+            MessageDigest l_MDigest = MessageDigest.getInstance("SHA-1");
+        
+            // Convertir el input en bytes y calcular el hash
+            byte[] hashBytes = l_MDigest.digest(p_Password.getBytes());
+        
+            // Convertir el hash a una representación hexadecimal
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) 
+                hexString.append(String.format("%02x", b));
             
-            byte[] l_MessageDiggest = l_MD.digest(p_Password.getBytes());
             
-            BigInteger l_BI = new BigInteger(1, l_MessageDiggest);
-            
-            String hashText = l_BI.toString(16);
-            
-            while (hashText.length() < 32)
-                hashText = "0" + hashText;
-            
-            return hashText;
+            return hexString.toString();
         }catch(NoSuchAlgorithmException e)
         {
             throw new RuntimeException(e);
