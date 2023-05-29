@@ -4,8 +4,6 @@
  */
 package aeroport.persona;
 
-import java.io.Serializable;
-
 /**
  *
  * Enumerador para los tipos de {@link Equipaje}
@@ -21,7 +19,7 @@ import java.io.Serializable;
  * @dev.codevs
  * @my.fecha 22 may 2023 9:51:35
  */
-public enum TipoEquipaje implements Serializable
+public enum TipoEquipaje
 {
     /**
      * Equipaje de tipo equipaje de mano.

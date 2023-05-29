@@ -21,12 +21,7 @@ import java.util.Objects;
  * @my.company Ciclo Superior de Informática
  */
 public class AvionPublico extends Avion implements IAvion
-{
-    /**
-     * Atributo que identifica el identificador de {@link AvionPublico}
-     */
-    private String l_Nombre;
-    
+{    
     /**
      * Atributo que identifica la cantidad de asientos de {@link AvionPublico}
      */
@@ -66,7 +61,7 @@ public class AvionPublico extends Avion implements IAvion
         
         for (Asiento[] p_AsientoF : this.l_Asientos)        
             for (Asiento p_AsientoC : p_AsientoF)            
-                if (p_AsientoC.GetPersona() != null && p_AsientoC != null) 
+                if (p_AsientoC.GetPersona() != null) 
                     l_AsientosLibres++;
         
         return l_AsientosLibres;
@@ -96,7 +91,7 @@ public class AvionPublico extends Avion implements IAvion
     public int hashCode() 
     {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.l_Nombre);
+        hash = 67 * hash + Objects.hashCode(super.l_NumSerie);
         
         return hash;
     }
@@ -115,7 +110,7 @@ public class AvionPublico extends Avion implements IAvion
         }
         
         final AvionPublico other = (AvionPublico) obj;
-        return Objects.equals(this.l_Nombre, other.l_Nombre);
+        return Objects.equals(super.l_NumSerie, other.l_NumSerie);
     }
     
     @Override
@@ -123,10 +118,8 @@ public class AvionPublico extends Avion implements IAvion
     {
         return String.format("Información del Avión Privado:%n"
                 + "%s%n"
-                + "Identificador: %s%n"
                 + "Asientos Disponibles: %d%n",
                 super.toString(),
-                this.l_Nombre,
                 this.GetAsientosLibres());
     }
 }

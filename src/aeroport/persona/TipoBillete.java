@@ -4,8 +4,6 @@
  */
 package aeroport.persona;
 
-import java.io.Serializable;
-
 /**
  *
  * Enumerador para los tipos de billete.<br><br>
@@ -25,7 +23,7 @@ import java.io.Serializable;
  * @my.fecha 19 may 2023 12:28:20
  * @my.company Ciclo Superior de Informática
  */
-public enum TipoBillete implements Serializable
+public enum TipoBillete
 {
     /**
      * El billete para Primera Clase que ofrece los mejores servicios.

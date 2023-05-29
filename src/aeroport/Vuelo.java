@@ -106,7 +106,7 @@ public class Vuelo implements Serializable
     {
         this.l_Company = p_Company;
         this.l_Avion = p_Avion;
-        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", this.l_ID++)));
+        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", l_ID++)));
         this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;

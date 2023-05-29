@@ -7,7 +7,9 @@ package aeroport;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.TreeSet;
 
 
@@ -26,6 +28,10 @@ import java.util.TreeSet;
 public class Terminal implements Serializable
 {
     /**
+     * Número de la Terminal
+     */
+    private int l_Numero;
+    /**
      * El nombre de la {@link Terminal}
      */
     private String l_Nombre;
@@ -37,10 +43,12 @@ public class Terminal implements Serializable
     
     /**
      * Constructor por defecto de las {@link Terminal}
+     * @param p_Numero El número de la {@link Terminal}
      * @param p_Nombre El nombre de la {@link Terminal}
      */
-    public Terminal(String p_Nombre)
+    public Terminal(int p_Numero, String p_Nombre)
     {
+        this.l_Numero = p_Numero;
         this.l_Nombre = p_Nombre;
         this.l_Puertas = new TreeSet<>();
     }
@@ -98,8 +106,20 @@ public class Terminal implements Serializable
      *          </ul> 
      */
     public boolean RemovePuertaEmbarque(PuertaEmbarque p_Puerta)
-    {
+    {        
         return this.l_Puertas.remove(p_Puerta);
+    }
+
+    /**
+     * Devuelve una {@link PuertaEmbarque} aleatoria.
+     * @return Una {@link PuertaEmbarque}
+     */
+    public PuertaEmbarque GetRandomPuertaEmbarque()
+    {
+        ArrayList<PuertaEmbarque> l_ALPuertas = new ArrayList<>(this.l_Puertas); 
+        Random l_Rand = new Random();
+
+        return l_ALPuertas.get(l_Rand.nextInt(l_ALPuertas.size()));
     }
 
     @Override

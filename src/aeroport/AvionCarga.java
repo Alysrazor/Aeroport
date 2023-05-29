@@ -101,7 +101,6 @@ public class AvionCarga extends Avion
     {
         return String.format("Información del Avión de Carga:%n"
                 + "%s%n"
-                + "Identificador: %s%n"
                 + "Carga Actual: %.2f"
                 + "Capacidad Disponible: %.2f",
                 super.toString(),
