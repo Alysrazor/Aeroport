@@ -22,12 +22,7 @@ import java.util.Objects;
  * @my.company Ciclo Superior de Informática
  */
 public class AvionCarga extends Avion 
-{
-    /**
-     * Atributo que identifica el identificador de {@link AvionCarga}
-     */
-    private String l_Identificador;
-    
+{    
     /**
      *  La carga actual que lleva el {@link AvionCarga}
      */
@@ -44,23 +39,13 @@ public class AvionCarga extends Avion
      * @param p_Nombre El nombre.
      * @param p_Company La compañia a la que pertenece.
      * @param p_Pilotos Los pilotos del Avion.
-     * @param p_Identificador El identificador.
      */
-    public AvionCarga(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos, String p_Identificador) 
+    public AvionCarga(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos) 
     {
         super(p_NumSerie, p_Nombre, p_Company, p_Pilotos);
-        this.l_Identificador = p_Identificador;
         this.l_Carga = 0;
     }
-    
-    /**
-     * Obtiene el identificador de {@link AvionCarga}
-     * @return Un {@link String} que contiene el identificador de {@link AvionCarga}
-     */
-    public String GetIdentificador() 
-    {
-        return l_Identificador;
-    }
+
     
     /**
      *  Obtiene la carga actual de esta instancia de {@link AvionCarga}
@@ -89,7 +74,7 @@ public class AvionCarga extends Avion
     public int hashCode() 
     {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.l_Identificador);
+        hash = 97 * hash + Objects.hashCode(super.GetNumSerie());
         
         return hash;
     }
@@ -108,7 +93,7 @@ public class AvionCarga extends Avion
         
         
         final AvionCarga other = (AvionCarga) obj;
-        return Objects.equals(this.l_Identificador, other.l_Identificador);
+        return Objects.equals(super.GetNumSerie(), other.GetNumSerie());
     }
     
     @Override

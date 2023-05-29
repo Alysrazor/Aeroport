@@ -20,13 +20,12 @@ import java.util.Objects;
  * @my.fecha 19 may 2023 17:02:10
  * @my.company Ciclo Superior de Informática
  */
-public class AvionPublico extends Avion 
+public class AvionPublico extends Avion implements IAvion
 {
-    
     /**
      * Atributo que identifica el identificador de {@link AvionPublico}
      */
-    private String l_Identificador;
+    private String l_Nombre;
     
     /**
      * Atributo que identifica la cantidad de asientos de {@link AvionPublico}
@@ -39,24 +38,14 @@ public class AvionPublico extends Avion
      * @param p_Nombre El nombre.
      * @param p_Company La compañia a la que pertenece.
      * @param p_Pilotos Los pilotos del Avion.
-     * @param p_Identificador El identificador.
      * @param p_Asientos La cantidad de asientos.
      */
-    public AvionPublico(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos, String p_Identificador, Asiento[][] p_Asientos) 
+    public AvionPublico(int p_NumSerie, String p_Nombre, Company p_Company, Piloto[] p_Pilotos, Asiento[][] p_Asientos) 
     {
-        super(p_NumSerie, p_Nombre, p_Company, p_Pilotos);
-        this.l_Identificador = p_Identificador;
+        super(p_NumSerie, p_Nombre, p_Company, p_Pilotos.clone());
         this.l_Asientos = p_Asientos.clone();
     }
-    
-    /**
-     * Obtiene el identificador de {@link AvionPublico}
-     * @return Un {@link String} que contiene el identificador de {@link AvionPublico}
-     */
-    public String GetIdentificador() 
-    {
-        return l_Identificador;
-    }
+
     
     /**
      * Obtiene la cantidad de asientos de {@link AvionPublico}
@@ -77,17 +66,37 @@ public class AvionPublico extends Avion
         
         for (Asiento[] p_AsientoF : this.l_Asientos)        
             for (Asiento p_AsientoC : p_AsientoF)            
-                if (p_AsientoC.GetPersona() != null) 
+                if (p_AsientoC.GetPersona() != null && p_AsientoC != null) 
                     l_AsientosLibres++;
         
         return l_AsientosLibres;
     }
 
     @Override
+    public String PrintAsientos() 
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (Asiento[] p_AsientoF : this.l_Asientos)
+        {
+            for (Asiento p_AsientoC : p_AsientoF)
+            {
+                if (p_AsientoC.GetPersona() == null)                
+                    sb.append(String.format("%-5s", COLOR_VERDE + p_AsientoC.GetCodigoAsiento() + COLOR_RESET));
+                else
+                    sb.append(String.format("%-5s", COLOR_ROJO + p_AsientoC.GetCodigoAsiento() + COLOR_RESET));
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    @Override
     public int hashCode() 
     {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.l_Identificador);
+        hash = 67 * hash + Objects.hashCode(this.l_Nombre);
         
         return hash;
     }
@@ -106,7 +115,7 @@ public class AvionPublico extends Avion
         }
         
         final AvionPublico other = (AvionPublico) obj;
-        return Objects.equals(this.l_Identificador, other.l_Identificador);
+        return Objects.equals(this.l_Nombre, other.l_Nombre);
     }
     
     @Override
@@ -117,7 +126,7 @@ public class AvionPublico extends Avion
                 + "Identificador: %s%n"
                 + "Asientos Disponibles: %d%n",
                 super.toString(),
-                this.l_Identificador,
+                this.l_Nombre,
                 this.GetAsientosLibres());
     }
 }
