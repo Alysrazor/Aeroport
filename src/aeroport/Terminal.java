@@ -157,7 +157,7 @@ public class Terminal implements Serializable
     public String toString()
     {
         return String.format("Informacion de la Terminal: %n"
-                + "Nombre:%s%n",
+                + "Nombre: %s%n",
                 this.l_Nombre);
     }
 }

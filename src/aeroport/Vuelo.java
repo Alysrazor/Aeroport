@@ -106,7 +106,7 @@ public class Vuelo implements Serializable
     {
         this.l_Company = p_Company;
         this.l_Avion = p_Avion;
-        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", l_ID++)));
+        this.l_Identificador = p_Identificador;
         this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
@@ -136,7 +136,7 @@ public class Vuelo implements Serializable
     {
         this.l_Company = p_Company;
         this.l_Avion = p_Avion;
-        this.l_Identificador = (p_Company.GetShortName().concat(String.format("03%d", l_ID++)));
+        this.l_Identificador = p_Identificador;
         this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
@@ -267,16 +267,16 @@ public class Vuelo implements Serializable
     public String toString()
     {
         return String.format("Informacion del Vuelo:%n"
-                + "Identificador: %s%n"
-                + "Terminal: %s%n"
-                + "Puerta de Embarque: %d%n"
-                + "Origen: %s%n"
-                + "Destino: %s%n"
-                + "Hora de Salida: %s%n"
-                + "Escalas: %d%n",
+                + "\tIdentificador: %s%n"
+                + "\tTerminal: %d%n"
+                + "\tPuerta de Embarque: %d%n"
+                + "\tOrigen: %s%n"
+                + "\tDestino: %s%n"
+                + "\tHora de Salida: %s%n"
+                + "\tEscalas: %d%n",
                 this.l_Identificador,
-                this.l_Terminal,
-                this.l_Puerta,
+                this.l_Terminal.GetNumero(),
+                this.l_Puerta.GetPuerta(),
                 this.l_Origen,
                 this.l_Destino,
                 this.l_HoraVuelo.toString(),

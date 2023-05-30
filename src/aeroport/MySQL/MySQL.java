@@ -393,12 +393,18 @@ public class MySQL
                         try(ResultSet p_Result = p_StmtAvionAsiento.executeQuery())
                         {
     
-                            if (p_ResultAvion.getString(4).equals("Público"))                        
-                                l_Asientos = new Asiento[9][6];
-                            else if (p_ResultAvion.getString(4).equals("Privado"))
-                                l_Asientos = new Asiento[6][4];
-                            else 
-                                l_Asientos = null;
+                            switch (p_ResultAvion.getString(4)) 
+                            {
+                                case "Público":
+                                    l_Asientos = new Asiento[9][6];
+                                    break;
+                                case "Privado":
+                                    l_Asientos = new Asiento[6][4];
+                                    break;
+                                default:
+                                    l_Asientos = null;
+                                    break;
+                            }
 
                             if (l_Asientos != null)
                             {
@@ -422,20 +428,23 @@ public class MySQL
     
                         try(ResultSet p_Result = p_StmtAvionPiloto.executeQuery())
                         {
-                            for (Piloto p_Piloto : l_Pilotos)
+                            for (int l_Itr = 0; l_Itr < l_Pilotos.length; l_Itr++)
                             {
                                 if (p_Result.next())
-                                    p_Piloto = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
+                                    l_Pilotos[l_Itr] = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
                             }
                         }
                     }
     
-                    if (p_ResultAvion.getString(4).equals("Público"))
-                        return new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
-                    else if (p_ResultAvion.getString(4).equals("Privado"))
-                        return new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
-                    else
-                        return new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone());
+                    switch (p_ResultAvion.getString(4)) 
+                    {
+                        case "Público":
+                            return new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                        case "Privado":
+                            return new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                        default:
+                            return new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone());
+                    }
                 }
             }
             
@@ -486,12 +495,18 @@ public class MySQL
                     try(ResultSet p_Result = p_StmtAvionAsiento.executeQuery())
                     {
 
-                        if (p_ResultAvion.getString(4).equals("Público"))                        
-                            l_Asientos = new Asiento[9][6];
-                        else if (p_ResultAvion.getString(4).equals("Privado"))
-                            l_Asientos = new Asiento[6][4];
-                        else
-                            l_Asientos = null;
+                        switch (p_ResultAvion.getString(4)) 
+                        {
+                            case "Público":
+                                l_Asientos = new Asiento[9][6];
+                                break;
+                            case "Privado":
+                                l_Asientos = new Asiento[6][4];
+                                break;
+                            default:
+                                l_Asientos = null;
+                                break;
+                        }
                                
                         if (l_Asientos != null)
                         {
@@ -515,20 +530,32 @@ public class MySQL
 
                     try(ResultSet p_Result = p_StmtAvionPiloto.executeQuery())
                     {
-                        for (Piloto p_Piloto : l_Pilotos)
-                        {
-                            if (p_Result.next())
-                                p_Piloto = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
-                        }
+                           for (int l_Itr = 0; l_Itr < l_Pilotos.length; l_Itr++)
+                           {
+                                if (p_Result.next())
+                                    l_Pilotos[l_Itr] = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
+                           }
                     }
                 }
 
-                if (p_ResultAvion.getString(4).equals("Público"))
-                    l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                else if (p_ResultAvion.getString(4).equals("Privado"))
-                    l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                else
-                    l_Aviones.add(new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone()));
+                switch (p_ResultAvion.getString(4)) 
+                {
+                    case "Público":
+                        if (this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)) == null)
+                            l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
+                       else
+                           l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)),l_Asientos.clone()));
+                        break;
+                    case "Privado":
+                        if (this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)) == null)
+                            l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
+                        else
+                        l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)),l_Asientos.clone()));
+                        break;
+                    default:
+                        l_Aviones.add(new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone()));
+                        break;
+                }
             }
         }
         catch(SQLException e)
@@ -553,14 +580,14 @@ public class MySQL
      * {@code NULL}.
      * </p>
      *
-     * @param p_Avion El {@link Avion} que se desea comprobar.
+     * @param p_NumSerie El {@link Avion} que se desea comprobar.
      * @return <ul>
      * <li>{@code -1} si ha ocurrido un error en la consulta de la base de
      * datos.
      * <li>Devolverá un {@code int} con el número de {@link Asiento} libres.
      * </ul>
      */
-    public int GetNumeroAsientosDisponibles(Avion p_Avion) 
+    public int GetNumeroAsientosDisponibles(int p_NumSerie) 
     {
         String l_Query = "SELECT `Cliente` FROM `avion_asiento` WHERE `Avion` = ? AND `Cliente` IS NULL";
         int l_NumAsientos = 0;
@@ -569,7 +596,7 @@ public class MySQL
         {
             try (PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);) 
             {
-                p_Stmt.setInt(1, p_Avion.GetNumSerie());
+                p_Stmt.setInt(1, p_NumSerie);
 
                 try (ResultSet l_Result = p_Stmt.executeQuery()) 
                 {
@@ -648,7 +675,7 @@ public class MySQL
             try(ResultSet p_Result = p_Stmt.executeQuery())
             {
                 while (p_Result.next())
-                    l_Puertas.add(new PuertaEmbarque());
+                    l_Puertas.add(new PuertaEmbarque(p_Result.getInt(1)));
             }
         }
         catch (SQLException e) 
@@ -699,16 +726,26 @@ public class MySQL
         return l_Vuelos;
     }
 
-    public Vuelo GetVueloFromDBByAvion(Avion p_Avion)
+    public Vuelo GetVueloFromDBByAvion(int p_NumSerie)
     {
-        String l_Query = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion = ?`";
+        String l_Query = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion` = ?";
 
         try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
-            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);
-            ResultSet p_Result = p_Stmt.executeQuery())
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
         {
-            if (p_Result.next())
-                return new Vuelo(GetCompanyFromDB(p_Result.getString(1)), GetAvionFromDB(p_Result.getInt(2)), p_Result.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_Result.getString(4), p_Result.getString(5), p_Result.getTimestamp(6).toLocalDateTime());
+            p_Stmt.setInt(1, p_NumSerie);
+
+            try(ResultSet p_Result = p_Stmt.executeQuery())
+            {
+                if (p_Result.next())
+                return new Vuelo(GetCompanyFromDB(p_Result.getString(1)), 
+                                    GetAvionFromDB(p_Result.getInt(2)), p_Result.getString(3), 
+                                    GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), 
+                                    p_Result.getString(4), 
+                                    p_Result.getString(5), 
+                                    p_Result.getTimestamp(6).toLocalDateTime());
+            }
+            
         }
         catch(SQLException e)
         {

@@ -31,7 +31,7 @@ public class AvionCarga extends Avion
     /**
      *  La cantidad máxima que puede cargar el {@link AvionCarga}
      */
-    private final double CARGA_MAX = 500000.00;
+    private final double CARGA_MAX = 50000.00;
     
     /**
      * Constructor por defecto de {@link AvionCarga} con todos sus parámetros.

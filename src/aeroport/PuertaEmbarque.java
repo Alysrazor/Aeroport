@@ -28,12 +28,7 @@ import java.io.Serializable;
  */
 
 public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
-{
-    /**
-     * Contador para la {@link PuertaEmbarque}
-     */
-    private static int l_Count = 1;
-    
+{    
     /**
      * Terminal donde está instalada esta {@link PuertaEmbarque}
      */
@@ -42,7 +37,7 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
     /**
      * Identificador de la Puerta.
      */
-    private final int l_Puerta;
+    private int l_Puerta;
     
     /**
      * Avión que efectuará el {@link Vuelo}
@@ -51,10 +46,11 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
     
     /**
      * Constructor por defecto de {@link PuertaEmbarque}
+     * @param p_Puerta El número de la {@link PuertaEmbarque}
      */
-    public PuertaEmbarque()
+    public PuertaEmbarque(int p_Puerta)
     {
-        this.l_Puerta = l_Count++;
+        this.l_Puerta = p_Puerta;
         this.l_Avion = null;
     }
     

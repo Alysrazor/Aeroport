@@ -172,7 +172,7 @@ public abstract class Avion implements Comparable<Avion>, Serializable
                 + "Numero de Serie: %d%n"
                 + "Nombre: %s%n"
                 + "Compañia: %s%n"
-                + "Vuelo:%s%n",
+                + "Vuelo:%n\t%s%n",
                 this.l_NumSerie,
                 this.l_Nombre,
                 this.l_Company.GetNombre(),
