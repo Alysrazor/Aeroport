@@ -1,6 +1,9 @@
 package aeroport;
 
 import aeroport.MySQL.MySQL;
+
+import static java.lang.System.out;
+
 import java.util.Arrays;
 
 public class AeroportApp 
@@ -9,16 +12,18 @@ public class AeroportApp
     public static void main(String[] p_Args)
     {
         MySQL m_MySQL = new MySQL();
-        m_MySQL.TestConnection();
+        //m_MySQL.TestConnection();
         //System.out.println(Arrays.toString(m_MySQL.GetCompaniesFromDB().toArray()));
-        try
+        /*try
         {
-            System.out.println(Arrays.toString(m_MySQL.GetAvionesFromDB().toArray()));
+            for (Avion p_Avion: m_MySQL.GetAvionesFromDB())
+                out.println(p_Avion);
         }
         catch(IllegalArgumentException e)
         {
             System.out.println(e.getMessage());
         }
-        
+        */        
+        //System.out.println(Arrays.toString(m_MySQL.GetTerminalFromDB(1).GetPuertasEmbarque().toArray()));
     }
 }

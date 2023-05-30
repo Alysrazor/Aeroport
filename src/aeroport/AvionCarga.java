@@ -100,9 +100,9 @@ public class AvionCarga extends Avion
     public String toString()
     {
         return String.format("Información del Avión de Carga:%n"
-                + "%s%n"
-                + "Carga Actual: %.2f"
-                + "Capacidad Disponible: %.2f",
+                + "%s"
+                + "Carga Actual: %.2f%n"
+                + "Capacidad Disponible: %.2f kg%n",
                 super.toString(),
                 this.l_Carga,
                 this.CARGA_MAX - this.l_Carga);

@@ -4,6 +4,8 @@ import aeroport.persona.Piloto;
 
 import java.io.Serializable;
 
+import java.util.Comparator;
+
 /**
  *
  * Clase que representa a un {@link Avion}
@@ -19,7 +21,7 @@ import java.io.Serializable;
  * @my.fecha 19 may 2023 17:02:10
  * @my.company Ciclo Superior de Informática
  */
-public abstract class Avion implements Serializable
+public abstract class Avion implements Comparable<Avion>, Serializable
 {
     /**
      * Atributo que identifica el número de serie de {@link Avion}
@@ -156,6 +158,12 @@ public abstract class Avion implements Serializable
         final Avion other = (Avion) obj;
         return this.l_NumSerie == other.l_NumSerie;
     }
+
+    @Override
+    public int compareTo(Avion p_Avion)
+    {
+        return this.GetNumSerie() - p_Avion.GetNumSerie();
+    }
     
     @Override
     public String toString()
@@ -167,7 +175,7 @@ public abstract class Avion implements Serializable
                 + "Vuelo:%s%n",
                 this.l_NumSerie,
                 this.l_Nombre,
-                this.l_Company,
-                (this.l_Vuelo == null ? "No tiene un vuelo asignado" : this.l_Vuelo.toString()));
+                this.l_Company.GetNombre(),
+                (this.l_Vuelo == null ? " No tiene un vuelo asignado" : this.l_Vuelo.toString()));
     }
 }

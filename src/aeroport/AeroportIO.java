@@ -1,10 +1,9 @@
 package aeroport;
 
-import aeroport.persona.Cliente;
-import aeroport.persona.Empleado;
+import aeroport.MySQL.MySQL;
+
 import aeroport.persona.Equipaje;
 import aeroport.persona.Persona;
-import aeroport.persona.Piloto;
 import aeroport.persona.Reserva;
 
 import java.io.EOFException;
@@ -32,10 +31,11 @@ import java.util.TreeSet;
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
- * @fecha 23 may 2023 15:38:49
- * @company Ciclo Superior de Informática
+ * @my.fecha 23 may 2023 15:38:49
+ * @my.company Ciclo Superior de Informática
+ * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport
  */
-
+@Deprecated
 public class AeroportIO 
 {    
     // Aeroport Files

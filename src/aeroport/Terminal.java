@@ -55,13 +55,24 @@ public class Terminal implements Serializable
     
     /**
      * Constructor secundario de las {@link Terminal} donde cada instancia tendrá sus {@link PuertaEmbarque}
+     * @param p_Numero El número de la {@link Terminal}
      * @param p_Nombre El nombre de la {@link Terminal}
      * @param p_Puertas Un {@link TreeSet} con las {@link PuertaEmbarque}
      */
-    public Terminal(String p_Nombre, TreeSet<PuertaEmbarque> p_Puertas)
+    public Terminal(int p_Numero, String p_Nombre, TreeSet<PuertaEmbarque> p_Puertas)
     {
+        this.l_Numero = p_Numero;
         this.l_Nombre = p_Nombre;
         this.l_Puertas = new TreeSet<>(p_Puertas);
+    }
+    
+    /**
+     * Obtiene el número de la {@link Terminal}
+     * @return Un {@code int} con el número de la {@link Terminal}
+     */
+    public int GetNumero()
+    {
+        return this.l_Numero;
     }
     
     /**

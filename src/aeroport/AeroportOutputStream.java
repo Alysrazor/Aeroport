@@ -5,6 +5,7 @@
 
 package aeroport;
 
+import aeroport.MySQL.MySQL;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -25,10 +26,10 @@ import java.io.OutputStream;
  * @dev.codevs
  * @my.fecha 23 may 2023 18:28:44
  * @my.company Ciclo Superior de Informática
- * 
+ * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport
  * @see ObjectOutputStream
  */
-
+@Deprecated
 public class AeroportOutputStream extends ObjectOutputStream
 {
     public AeroportOutputStream() throws IOException {}

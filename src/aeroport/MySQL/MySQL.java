@@ -10,6 +10,7 @@ import aeroport.AvionCarga;
 import aeroport.AvionPrivado;
 import aeroport.AvionPublico;
 import aeroport.Company;
+import aeroport.PuertaEmbarque;
 import aeroport.Terminal;
 import aeroport.Vuelo;
 
@@ -26,16 +27,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Savepoint;
-import java.sql.Timestamp;
+import java.sql.SQLException;
 
 import static java.lang.System.out;
-
-import java.sql.SQLException;
 
 import java.time.LocalDate;
 
 import java.util.HashSet;
 import java.util.TreeSet;
+
 
 /**
  *
@@ -45,11 +45,11 @@ import java.util.TreeSet;
  */
 public class MySQL 
 {
-
-    private static final String l_UserString = "Aeroport";
-    private static final String l_PassString = "aeroport";
-    private static final String l_PortString = "3312";
-    private static final String l_ConnectionString = "jdbc:mysql://localhost:".concat(l_PortString).concat("/").concat(l_PassString);
+    private static final int TERMINAL = 1;
+    private static final String USER = "Aeroport";
+    private static final String PASSWORD = "aeroport";
+    private static final String PORT = "3312";
+    private static final String CONNECTION = "jdbc:mysql://localhost:".concat(PORT).concat("/").concat(PASSWORD);
 
     /**
      * Compruba y notifica al usuario si se ha podido establecer correctamente
@@ -57,7 +57,7 @@ public class MySQL
      */
     public void TestConnection() 
     {
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString)) {
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) {
             out.println("Se ha conectado satisfactoriamente con la base de datos.");
         } catch (SQLException e) {
             out.println(e.getSQLState());
@@ -95,7 +95,7 @@ public class MySQL
     {
         String l_Query = "INSERT INTO `cliente` VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString)) 
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
             try (PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query)) {
                 p_Conn.setAutoCommit(false);
@@ -167,12 +167,12 @@ public class MySQL
      * ocupado.
      */
     public boolean NuevaReservaCliente(Cliente p_Cliente, Vuelo p_Vuelo, String p_TipoReserva, HashSet<Equipaje> p_Equipaje, HashSet<Asiento> p_Asientos) throws IllegalArgumentException 
-    {
+    {        
         String l_ReservaQuery = "INSERT INTO `reserva` VALUES(?, ?, ?, ?)";
         String l_AsientoQuery = "UPDATE `avion_asiento` SET `Cliente` = ? WHERE `Avion` = ? AND `CodAsiento` = ? AND `Cliente` IS NULL";
         String l_EquipajeQuery = "INSERT INTO `equipaje` VALUES(?, ?, ?, ?)";
 
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString)) 
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
             Savepoint l_ReservaSave = p_Conn.setSavepoint("beforeReserva");
 
@@ -241,6 +241,51 @@ public class MySQL
     // CONSULTAS EN BASE DE DATOS
 
     /**
+     * Busca en la base de datos una {@link Company}
+     * 
+     * <p>
+     *      Pasado un nombre por parámetro, intentará buscar una {@link Company}<br>
+     *      Si la encuentra, devolverá esa {@link Company} en caso contrario devolverá
+     *      {@code null}
+     * </p>
+     * @param p_Nombre El nombre ha buscar
+     * @return <ul>
+     *              <li>Una {@link Company} si encuentra esa compañía.</li>
+     *              <li>{@code null} ocurre algún error en la consulta.
+     *          </ul>
+     * @throws IllegalArgumentException si no encuentra la {@link Company}
+     */
+    public Company GetCompanyFromDB(String p_Nombre) throws IllegalArgumentException
+    {
+        String l_Query = "SELECT `Nombre`, `CodCompany` FROM `company` WHERE `Nombre` = ?;";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
+        {
+            p_Stmt.setString(1, p_Nombre);
+
+            try(ResultSet p_Result = p_Stmt.executeQuery())
+            {
+                if (p_Result.next())
+                    return new Company(p_Result.getString(1), p_Result.getString(2));
+                else
+                    throw new IllegalArgumentException("No se ha encontrado esa Compañía. Introduce otra.");
+            }
+            
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+            return null;
+        }
+    }
+
+    /**
      * Obtiene y devuelve un {@link TreeSet} de {@link Company} desde la base de datos.
      * 
      * <p>
@@ -254,7 +299,7 @@ public class MySQL
         TreeSet<Company> l_Companies = new TreeSet<>();
         String l_Query = "SELECT `Nombre`, `CodCompany` FROM `company`";
 
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
                 PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);
                 ResultSet p_Result = p_Stmt.executeQuery()) 
         {
@@ -288,7 +333,7 @@ public class MySQL
         TreeSet<Cliente> l_Clientes = new TreeSet<>();
         String l_Query = "SELECT `DNI`, `Nombre`, `Apellidos`, `Fecha_Nacimiento`, `Usuario`, `Password`, `EMail` FROM `cliente`";
 
-        try(Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);
             ResultSet p_Result = p_Stmt.executeQuery())
         {
@@ -309,137 +354,6 @@ public class MySQL
     }
 
     /**
-     * Busca en la base de datos una {@link Company}
-     * 
-     * <p>
-     *      Pasado un nombre por parámetro, intentará buscar una {@link Company}<br>
-     *      Si la encuentra, devolverá esa {@link Company} en caso contrario devolverá
-     *      {@code null}
-     * </p>
-     * @param p_Nombre El nombre ha buscar
-     * @return <ul>
-     *              <li>Una {@link Company} si encuentra esa compañía.</li>
-     *              <li>{@code null} ocurre algún error en la consulta.
-     *          </ul>
-     * @throws IllegalArgumentException si no encuentra la {@link Company}
-     */
-    public Company GetCompanyFromDB(String p_Nombre) throws IllegalArgumentException
-    {
-        String l_Query = "SELECT `Nombre`, `CodCompany` FROM `company` WHERE `Nombre` = ?;";
-
-        try(Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
-            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
-        {
-            p_Stmt.setString(1, p_Nombre);
-
-            try(ResultSet p_Result = p_Stmt.executeQuery())
-            {
-                if (p_Result.next())
-                    return new Company(p_Result.getString(1), p_Result.getString(2));
-                else
-                    throw new IllegalArgumentException("No se ha encontrado esa Compañía. Introduce otra.");
-            }
-            
-        }
-        catch(SQLException e)
-        {
-            out.println(String.format("%d%n"
-                                + "%s%n"
-                                + "%s%n",
-                                e.getErrorCode(),
-                                e.getMessage(),
-                                e.getSQLState()));
-            return null;
-        }
-    }
-
-
-    /**
-     * Obtiene y devuelve un {@link HashSet} de {@link Avion} desde la base de datos.
-     * 
-     * <p>
-     *      Para que la carga sea efectiva, se debe contar con acceso a la base de datos.
-     *      En caso contrario no se podrá acceder y devolverá un {@link HashSet} vacío.
-     * </p>
-     * @return Un {@link HashSet} de {@link Avion}
-     */
-    public HashSet<Avion> GetAvionesFromDB() 
-    {
-        HashSet<Avion> l_Aviones = new HashSet<>();
-        Asiento[][] l_Asientos = null;
-        Piloto[] l_Pilotos = new Piloto[2];
-
-        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion`";
-
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
-                PreparedStatement p_StmtAvion = p_Conn.prepareStatement(l_QueryAvion);
-                ResultSet p_ResultAvion = p_StmtAvion.executeQuery()) 
-        {
-            while (p_ResultAvion.next())
-            {
-                // Obtienemos los Asientos
-                String l_QueryAvionAsiento = "SELECT `CodAsiento` FROM `avion_asiento` WHERE `Avion` = ?";
-                
-                try(PreparedStatement p_StmtAvionAsiento = p_Conn.prepareStatement(l_QueryAvionAsiento))
-                {
-                    p_StmtAvionAsiento.setInt(1, p_ResultAvion.getInt(1));
-
-                    try(ResultSet p_Result = p_StmtAvionAsiento.executeQuery())
-                    {
-
-                        if (p_ResultAvion.getString(4).equals("Público"))                        
-                            l_Asientos = new Asiento[10][6];
-                        else if (p_ResultAvion.getString(4).equals("Privado"))
-                            l_Asientos = new Asiento[6][4];
-                                
-                        for (Asiento[] p_AsientoF : l_Asientos)
-                        {
-                            for (int l_AsientoC = 0; l_AsientoC < p_AsientoF.length && p_Result.next(); l_AsientoC++)
-                                p_AsientoF[l_AsientoC] = new Asiento(p_Result.getString(1));
-                        } 
-                    }
-                }
-                // Obtenemos los Pilotos
-                String l_QueryAvionPiloto = "SELECT `e`.`DNI`, `e`.`Nombre`, `e`.`Apellidos`, `e`.`Fecha_Nacimiento`, `e`.`CodEmpleado`, `a`.`Company` FROM `empleado` AS `e` INNER JOIN `avion` AS `a` INNER JOIN `avion_piloto` AS `ap`"
-                                            + "ON `a`.`NumSerie` = ? AND `a`.`NumSerie` = `ap`.`Avion` AND `e`.`Tipo` = ? AND `e`.`CodEmpleado` = `ap`.`Piloto`";
-
-                try(PreparedStatement p_StmtAvionPiloto = p_Conn.prepareStatement(l_QueryAvionPiloto))
-                {
-                    p_StmtAvionPiloto.setInt(1, p_ResultAvion.getInt(1));
-                    p_StmtAvionPiloto.setString(2, "Piloto");
-
-                    try(ResultSet p_Result = p_StmtAvionPiloto.executeQuery())
-                    {
-                        for (Piloto p_Piloto : l_Pilotos)
-                        {
-                            if (p_Result.next())
-                                p_Piloto = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
-                        }
-                    }
-                }
-
-                if (p_ResultAvion.getString(4).equals("Público"))
-                    l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                else if (p_ResultAvion.getString(4).equals("Privado"))
-                    l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                else
-                    l_Aviones.add(new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone()));
-            }
-        }
-        catch(SQLException e)
-        {
-            out.println(String.format("%d%n"
-                                + "%s%n"
-                                + "%s%n",
-                                e.getErrorCode(),
-                                e.getMessage(),
-                                e.getSQLState()));
-        }
-
-        return l_Aviones;
-    }
-
-    /**
      * Busca en la base de datos un {@link Avion}
      * 
      * <p>
@@ -450,9 +364,8 @@ public class MySQL
      * @param p_NumSerie El número de serie
      * @return <ul>
      *              <li>Un {@link Avion} si encuentra ese avión.</li>
-     *              <li>{@code null} ocurre algún error en la consulta.
+     *              <li>{@code null} ocurre algún error en la consulta o no ha encontrado el {@link Avion}.
      *          </ul>
-     * @throws IllegalArgumentException si no encuentra el {@link Avion}
      */
     public Avion GetAvionFromDB(int p_NumSerie) throws IllegalArgumentException
     {
@@ -461,7 +374,7 @@ public class MySQL
 
         String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion` WHERE `NumSerie` = ? LIMIT 1";
 
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
                 PreparedStatement p_StmtAvion = p_Conn.prepareStatement(l_QueryAvion)) 
         {
             p_StmtAvion.setInt(1, p_NumSerie);
@@ -471,7 +384,7 @@ public class MySQL
                 if (p_ResultAvion.next())
                 {
                     // Obtienemos los Asientos
-                    String l_QueryAvionAsiento = "SELECT `CodAsiento` FROM `avion_asiento` WHERE `Avion` = ?";
+                    String l_QueryAvionAsiento = "SELECT `CodAsiento` FROM `avion_asiento` WHERE `Avion` = ? ORDER BY `CodAsiento` ASC";
                     
                     try(PreparedStatement p_StmtAvionAsiento = p_Conn.prepareStatement(l_QueryAvionAsiento))
                     {
@@ -481,9 +394,11 @@ public class MySQL
                         {
     
                             if (p_ResultAvion.getString(4).equals("Público"))                        
-                                l_Asientos = new Asiento[10][6];
+                                l_Asientos = new Asiento[9][6];
                             else if (p_ResultAvion.getString(4).equals("Privado"))
                                 l_Asientos = new Asiento[6][4];
+                            else 
+                                l_Asientos = null;
 
                             if (l_Asientos != null)
                             {
@@ -522,8 +437,6 @@ public class MySQL
                     else
                         return new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone());
                 }
-                else
-                    throw new IllegalArgumentException("No existe ningún avión con ese número de serie.");
             }
             
         }
@@ -538,6 +451,97 @@ public class MySQL
         }
 
         return null;
+    }
+
+    /**
+     * Obtiene y devuelve un {@link TreeSet} de {@link Avion} desde la base de datos.
+     * 
+     * <p>
+     *      Para que la carga sea efectiva, se debe contar con acceso a la base de datos.
+     *      En caso contrario no se podrá acceder y devolverá un {@link TreeSet} vacío.
+     * </p>
+     * @return Un {@link TreeSet} de {@link Avion}
+     */
+    public TreeSet<Avion> GetAvionesFromDB() 
+    {
+        TreeSet<Avion> l_Aviones = new TreeSet<>();
+        Asiento[][] l_Asientos = null;
+        Piloto[] l_Pilotos = new Piloto[2];
+
+        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion` ORDER BY `NumSerie`";
+
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+                PreparedStatement p_StmtAvion = p_Conn.prepareStatement(l_QueryAvion);
+                ResultSet p_ResultAvion = p_StmtAvion.executeQuery()) 
+        {
+            while (p_ResultAvion.next())
+            {
+                // Obtienemos los Asientos
+                String l_QueryAvionAsiento = "SELECT `CodAsiento` FROM `avion_asiento` WHERE `Avion` = ? ORDER BY `CodAsiento` ASC";
+                
+                try(PreparedStatement p_StmtAvionAsiento = p_Conn.prepareStatement(l_QueryAvionAsiento))
+                {
+                    p_StmtAvionAsiento.setInt(1, p_ResultAvion.getInt(1));
+
+                    try(ResultSet p_Result = p_StmtAvionAsiento.executeQuery())
+                    {
+
+                        if (p_ResultAvion.getString(4).equals("Público"))                        
+                            l_Asientos = new Asiento[9][6];
+                        else if (p_ResultAvion.getString(4).equals("Privado"))
+                            l_Asientos = new Asiento[6][4];
+                        else
+                            l_Asientos = null;
+                               
+                        if (l_Asientos != null)
+                        {
+                            for (Asiento[] p_AsientoF : l_Asientos)
+                            {
+                                for (int l_AsientoC = 0; l_AsientoC < p_AsientoF.length && p_Result.next(); l_AsientoC++)
+                                    p_AsientoF[l_AsientoC] = new Asiento(p_Result.getString(1));
+                            } 
+                        }
+                        
+                    }
+                }
+                // Obtenemos los Pilotos
+                String l_QueryAvionPiloto = "SELECT `e`.`DNI`, `e`.`Nombre`, `e`.`Apellidos`, `e`.`Fecha_Nacimiento`, `e`.`CodEmpleado`, `a`.`Company` FROM `empleado` AS `e` INNER JOIN `avion` AS `a` INNER JOIN `avion_piloto` AS `ap`"
+                                            + "ON `a`.`NumSerie` = ? AND `a`.`NumSerie` = `ap`.`Avion` AND `e`.`Tipo` = ? AND `e`.`CodEmpleado` = `ap`.`Piloto` ORDER BY `ap`.`Avion`";
+
+                try(PreparedStatement p_StmtAvionPiloto = p_Conn.prepareStatement(l_QueryAvionPiloto))
+                {
+                    p_StmtAvionPiloto.setInt(1, p_ResultAvion.getInt(1));
+                    p_StmtAvionPiloto.setString(2, "Piloto");
+
+                    try(ResultSet p_Result = p_StmtAvionPiloto.executeQuery())
+                    {
+                        for (Piloto p_Piloto : l_Pilotos)
+                        {
+                            if (p_Result.next())
+                                p_Piloto = new Piloto(p_Result.getString(1), p_Result.getString(2), p_Result.getString(3), p_Result.getDate(4).toLocalDate(), p_Result.getString(5), GetCompanyFromDB(p_Result.getString(6)));
+                        }
+                    }
+                }
+
+                if (p_ResultAvion.getString(4).equals("Público"))
+                    l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
+                else if (p_ResultAvion.getString(4).equals("Privado"))
+                    l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
+                else
+                    l_Aviones.add(new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone()));
+            }
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+        }
+
+        return l_Aviones;
     }
 
     /**
@@ -561,7 +565,7 @@ public class MySQL
         String l_Query = "SELECT `Cliente` FROM `avion_asiento` WHERE `Avion` = ? AND `Cliente` IS NULL";
         int l_NumAsientos = 0;
 
-        try (Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString)) 
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
             try (PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);) 
             {
@@ -602,13 +606,12 @@ public class MySQL
      *              <li>Un {@link Terminal} si encuentra esa terminal.</li>
      *              <li>{@code null} ocurre algún error en la consulta.
      *          </ul>
-     * @throws IllegalArgumentException si no encuentra la {@link Terminal}
      */
-    public Terminal GetTerminalFromDB(int p_NumeroTerminal) throws IllegalArgumentException
+    public Terminal GetTerminalFromDB(int p_NumeroTerminal)
     {
         String l_Query = "SELECT `NumTerminal`, `Nombre` FROM `terminal` WHERE `NumTerminal` = ? LIMIT 1";
 
-        try(Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
         {
             p_Stmt.setInt(1, p_NumeroTerminal);
@@ -616,9 +619,7 @@ public class MySQL
             try(ResultSet p_Result = p_Stmt.executeQuery())
             {
                 if (p_Result.next())
-                    return new Terminal(p_Result.getInt(1), p_Result.getString(2));
-                else
-                    throw new IllegalArgumentException("No existe la terminal.");
+                    return new Terminal(p_Result.getInt(1), p_Result.getString(2), GetPuertasEmbarqueFromDB(p_NumeroTerminal));
             }
         }
         catch (SQLException e) 
@@ -632,6 +633,35 @@ public class MySQL
         }
 
         return null;
+    }
+
+    public TreeSet<PuertaEmbarque> GetPuertasEmbarqueFromDB(int p_Terminal)
+    {
+        TreeSet<PuertaEmbarque> l_Puertas = new TreeSet<>();
+        String l_Query = "SELECT `NumPuerta`, `Terminal` FROM `puerta_embarque` WHERE `Terminal` = ?";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
+        {
+            p_Stmt.setInt(1, p_Terminal);
+
+            try(ResultSet p_Result = p_Stmt.executeQuery())
+            {
+                while (p_Result.next())
+                    l_Puertas.add(new PuertaEmbarque());
+            }
+        }
+        catch (SQLException e) 
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+        }
+
+        return l_Puertas;
     }
 
     /**
@@ -648,12 +678,12 @@ public class MySQL
         HashSet<Vuelo> l_Vuelos = new HashSet<>();
         String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo`";
 
-        try(Connection p_Conn = DriverManager.getConnection(l_ConnectionString, l_UserString, l_PassString);
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo);
             ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
         {
             while(p_ResultVuelo.next())            
-                l_Vuelos.add(new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), GetAvionFromDB(p_ResultVuelo.getInt(2)), p_ResultVuelo.getString(3), GetTerminalFromDB(1), GetTerminalFromDB(1).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime()));
+                l_Vuelos.add(new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), GetAvionFromDB(p_ResultVuelo.getInt(2)), p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime()));
             
         }
         catch (SQLException e) 
@@ -667,5 +697,29 @@ public class MySQL
         }
 
         return l_Vuelos;
+    }
+
+    public Vuelo GetVueloFromDBByAvion(Avion p_Avion)
+    {
+        String l_Query = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion = ?`";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);
+            ResultSet p_Result = p_Stmt.executeQuery())
+        {
+            if (p_Result.next())
+                return new Vuelo(GetCompanyFromDB(p_Result.getString(1)), GetAvionFromDB(p_Result.getInt(2)), p_Result.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_Result.getString(4), p_Result.getString(5), p_Result.getTimestamp(6).toLocalDateTime());
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+            + "%s%n"
+            + "%s%n",
+            e.getErrorCode(),
+            e.getMessage(),
+            e.getSQLState()));
+        }
+
+        return null;
     }
 }

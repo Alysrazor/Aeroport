@@ -15,9 +15,9 @@ import java.util.Objects;
  *  no puede repetirse. Además el {@link Asiento} sabe si está ocupado por una {@link Persona} o no.
  * <p>
  * 
- * Cada {@link AvionPublico} tiene en cada fila 6 asientos.<br><br>
+ * Cada {@link AvionPublico} tiene en cada fila 6 asientos con un máximo de 9 asientos.<br><br>
  * 
- * En el caso de los {@link AvionPrivado} solo tienen 2 por cada fila con un máximo de 5 filas.<br><br>
+ * En el caso de los {@link AvionPrivado} solo tienen 4 por cada fila con un máximo de 6 filas.<br><br>
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
