@@ -22,6 +22,7 @@ package aeroport.persona;
  * @dev.codevs
  * @my.fecha 19 may 2023 12:28:20
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public enum TipoBillete
 {

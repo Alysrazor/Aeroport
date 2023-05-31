@@ -17,6 +17,7 @@ import java.util.Objects;
  * @dev.codevs Sergio Capilla Cabades
  * @my.fecha 22 may 2023 10:24:40
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Equipaje implements Serializable
 {

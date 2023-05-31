@@ -30,7 +30,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Savepoint;
 import java.sql.Timestamp;
 import java.sql.SQLException;
 
@@ -43,10 +42,21 @@ import java.util.TreeSet;
 
 
 /**
- *
+ * Clase MySQL que gestiona el {@link Aeroport}
+ * 
+ * <p>
+ *      Para poder utilizar esta clase se debe contar con MySQL y 
+ *      la base de datos de este programa.<br><br>
+ *      Si no se cuenta con la base de datos es imposible importar
+ *      los datos al programa y hacer las operaciones necesarias.
+ * </p>
+ * 
  * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
  * @my.fecha 27 may 2023 13:02:55
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class MySQL 
 {
@@ -58,7 +68,8 @@ public class MySQL
 
     /**
      * Compruba y notifica al usuario si se ha podido establecer correctamente
-     * conexión con la base de datos.
+     * conexión con la base de datos.<br>
+     * Este método es para fines de prueba solo.
      */
     public void TestConnection() 
     {
@@ -170,8 +181,7 @@ public class MySQL
      *              <li>{@code true} si la {@link Reserva} se ha hecho correctamente.</li>
      *              <li>{@code false} si no se ha podido llevar a cabo la {@link Reserva}
      *          </ul>
-     * @throws IllegalArgumentException en caso de que un {@link Asiento} esté
-     * ocupado.
+     * @throws IllegalArgumentException en caso de que un {@link Asiento} esté ocupado.
      */
     public boolean NuevaReservaCliente(Cliente p_Cliente, Vuelo p_Vuelo, String p_TipoReserva, HashSet<Equipaje> p_Equipaje, HashSet<Asiento> p_Asientos) throws IllegalArgumentException 
     {        

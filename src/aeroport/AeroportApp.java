@@ -8,62 +8,90 @@ import aeroport.persona.TipoEquipaje;
 import aeroport.persona.TipoBillete;
 
 import static java.lang.System.out;
+import static java.lang.System.in;
 
 import java.time.LocalDate;
 import java.time.Month;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
+import java.util.TreeSet;
 
+/**
+ * Clase para mostrar un menú
+ */
+class Menu
+{
+    /**
+     * Nadie puede invocar la clase.
+     */
+    private Menu() {}
+
+    /**
+     * Muestra un menú dado un vector de {@link String}
+     * @param p_Menu El vector de {@link String}
+     * @return Un {@link String} con el menú formado.
+     */
+    public static String MostrarMenu(String[] p_Menu)
+    {
+        String l_Menu = "";
+        int l_Count = 1;
+
+        for (String p_String : p_Menu)
+            l_Menu += String.format("%d. %s%n", l_Count, p_String);
+
+        return l_Menu;
+    }
+}
+
+/**
+ * Programa principal del proyecto del aeropuerto
+ * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 31 may 2023 15:30:10
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
+ */
 public class AeroportApp 
 {
-    // Aeroport l_Aeroport = new Aeroport("Valencia Manises", "VLC", )
+    private Scanner l_Teclado = new Scanner(in), l_TecladoNum = new Scanner(in);
+    private Aeroport l_Aeroport;
+    private MySQL m_MySQL = new MySQL();
+    private Cliente l_Login = null;
+    private String[] l_MenuInicial = {"Crear Usuario", "Reservar Vuelo"};
+    private int l_Opc;
+
+    
+    public AeroportApp()
+    {
+        this.l_Aeroport = new Aeroport("Valencia Manises", "VLC", m_MySQL.GetCompaniesFromDB(), m_MySQL.GetPistasFromDB(), m_MySQL.GetTerminalFromDB(1), m_MySQL.GetClientesFromDB());
+    }
+
+    void Initialize()
+    {
+
+    }
+
     public static void main(String[] p_Args)
     {
-        MySQL m_MySQL = new MySQL();
-        //m_MySQL.TestConnection();
-        System.out.println(Arrays.toString(m_MySQL.GetCompaniesFromDB().toArray()));
-        try
-        {
-            for (Avion p_Avion: m_MySQL.GetAvionesFromDB())
-            {
-                out.println(p_Avion);
-                if (p_Avion instanceof AvionPublico)
-                {
-                    AvionPublico p_AvionPb = (AvionPublico)p_Avion;
-                   out.println(p_AvionPb.PrintAsientos());
-                }                
-                else if (p_Avion instanceof AvionPrivado)
-                {
-                    AvionPrivado p_AvionPv = (AvionPrivado)p_Avion;
-                    out.println(p_AvionPv.PrintAsientos());
-                }
-            }
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.out.println(e.getMessage());
-        }
-//        System.out.println(Arrays.toString(m_MySQL.GetTerminalFromDB(1).GetPuertasEmbarque().toArray()));
-//          System.out.println(m_MySQL.GetVueloFromDBByAvion(12000));
-//        System.out.println(Arrays.toString(m_MySQL.GetTerminalFromDB(1).GetPuertasEmbarque().toArray()));
-
-//            if (m_MySQL.AddNewClient("35795145N", "Nombre A", "Apellidos A", LocalDate.of(1998, Month.MARCH, 12), "User A", "pass", "miemail@gmail.com"))
-//                out.println("Cliente añadido correctamente.");
-//            else
-//                out.println("Ha ocurrido un error.");
-//            HashSet<Equipaje> l_Equipaje = new HashSet<>();
-//            l_Equipaje.add(new Equipaje("Equipaje A", TipoEquipaje.EQUIPAJE_MALETA, 20.0));
-//            
-//            HashSet<Asiento> l_Asiento = new HashSet<>();
-//            l_Asiento.add(new Asiento("1A"));
-//            
-//            out.println(TipoBillete.TOURIST.GetNombre());
-//            
-//            if (m_MySQL.NuevaReservaCliente(new Cliente("35795145N", "Nombre A", "Apellidos A", LocalDate.of(1998, Month.MARCH, 1), "UserA", "pass", "miemail@hotmail.es"), m_MySQL.GetVueloFromDBByAvion(10000),TipoBillete.TOURIST.GetNombre(), l_Equipaje, l_Asiento))
-//                out.println("Reserva realizada correctamente.");
-//            else
-//                out.println("Ha ocurrido un error.");
-            
+        
+//        try
+//        {
+//            for (Avion p_Avion: m_MySQL.GetAvionesFromDB())
+//            {
+//                out.println(p_Avion);
+//                if (p_Avion instanceof AvionPublico)
+//                {
+//                    AvionPublico p_AvionPb = (AvionPublico)p_Avion;
+//                   out.println(p_AvionPb.PrintAsientos());
+//                }                
+//                else if (p_Avion instanceof AvionPrivado)
+//                {
+//                    AvionPrivado p_AvionPv = (AvionPrivado)p_Avion;
+//                    out.println(p_AvionPv.PrintAsientos());
+//                }
+//            }
     }
 }

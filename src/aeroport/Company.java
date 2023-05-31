@@ -18,8 +18,9 @@ import java.util.TreeSet;
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
- * @fecha 22 may 2023 18:08:30
- * @company Ciclo Superior de Informática
+ * @my.fecha 22 may 2023 18:08:30
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Company implements Comparable<Company>, Serializable
 {

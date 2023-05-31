@@ -34,6 +34,8 @@ import java.util.Objects;
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
  * @my.fecha 19 may 2023 11:51:20
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Cliente extends Persona
 {

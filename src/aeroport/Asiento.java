@@ -22,7 +22,9 @@ import java.util.Objects;
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
- * @my.fecha 19/05/2023 11:52:50
+ * @my.fecha 19 may 2023 11:52:50
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Asiento implements Serializable
 {

@@ -18,6 +18,8 @@ package aeroport.persona;
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
  * @my.fecha 22 may 2023 9:51:35
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public enum TipoEquipaje
 {

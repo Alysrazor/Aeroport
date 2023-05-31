@@ -23,6 +23,7 @@ import java.util.Objects;
  * @dev.codevs
  * @my.fecha 19 may 23 11:08:10
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public abstract class Persona implements Comparable<Persona>, Serializable
 {

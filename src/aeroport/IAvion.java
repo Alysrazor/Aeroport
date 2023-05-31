@@ -1,5 +1,15 @@
 package aeroport;
 
+/**
+ * Interfaz para {@link Avion} en la que se definen colores y un método abstracto para imprimir los asientos.
+ * 
+ * @author Sergio Capilla Cabadés
+ * @dev.main Sergio Capilla Cabadés
+ * @dev.codevs
+ * @my.fecha 29 may 2023 16:12:35
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
+ */
 public interface IAvion 
 {
     // COLORES

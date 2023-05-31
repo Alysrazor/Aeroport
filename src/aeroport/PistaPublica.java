@@ -3,11 +3,12 @@ package aeroport;
 /**
  * Clase que representa una {@link PistaPublica} en el {@link Aeroport}
  * 
- * @author Luis Tomas Sahuquilo
- * @dev.main Luis Tomas Sahuquilo
+ * @author Luis Tomas Sahuquillo
+ * @dev.main Luis Tomas Sahuquillo
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:20:52
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class PistaPublica extends Pista{
 

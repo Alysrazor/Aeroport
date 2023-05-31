@@ -23,6 +23,7 @@ import java.util.TreeSet;
  * @dev.codevs
  * @my.fecha 19 may 2023 18:10:52
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 
 public class Terminal implements Serializable

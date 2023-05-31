@@ -9,6 +9,7 @@ package aeroport;
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:30:52
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class PistaPrivada extends Pista
 {

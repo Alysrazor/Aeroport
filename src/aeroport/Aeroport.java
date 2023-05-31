@@ -4,6 +4,8 @@
  */
 package aeroport;
 
+import aeroport.MySQL.MySQL;
+
 import aeroport.persona.Cliente;
 
 import java.io.Serializable;
@@ -25,17 +27,18 @@ import java.util.TreeSet;
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
  * @my.fecha 19/05/2023 11:52:50
+ * @since JDK 1.18
  */
 public class Aeroport implements Serializable
 {
     // Sets
     private TreeSet<Company> l_Companies;
     private TreeSet<Pista> l_Pistas;
-    private TreeSet<Terminal> l_Terminales;
+    private Terminal l_Terminal;
     private TreeSet<Cliente> l_Clientes;
     
     // Tipos
-    public Asiento[][] l_Asientos;
+    MySQL l_MySQL = new MySQL();
     
     /**
      * El nombre del {@link Aeroport}
@@ -53,16 +56,19 @@ public class Aeroport implements Serializable
      * @param p_CodAeroport El codigo del {@link Aeroport}
      * @param p_Companies Las {@link Company} que tiene el {@link Aeroport}
      * @param p_Pistas Las {@link Pista} del {@link Aeroport}
-     * @param p_Terminales Las {@link Terminal} del {@link Aeroport}
+     * @param p_Terminal La {@link Terminal} del {@link Aeroport}
      * @param p_Clientes Los {@link Cliente} registrados en el {@link Aeroport}
      */
-    public Aeroport(String p_Nombre, String p_CodAeroport, TreeSet<Company> p_Companies, TreeSet<Pista> p_Pistas, TreeSet<Terminal> p_Terminales, TreeSet<Cliente> p_Clientes)
+    public Aeroport(String p_Nombre, String p_CodAeroport, TreeSet<Company> p_Companies, TreeSet<Pista> p_Pistas, Terminal p_Terminal, TreeSet<Cliente> p_Clientes)
     {
         this.l_Nombre = p_Nombre;
         this.l_CodAeroport = p_CodAeroport;
         this.l_Companies = new TreeSet<>(p_Companies);
         this.l_Pistas = new TreeSet<>(p_Pistas);
-        this.l_Terminales = new TreeSet<>(p_Terminales);
+        this.l_Terminal = p_Terminal;
+        for (PuertaEmbarque p_PE : l_MySQL.GetPuertasEmbarqueFromDB(l_Terminal.GetNumero()))
+            l_Terminal.AddPuertaEmbarque(p_PE);
+
         this.l_Clientes = new TreeSet<>(p_Clientes);
     }
     
@@ -120,6 +126,15 @@ public class Aeroport implements Serializable
         
         return null;
     }
+
+    /**
+     * Obtiene un {@link TreeSet} de {@link Cliente}
+     * @return Un {@link TreeSet}
+     */
+    public TreeSet<Cliente> GetClientes()
+    {
+        return this.l_Clientes;
+    }
     
     /**
      * Obtiene las {@link Pista} del {@link Aeroport}
@@ -131,12 +146,12 @@ public class Aeroport implements Serializable
     }
     
     /**
-     * Obtiene las {@link Terminal} del {@link Aeroport}
-     * @return Un {@link TreeSet} de tipo {@link Terminal}
+     * Obtiene la {@link Terminal} del {@link Aeroport}
+     * @return Una {@link Terminal}
      */
-    public TreeSet<Terminal> GetTerminales()
+    public Terminal GetTerminal()
     {
-        return this.l_Terminales;
+        return this.l_Terminal;
     }
 
     @Override

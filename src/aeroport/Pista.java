@@ -9,9 +9,10 @@ import java.io.Serializable;
  * @dev.main Luis Tomas Sahuquilo
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:10:52
- * @my.company Ciclo Superior de Informática
+ * @my.company Ciclo Superior de Informática´
+ * @since JDK 1.18
  */
-public abstract class Pista implements Serializable
+public abstract class Pista implements Comparable<Pista>, Serializable
 {
     /**
     * Identificador de la pista
@@ -98,6 +99,12 @@ public abstract class Pista implements Serializable
         
         final Pista other = (Pista) obj;
         return this.l_ID == other.l_ID;
+    }
+    
+    @Override
+    public int compareTo(Pista p_Obj)
+    {
+        return this.l_ID - p_Obj.l_ID;
     }
     
     @Override

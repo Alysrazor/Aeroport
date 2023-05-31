@@ -28,6 +28,7 @@ import java.io.OutputStream;
  * @my.company Ciclo Superior de Informática
  * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport
  * @see ObjectOutputStream
+ * @since JDK 1.18
  */
 @Deprecated
 public class AeroportOutputStream extends ObjectOutputStream

@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
  * @dev.codevs
  * @my.fecha 19 may 2023 16:35:47
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class CryptSHA1 
 {

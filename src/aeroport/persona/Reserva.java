@@ -23,6 +23,7 @@ import java.util.Objects;
  * @dev.main Sergio Capilla Cabadés
  * @dev.codevs
  * @my.fecha 19 may 2023 12:08:50
+ * @since JDK 1.18
  */
 public class Reserva implements Serializable
 {

@@ -18,6 +18,7 @@ import java.util.Objects;
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 19 may 2023 17:02:10
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class AvionPrivado extends Avion implements IAvion
 {    

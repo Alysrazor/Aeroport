@@ -34,6 +34,7 @@ import java.util.TreeSet;
  * @my.fecha 23 may 2023 15:38:49
  * @my.company Ciclo Superior de Informática
  * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport
+ * @since JDK 1.18
  */
 @Deprecated
 public class AeroportIO 

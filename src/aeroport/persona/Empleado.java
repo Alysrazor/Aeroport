@@ -17,6 +17,7 @@ import java.util.Objects;
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 22 may 2023 6:27:58
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Empleado extends Persona
 {
