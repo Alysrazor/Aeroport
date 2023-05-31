@@ -90,9 +90,9 @@ public class AvionPrivado extends Avion implements IAvion
             for (Asiento p_AsientoC : p_AsientoF)
             {
                 if (p_AsientoC.GetPersona() == null)                
-                    sb.append(String.format("%-5s", COLOR_VERDE + p_AsientoC.GetCodigoAsiento() + COLOR_RESET));
+                    sb.append(COLOR_VERDE).append(String.format("%-4s", p_AsientoC.GetCodigoAsiento())).append(COLOR_RESET);
                 else
-                    sb.append(String.format("%-5s", COLOR_ROJO + p_AsientoC.GetCodigoAsiento() + COLOR_RESET));
+                    sb.append(COLOR_ROJO).append(String.format("%-4s", p_AsientoC.GetCodigoAsiento())).append(COLOR_RESET);
             }
             sb.append("\n");
         }

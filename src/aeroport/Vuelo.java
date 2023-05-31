@@ -36,12 +36,7 @@ import java.util.Objects;
  * 
  */
 public class Vuelo implements Serializable
-{
-    /**
-     * Contador automático.
-     */    
-    private static int l_ID = 1;
-    
+{    
     /**
      * La {@link Company} que proporciona el {@link Vuelo}
      */
@@ -85,6 +80,11 @@ public class Vuelo implements Serializable
      * Escalas que tiene el {@link Vuelo}
      */
     private int l_Escalas;
+
+    /**
+     * Estado del {@link Vuelo}
+     */
+    private String l_Estado;
     
     /**
      * Constructor principal de {@link Vuelo}
@@ -101,6 +101,7 @@ public class Vuelo implements Serializable
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
+     * @param p_Estado Estado del {@link Vuelo}
      */
     public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
     {
@@ -113,6 +114,7 @@ public class Vuelo implements Serializable
         this.l_Destino = p_Destino;
         this.l_HoraVuelo = p_HoraVuelo;
         this.l_Escalas = 0;
+        this.l_Estado = "";
     }
     
     /**
@@ -132,7 +134,7 @@ public class Vuelo implements Serializable
      * @param p_HoraVuelo La hora de despegue.
      * @param p_Escalas Las escalas del {@link Vuelo}
      */
-    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
+    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas, String p_Estado)
     {
         this.l_Company = p_Company;
         this.l_Avion = p_Avion;
@@ -143,6 +145,7 @@ public class Vuelo implements Serializable
         this.l_Destino = p_Destino;
         this.l_HoraVuelo = p_HoraVuelo;
         this.l_Escalas = p_Escalas;
+        this.l_Estado = p_Estado;
     }
     
     /**
@@ -237,6 +240,24 @@ public class Vuelo implements Serializable
     public int GetEscalas()
     {
         return this.l_Escalas;
+    }
+
+    /**
+     * Obtiene el estado del {@link Vuelo}
+     * @return Un {@link String}
+     */
+    public String GetEstado()
+    {
+        return this.l_Estado;
+    }
+
+    /**
+     * Establece el nuevo estado del {@link Vuelo}
+     * @param p_Estado El nuevo estado del {@link Vuelo}
+     */
+    public void SetEstado(String p_Estado)
+    {
+        this.l_Estado = p_Estado;
     }
 
     @Override

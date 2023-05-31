@@ -32,11 +32,11 @@ public enum TipoBillete
     /**
      * El billete para la clase de negocios, solamente para aquellos que realicen viajes de negocios.
      */
-    BUSINESS("Negocios"),
+    BUSINESS("Business"),
     /**
      * El billete más común para la Clase Turista.
      */
-    TOURIST("Clase Turista.");
+    TOURIST("Clase Turista");
     
     /**
      * Variable para el nombre

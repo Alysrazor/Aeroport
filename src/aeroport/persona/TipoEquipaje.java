@@ -24,11 +24,11 @@ public enum TipoEquipaje
     /**
      * Equipaje de tipo equipaje de mano.
      */
-    EQUIPAJE_MANO("Equipaje de mano."),
+    EQUIPAJE_MANO("Mano"),
     /**
      * Equipaje de tipo maleta.
      */
-    EQUIPAJE_MALETA("Equipaje maleta.");
+    EQUIPAJE_MALETA("Maleta");
     
     /**
      * Variable read-only para el nombre

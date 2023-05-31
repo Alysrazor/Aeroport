@@ -4,12 +4,16 @@
  */
 package aeroport.MySQL;
 
+import aeroport.Aeroport;
 import aeroport.Asiento;
 import aeroport.Avion;
 import aeroport.AvionCarga;
 import aeroport.AvionPrivado;
 import aeroport.AvionPublico;
 import aeroport.Company;
+import aeroport.Pista;
+import aeroport.PistaPrivada;
+import aeroport.PistaPublica;
 import aeroport.PuertaEmbarque;
 import aeroport.Terminal;
 import aeroport.Vuelo;
@@ -27,12 +31,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Savepoint;
+import java.sql.Timestamp;
 import java.sql.SQLException;
 
 import static java.lang.System.out;
 
 import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -107,12 +112,13 @@ public class MySQL
                 p_Stmt.setString(5, p_Usuario);
                 p_Stmt.setString(6, CryptSHA1.EncryptPassword(p_Password));
                 p_Stmt.setString(7, p_Email);
-                p_Stmt.setDate(8, Date.valueOf(LocalDate.now()));
+                p_Stmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
 
                 p_Stmt.execute();
 
                 p_Conn.commit();
-            } catch (SQLException e) 
+            } 
+            catch (SQLException e) 
             {
                 p_Conn.rollback();
                 out.println(String.format("%d%n"
@@ -123,7 +129,8 @@ public class MySQL
                                     e.getSQLState()));
                 return false;
             }
-        } catch (SQLException e) 
+        } 
+        catch (SQLException e) 
         {
             out.println(String.format("%d%n"
                                 + "%s%n"
@@ -174,15 +181,13 @@ public class MySQL
 
         try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
-            Savepoint l_ReservaSave = p_Conn.setSavepoint("beforeReserva");
-
             try (PreparedStatement p_StmtReserva = p_Conn.prepareStatement(l_ReservaQuery); 
-            PreparedStatement p_StmtEquipaje = p_Conn.prepareStatement(l_EquipajeQuery);
+                    PreparedStatement p_StmtEquipaje = p_Conn.prepareStatement(l_EquipajeQuery);
                     PreparedStatement p_StmtAsiento = p_Conn.prepareStatement(l_AsientoQuery)) 
             {
                 p_Conn.setAutoCommit(false);
 
-                p_StmtReserva.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(5, p_Cliente.GetDNI().length() - 1).toString()));
+                p_StmtReserva.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(6, p_Cliente.GetDNI().length()).toString()));
                 p_StmtReserva.setString(2, p_Cliente.GetDNI());
                 p_StmtReserva.setString(3, p_Vuelo.GetIdentificador());
                 p_StmtReserva.setString(4, p_TipoReserva);
@@ -191,7 +196,7 @@ public class MySQL
 
                 for (Equipaje p_Equip : p_Equipaje)
                 {
-                    p_StmtEquipaje.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(5, p_Cliente.GetDNI().length() - 1).toString()));
+                    p_StmtEquipaje.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(6, p_Cliente.GetDNI().length()).toString()));
                     p_StmtEquipaje.setDouble(2, p_Equip.GetPeso());
                     p_StmtEquipaje.setString(3, p_Equip.GetTipo().GetNombre());
                     p_StmtEquipaje.setString(4, p_Cliente.GetDNI());
@@ -207,7 +212,7 @@ public class MySQL
 
                     if (p_StmtAsiento.executeUpdate() == 0) 
                     {
-                        p_Conn.rollback(l_ReservaSave);
+                        p_Conn.rollback();
                         throw new IllegalArgumentException(String.format("El asiento %s ya está ocupado, por favor vuelve ha realizar la reserva con los asientos libres.", p_Asiento.GetCodigoAsiento()));
                     }
                 }
@@ -215,7 +220,7 @@ public class MySQL
                 p_Conn.commit();
             } catch (SQLException e) 
             {
-                p_Conn.rollback(l_ReservaSave);
+                p_Conn.rollback();
                 out.println(String.format("%d%n"
                                     + "%s%n"
                                     + "%s%n",
@@ -582,10 +587,9 @@ public class MySQL
      *
      * @param p_NumSerie El {@link Avion} que se desea comprobar.
      * @return <ul>
-     * <li>{@code -1} si ha ocurrido un error en la consulta de la base de
-     * datos.
-     * <li>Devolverá un {@code int} con el número de {@link Asiento} libres.
-     * </ul>
+     *              <li>{@code -1} si ha ocurrido un error en la consulta de la base de datos.</li>
+     *              <li>Devolverá un {@code int} con el número de {@link Asiento} libres.</li>
+     *          </ul>
      */
     public int GetNumeroAsientosDisponibles(int p_NumSerie) 
     {
@@ -618,6 +622,50 @@ public class MySQL
         }
 
         return -1;
+    }
+
+    /**
+     * Busca en la base de datos las distintas {@link Pista} que hay en el {@link Aeroport}
+     * 
+     * <p>
+     *      Para realizar la búsqueda se deberá contar con acceso a la base de datos, en caso
+     *      contrario devolverá una excepción de {@link SQLException} indicando el código de error,
+     *      el mensaje, y el estado de SQL.
+     * </p>
+     * @return Un {@link TreeSet} de tipo {@link Pista}
+     */
+    public TreeSet<Pista> GetPistasFromDB()
+    {
+        TreeSet<Pista> l_Pistas = new TreeSet<>();
+        String l_Query = "SELECT `NumPista`, `Tipo` FROM `pista`";
+
+        try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+                PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query);
+                ResultSet p_Result = p_Stmt.executeQuery()) 
+        {
+            while(p_Result.next())
+            {
+                switch (p_Result.getString(2))
+                {
+                    case "Privada":
+                        l_Pistas.add(new PistaPrivada(p_Result.getInt(1), "Pista Privada"));
+                        break;
+                    case "Pública":
+                        l_Pistas.add(new PistaPublica(p_Result.getInt(1), "Pista Pública"));
+                }
+            }
+        }
+        catch (SQLException e) 
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+        }
+
+        return l_Pistas;
     }
 
     /**
@@ -692,18 +740,65 @@ public class MySQL
     }
 
     /**
-     * Obtiene y devuelve un {@link HashSet} de {@link Vuelo} desde la base de datos.
+     * Obtiene y devuelve un {@link TreeSet} de {@link Vuelo} desde la base de datos.
+     * 
+     * <p>
+     *      Busca en la base de datos los {@link Vuelo} que llegan a nuestro {@link Aeroport}
+     *      para ello el campo {@code Hora_Salida} tiene que estar {@code NULL}.<br><br>
+     *      En nuestro proyecto, esto no tiene relevancia puesto que solo gestionamos los {@link Vuelo}
+     *      que salen de nuestro {@link Aeroport}
+     * </p>
      * 
      * <p>
      *      Para que la carga sea efectiva, se debe contar con acceso a la base de datos.
-     *      En caso contrario no se podrá acceder y devolverá un {@link HashSet} vacío.
+     *      En caso contrario no se podrá acceder y devolverá un {@link TreeSet} vacío.
      * </p>
-     * @return Un {@link HashSet} de {@link Vuelo}
+     * @return Un {@link TreeSet} de {@link Vuelo}
      */
-    public HashSet<Vuelo> GetVuelosFromDB()
+    public TreeSet<Vuelo> GetVuelosLlegadaFromDB()
     {
-        HashSet<Vuelo> l_Vuelos = new HashSet<>();
-        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo`";
+        TreeSet<Vuelo> l_Vuelos = new TreeSet<>();
+        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Llegada` FROM `vuelo` WHERE `Hora_Salida` IS NULL";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo);
+            ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+        {
+            while(p_ResultVuelo.next())            
+                l_Vuelos.add(new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), GetAvionFromDB(p_ResultVuelo.getInt(2)), p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime()));
+            
+        }
+        catch (SQLException e) 
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+        }
+
+        return l_Vuelos;
+    }
+
+    /**
+     * Obtiene y devuelve un {@link TreeSet} de {@link Vuelo} desde la base de datos.
+     * 
+     * <p>
+     *      Busca en la base de datos los {@link Vuelo} que salgan de nuestro {@link Aeroport}
+     *      para ello el campo {@code Hora_Llegada} tiene que estar {@code NULL}.
+     * </p>
+     * 
+     * <p>
+     *      Para que la carga sea efectiva, se debe contar con acceso a la base de datos.
+     *      En caso contrario no se podrá acceder y devolverá un {@link TreeSet} vacío.
+     * </p>
+     * @return Un {@link TreeSet} de {@link Vuelo}
+     */
+    public TreeSet<Vuelo> GetVuelosSalidaFromDB()
+    {
+        TreeSet<Vuelo> l_Vuelos = new TreeSet<>();
+        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Hora_Llegada` IS NULL";
 
         try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo);
