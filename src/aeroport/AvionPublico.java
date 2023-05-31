@@ -1,5 +1,6 @@
 package aeroport;
 
+import aeroport.persona.Cliente;
 import aeroport.persona.Piloto;
 
 import java.util.Objects;

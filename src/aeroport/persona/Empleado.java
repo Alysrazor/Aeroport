@@ -1,5 +1,6 @@
 package aeroport.persona;
 
+import aeroport.Aeroport;
 import aeroport.Company;
 
 import java.time.LocalDate;
@@ -9,8 +10,7 @@ import java.util.Objects;
  *
  * Clase que representa a un {@link Empleado} de un {@link Aeroport}
  * 
- * Un {@link Empleado} puede ser a su vez {@link Piloto} y {@link AuxiliarVuelo}
- * que serán los trabajadores del {@link Aeroport}
+ * Un {@link Empleado} puede ser a su vez {@link Piloto} que serán los trabajadores del {@link Aeroport}
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Julián Alcázar Escobedo

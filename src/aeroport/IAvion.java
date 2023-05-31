@@ -13,9 +13,21 @@ package aeroport;
 public interface IAvion 
 {
     // COLORES
+    /**
+     * Color Azul en la consola.
+     */
     String COLOR_AZUL = "\u001B[34m";
+    /**
+     * Color Rojo en la consola.
+     */
     String COLOR_ROJO = "\u001B[31m";
+    /**
+     * Color Verde en la consola.
+     */
     String COLOR_VERDE = "\u001B[32m";
+    /**
+     * Reinicia el color en la consola.
+     */
     String COLOR_RESET = "\u001B[0m";
     
     /**

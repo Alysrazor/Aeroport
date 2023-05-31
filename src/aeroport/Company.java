@@ -1,5 +1,7 @@
 package aeroport;
 
+import aeroport.Aeroport;
+
 import aeroport.persona.Empleado;
 
 import java.io.Serializable;
@@ -10,7 +12,7 @@ import java.util.TreeSet;
 
 /**
  *
- * Clase que representa a una {@link Company} en el {@link Aeropuerto}
+ * Clase que representa a una {@link Company} en el {@link Aeroport}
  * 
  * Cada instancia de esta clase tendrá bajo su mandato a los {@link Empleado} 
  * que trabajen para cada {@link Company} y a los {@link Avion}.

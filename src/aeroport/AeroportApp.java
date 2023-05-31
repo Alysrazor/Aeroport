@@ -1,6 +1,7 @@
 package aeroport;
 
 import aeroport.MySQL.MySQL;
+import aeroport.crypto.CryptSHA1;
 
 import aeroport.persona.Cliente;
 import aeroport.persona.Equipaje;
@@ -60,18 +61,53 @@ public class AeroportApp
     private Aeroport l_Aeroport;
     private MySQL m_MySQL = new MySQL();
     private Cliente l_Login = null;
-    private String[] l_MenuInicial = {"Crear Usuario", "Reservar Vuelo"};
+    private String[] l_MenuInicial = {"Crear Usuario", "Iniciar Sesión","Reiniciar Contraseña","Reservar Vuelo"};
+    
+    // Datos Cliente
+    private String l_DNI, l_Nombre, l_Apellidos, l_Usuario, l_Password, l_Email, l_CodAvion, l_CodAsiento;
+    private LocalDate l_FechaNac;
     private int l_Opc;
 
-    
+    /**
+     * Constructor por defecto del programa principal.
+     */
     public AeroportApp()
     {
         this.l_Aeroport = new Aeroport("Valencia Manises", "VLC", m_MySQL.GetCompaniesFromDB(), m_MySQL.GetPistasFromDB(), m_MySQL.GetTerminalFromDB(1), m_MySQL.GetClientesFromDB());
     }
 
-    void Initialize()
+    /**
+     * Método que inicia y llama a los demás métodos.
+     */
+    public void Initialize()
     {
-
+        
+    }
+    
+    /**
+     * Menú inicial con el cual el {@link Cliente} puede realizar operaciones
+     * @param p_Opcion 
+     */
+    public void MenuInicial(int p_Opcion)
+    {
+        switch(p_Opcion)
+        {
+            case 1:
+                    l_DNI = Datos.ReturnDNI("Introduce tu DNI: ");
+                    l_Nombre = Datos.ReturnString("Introduce tu nombre: ");
+                    l_Apellidos = Datos.ReturnString("Introduce tus apellidos: ");
+                    l_FechaNac = Datos.ReturnLocalDate("Introduce tu fecha de nacimiento (ej: 1999-01-20): ");
+                    l_Usuario = Datos.ReturnString("Introduce tu nombre de usuario.");
+                    l_Password = CryptSHA1.EncryptPassword(Datos.ReturnString("Introduce tu contraseña: "));
+                    l_Email = Datos.ReturnString("Introduce tu Email: ");
+                    
+                    m_MySQL.AddNewClient(l_DNI, l_Nombre, l_Apellidos, l_FechaNac, l_Usuario, l_Password, l_Email);
+                    break;
+            case 2:
+                throw new UnsupportedOperationException("Aún no se ha implementado.");
+            case 3:
+                throw new UnsupportedOperationException("Aún no se ha implementado.");
+        }
     }
 
     public static void main(String[] p_Args)

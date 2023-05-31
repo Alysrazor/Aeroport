@@ -4,6 +4,8 @@
  */
 package aeroport.persona;
 
+import aeroport.Avion;
+
 /**
  *
  * Enumerador para los tipos de {@link Equipaje}

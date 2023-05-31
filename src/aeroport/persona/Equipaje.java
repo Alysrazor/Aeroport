@@ -25,6 +25,18 @@ public class Equipaje implements Serializable
     private TipoEquipaje l_TipoEquipaje;
     private double l_Peso;
 
+    /**
+     * Constructor por defecto del {@link Equipaje}
+     * 
+     * <p>
+     *      Cada equipaje será identificado únicamente por una combinación única que no podrá
+     *      repetirse.
+     * </p>
+     * 
+     * @param p_CodEquipaje El código del {@link Equipaje}
+     * @param p_TipoEquipaje El tipo de {@link Equipaje}
+     * @param p_Peso El peso.
+     */
     public Equipaje(String p_CodEquipaje, TipoEquipaje p_TipoEquipaje, double p_Peso) 
     {
         this.l_CodEquipaje = p_CodEquipaje;
@@ -32,22 +44,38 @@ public class Equipaje implements Serializable
         this.l_Peso = p_Peso;
     }
 
+    /**
+     * Obtiene el código del {@link Equipaje}
+     * @return Un {@link String}
+     */
     public String GetCodEquipaje() 
     {
         return l_CodEquipaje;
     }
 
-
+    /**
+     * Obtiene el {@link TipoEquipaje} del {@link Equipaje}
+     * @return Un {@link TipoEquipaje}
+     * @see TipoEquipaje
+     */
     public TipoEquipaje GetTipo() 
     {
         return l_TipoEquipaje;
     }
     
+    /**
+     * Obtiene el peso del {@link Equipaje}
+     * @return Un {@code double}
+     */
     public double GetPeso() 
     {
         return l_Peso;
     }
     
+    /**
+     * Establece el {@link TipoEquipaje} a esta instancia de {@link Equipaje}
+     * @param p_Tipo El nuevo {@link TipoEquipaje}
+     */
     public void SetTipo(TipoEquipaje p_Tipo) 
     {
         this.l_TipoEquipaje = p_Tipo;

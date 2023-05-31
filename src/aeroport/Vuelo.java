@@ -58,7 +58,7 @@ public class Vuelo implements Serializable
      */
     private Terminal l_Terminal;
     /**
-     * La {@link PuertaEmbarque} que usarán los pasajeros para subirse al {@link Avión}
+     * La {@link PuertaEmbarque} que usarán los pasajeros para subirse al {@link Avion}
      */
     private PuertaEmbarque l_Puerta;
     
@@ -102,7 +102,6 @@ public class Vuelo implements Serializable
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
-     * @param p_Estado Estado del {@link Vuelo}
      */
     public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
     {
@@ -134,6 +133,7 @@ public class Vuelo implements Serializable
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      * @param p_Escalas Las escalas del {@link Vuelo}
+     * @param p_Estado El estado del {@link Vuelo}
      */
     public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas, String p_Estado)
     {
