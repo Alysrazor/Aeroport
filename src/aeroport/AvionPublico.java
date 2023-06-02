@@ -22,7 +22,7 @@ import java.util.Objects;
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
  */
-public class AvionPublico extends Avion implements IAvion
+public class AvionPublico extends Avion
 {    
     /**
      * Atributo que identifica la cantidad de asientos de {@link AvionPublico}
@@ -83,26 +83,7 @@ public class AvionPublico extends Avion implements IAvion
         
         return l_AsientosLibres;
     }
-
-    @Override
-    public String PrintAsientos() 
-    {
-        StringBuilder sb = new StringBuilder();
-
-        for (Asiento[] p_AsientoF : this.l_Asientos)
-        {
-            for (Asiento p_AsientoC : p_AsientoF)
-            {
-                if (p_AsientoC.GetPersona() == null)                
-                    sb.append(COLOR_VERDE).append(String.format("%-4s", p_AsientoC.GetCodigoAsiento())).append(COLOR_RESET);
-                else
-                    sb.append(COLOR_ROJO).append(String.format("%-4s", p_AsientoC.GetCodigoAsiento())).append(COLOR_RESET);
-            }
-            sb.append("\n");
-        }
-
-        return sb.toString();
-    }
+    
 
     @Override
     public int hashCode() 

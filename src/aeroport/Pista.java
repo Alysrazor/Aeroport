@@ -5,8 +5,8 @@ import java.io.Serializable;
 /**
  * Clase que representa una {@link Pista} en el {@link Aeroport}
  *
- * @author Luis Tomas Sahuquilo
- * @dev.main Luis Tomas Sahuquilo
+ * @author Luis Tomas Sahuquillo
+ * @dev.main Luis Tomas Sahuquillo
  * @dev.codevs Sergio Capilla Cabadés
  * @my.fecha 23 may 2023 11:10:52
  * @my.company Ciclo Superior de Informática´

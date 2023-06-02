@@ -1,6 +1,6 @@
 package aeroport;
 
-import aeroport.Aeroport;
+import aeroport.MySQL.MySQL;
 
 import aeroport.persona.Empleado;
 
@@ -19,7 +19,6 @@ import java.util.TreeSet;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 22 may 2023 18:08:30
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
@@ -35,9 +34,9 @@ public class Company implements Comparable<Company>, Serializable
      */
     private final String l_ShortName;
     /**
-     * Un {@link HashSet} de {@link Avion}
+     * Un {@link TreeSet} de {@link Avion}
      */
-    private HashSet<Avion> l_Aviones;
+    private TreeSet<Avion> l_Aviones;
     /**
      * Un {@link TreeSet} de {@link Empleado}
      */
@@ -52,7 +51,7 @@ public class Company implements Comparable<Company>, Serializable
     {
         this.l_Nombre = p_Nombre;
         this.l_ShortName = p_ShortName;
-        this.l_Aviones = new HashSet<>();
+        this.l_Aviones = new TreeSet<>();
         this.l_Empleados = new TreeSet<>();
     }
     
@@ -63,11 +62,11 @@ public class Company implements Comparable<Company>, Serializable
      * @param p_Aviones Los {@link Avion} que tiene.
      * @param p_Empleados Los {@link Empleado} que tiene bajo su mando.
      */
-    public Company(String p_Nombre, String p_ShortName, HashSet<Avion> p_Aviones, TreeSet<Empleado> p_Empleados)
+    public Company(String p_Nombre, String p_ShortName, TreeSet<Avion> p_Aviones, TreeSet<Empleado> p_Empleados)
     {
         this.l_Nombre = p_Nombre;
         this.l_ShortName = p_ShortName;
-        this.l_Aviones = new HashSet<>(p_Aviones);
+        this.l_Aviones = new TreeSet<>(p_Aviones);
         this.l_Empleados = new TreeSet<>(p_Empleados);
     }
     
@@ -91,9 +90,9 @@ public class Company implements Comparable<Company>, Serializable
     
     /**
      * Obtiene los {@link Avion} que tiene la {@link Company}
-     * @return Un {@link HashSet}
+     * @return Un {@link TreeSet}
      */
-    public HashSet<Avion> GetAviones()
+    public TreeSet<Avion> GetAviones()
     {
         return this.l_Aviones;
     }
@@ -157,6 +156,23 @@ public class Company implements Comparable<Company>, Serializable
     public boolean RemoveAvion(Avion p_Avion)
     {
         return this.l_Aviones.remove(p_Avion);
+    }
+    
+    /**
+     * Establece un nuevo {@link TreeSet} de {@link Avion} para la {@link Company}
+     * @param p_MySQL La conexión de {@link MySQL} donde se realizará las operaciones.
+     */
+    public void SetAviones(MySQL p_MySQL)
+    {
+        TreeSet<Avion> l_AvionesFromDB = new TreeSet<>();
+        
+        for (Avion p_Avion : p_MySQL.GetAvionesFromDB())
+        {
+            if (p_Avion.GetCompany().equals(this))
+                l_AvionesFromDB.add(p_Avion);
+        }
+        
+        this.l_Aviones = new TreeSet<>(l_AvionesFromDB);
     }
 
     @Override

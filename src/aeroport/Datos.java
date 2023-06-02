@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
  *
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 31 may 2023 9:14:50
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
@@ -130,7 +129,7 @@ public class Datos
                 if (l_Valor.isEmpty()) 
                     throw new IllegalArgumentException("No puedes dejar el campo vacío.");
                 
-                if (l_Matcher.matches())
+                if (!l_Matcher.matches())
                     throw new NotADNIException("No has introducido un DNI válido.");
 
                 l_OK = true;
@@ -201,6 +200,44 @@ public class Datos
             catch(InputMismatchException|IllegalArgumentException e)
             {
                 out.println(e.getMessage());
+                l_TecladoNum.nextLine();
+            }
+        }while(!l_OK);
+        
+        return l_Value;
+    }
+
+    /**
+     * Pide al {@link Cliente} un número flotante.
+     * 
+     * @param p_Msg El mensaje que ve el {@link Cliente}
+     * @return Un {@code double}
+     */
+    public static double ReturnDouble(String p_Msg)
+    {
+        double l_Value = 0;
+        boolean l_OK = false;
+
+        do
+        {
+            try
+            {
+                out.println(p_Msg);
+                l_Value = l_TecladoNum.nextDouble();
+
+                l_OK = true;
+            }
+            catch(NumberFormatException e)
+            {
+                out.println(e.getMessage());
+            }
+            catch(InputMismatchException|IllegalArgumentException e)
+            {
+                out.println(e.getMessage());
+            }
+            finally
+            {
+                l_TecladoNum.nextLine();
             }
         }while(!l_OK);
         

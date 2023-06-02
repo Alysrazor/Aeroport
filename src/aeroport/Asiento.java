@@ -21,7 +21,6 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 11:52:50
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
@@ -71,6 +70,15 @@ public class Asiento implements Serializable
             return this.l_Persona;
         
         return null;
+    }
+    
+    /**
+     * La {@link Persona} que ha reservado el {@link Asiento}
+     * @param p_Persona Una {@link Persona}
+     */
+    public void SetPersona(Persona p_Persona)
+    {
+        this.l_Persona = p_Persona;
     }
 
     @Override

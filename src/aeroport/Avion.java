@@ -44,6 +44,9 @@ public abstract class Avion implements Comparable<Avion>, Serializable
      */
     protected Piloto[] l_Pilotos = new Piloto[2];
     
+    /**
+     * El {@link Vuelo} del {@link Avion}
+     */
     protected Vuelo l_Vuelo;
     
     /**

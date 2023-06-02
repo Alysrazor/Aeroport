@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"aeroport"},{"l":"aeroport.crypto"},{"l":"aeroport.MySQL"},{"l":"aeroport.persona"},{"l":"All Packages","u":"allpackages-index.html"}];updateSearchResults();
+packageSearchIndex = [{"l":"aeroport"},{"l":"aeroport.MySQL"},{"l":"aeroport.persona"},{"l":"All Packages","u":"allpackages-index.html"}];updateSearchResults();

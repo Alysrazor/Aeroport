@@ -23,7 +23,6 @@ import java.io.OutputStream;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 23 may 2023 18:28:44
  * @my.company Ciclo Superior de Informática
  * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport

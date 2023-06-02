@@ -20,7 +20,6 @@ import java.util.TreeSet;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 18:10:52
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18

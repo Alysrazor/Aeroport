@@ -20,7 +20,6 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 23 11:08:10
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
@@ -45,6 +44,21 @@ public abstract class Persona implements Comparable<Persona>, Serializable
      * Atributo que identifica la fecha de nacimeinto de {@link Persona}
      */
     protected LocalDate l_FechaNac;
+
+    /**
+     * Constructor básico de {@link Persona}
+     * 
+     * <p>
+     *      Este constructor solo tiene la utilidad de buscar {@link Persona}
+     *      por su DNI y no debería ser usado por sus clases hijas para crear nuevas
+     *      {@link Persona}.
+     * </p>
+     * @param p_DNI El DNI.
+     */
+    public Persona(String p_DNI)
+    {
+        this.l_DNI = p_DNI;
+    }
     
     /**
      * Constructor por defecto de Persona con todos sus parámetros

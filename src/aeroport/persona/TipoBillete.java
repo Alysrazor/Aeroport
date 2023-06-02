@@ -19,7 +19,6 @@ package aeroport.persona;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 12:28:20
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
@@ -42,7 +41,7 @@ public enum TipoBillete
     /**
      * Variable para el nombre
      */
-    private String l_Nombre;
+    private final String l_Nombre;
     
     private TipoBillete(String p_String)
     {

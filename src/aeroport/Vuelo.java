@@ -30,13 +30,12 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 16:20:03
  * @my.company Ciclo Superior de Informática
  * @since JDK 1.18
  * 
  */
-public class Vuelo implements Serializable
+public class Vuelo implements Comparable<Vuelo>, Serializable
 {    
     /**
      * La {@link Company} que proporciona el {@link Vuelo}
@@ -283,6 +282,12 @@ public class Vuelo implements Serializable
         }
         final Vuelo other = (Vuelo) obj;
         return Objects.equals(this.l_Identificador, other.l_Identificador);
+    }
+    
+    @Override
+    public int compareTo(Vuelo p_Obj)
+    {
+        return this.l_Identificador.compareTo(p_Obj.l_Identificador);
     }
 
     @Override

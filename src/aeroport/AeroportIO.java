@@ -30,10 +30,9 @@ import java.util.TreeSet;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 23 may 2023 15:38:49
  * @my.company Ciclo Superior de Informática
- * @deprecated Los datos se gestionan en la clase {@link MySQL} de aeroport
+ * @deprecated Los datos se gestionan en la clase {@link MySQL} de {@link Aeroport}
  * @since JDK 1.18
  */
 @Deprecated
@@ -195,6 +194,7 @@ public class AeroportIO
     // OBJECTS
     // Aeroport IORelated
     // Output
+    
     
     public void GuardarAeroportBin(Aeroport p_Aeroport) throws IOException, SecurityException
     {

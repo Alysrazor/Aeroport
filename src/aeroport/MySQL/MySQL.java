@@ -23,21 +23,22 @@ import aeroport.persona.Equipaje;
 import aeroport.persona.Piloto;
 import aeroport.persona.Reserva;
 
-import aeroport.crypto.CryptSHA1;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.sql.SQLException;
 
 import static java.lang.System.out;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 
@@ -65,6 +66,9 @@ public class MySQL
     private static final String PASSWORD = "aeroport";
     private static final String PORT = "3312";
     private static final String CONNECTION = "jdbc:mysql://localhost:".concat(PORT).concat("/").concat(PASSWORD);
+    private static final String COLOR_VERDE = "\u001B[32m";
+    private static final String COLOR_ROJO = "\u001B[31m";
+    private static final String COLOR_RESET = "\u001B[0m";
 
     /**
      * Compruba y notifica al usuario si se ha podido establecer correctamente
@@ -86,7 +90,7 @@ public class MySQL
      * Añade un nuevo {@link Cliente} a la base de datos.
      *
      * <p>
-     *      No se podrá añadir un nuevo {@link Cliente} si el nombre de usuario y / o
+     *      No se podrá añadir un nuevo {@link Cliente} si el DNI, nombre de usuario y / o
      *      E-Mail ya existen en la base de datos.
      * </p>
      * <p>
@@ -113,7 +117,8 @@ public class MySQL
 
         try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
-            try (PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query)) {
+            try (PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query)) 
+            {
                 p_Conn.setAutoCommit(false);
 
                 p_Stmt.setString(1, p_DNI);
@@ -121,7 +126,7 @@ public class MySQL
                 p_Stmt.setString(3, p_Apellidos);
                 p_Stmt.setDate(4, Date.valueOf(p_FechaNac));
                 p_Stmt.setString(5, p_Usuario);
-                p_Stmt.setString(6, CryptSHA1.EncryptPassword(p_Password));
+                p_Stmt.setString(6, p_Password);
                 p_Stmt.setString(7, p_Email);
                 p_Stmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
 
@@ -185,9 +190,9 @@ public class MySQL
      */
     public boolean NuevaReservaCliente(Cliente p_Cliente, Vuelo p_Vuelo, String p_TipoReserva, HashSet<Equipaje> p_Equipaje, HashSet<Asiento> p_Asientos) throws IllegalArgumentException 
     {        
-        String l_ReservaQuery = "INSERT INTO `reserva` VALUES(?, ?, ?, ?)";
+        String l_ReservaQuery = "INSERT INTO `reserva`(`CodReserva`, `Cliente`, `Vuelo`, `Tipo`) VALUES(LEFT(SHA1(?), 10), ?, ?, ?)";
         String l_AsientoQuery = "UPDATE `avion_asiento` SET `Cliente` = ? WHERE `Avion` = ? AND `CodAsiento` = ? AND `Cliente` IS NULL";
-        String l_EquipajeQuery = "INSERT INTO `equipaje` VALUES(?, ?, ?, ?)";
+        String l_EquipajeQuery = "INSERT INTO `equipaje` VALUES(LEFT(SHA1(?), 10), ?, ?, ?)";
 
         try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD)) 
         {
@@ -197,7 +202,7 @@ public class MySQL
             {
                 p_Conn.setAutoCommit(false);
 
-                p_StmtReserva.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(6, p_Cliente.GetDNI().length()).toString()));
+                p_StmtReserva.setString(1, LocalDateTime.now().toString().concat(p_Cliente.GetDNI().substring(0, 9)));
                 p_StmtReserva.setString(2, p_Cliente.GetDNI());
                 p_StmtReserva.setString(3, p_Vuelo.GetIdentificador());
                 p_StmtReserva.setString(4, p_TipoReserva);
@@ -206,7 +211,7 @@ public class MySQL
 
                 for (Equipaje p_Equip : p_Equipaje)
                 {
-                    p_StmtEquipaje.setString(1, p_Vuelo.GetIdentificador().concat(p_Cliente.GetDNI().subSequence(6, p_Cliente.GetDNI().length()).toString()));
+                    p_StmtEquipaje.setString(1, LocalDateTime.now().toString().concat(p_Cliente.GetDNI().substring(0, 9)));
                     p_StmtEquipaje.setDouble(2, p_Equip.GetPeso());
                     p_StmtEquipaje.setString(3, p_Equip.GetTipo().GetNombre());
                     p_StmtEquipaje.setString(4, p_Cliente.GetDNI());
@@ -253,8 +258,66 @@ public class MySQL
         return true;
     }
 
+    // ACTUALIZAR REGISTROS EN BASE DE DATOS
+
+    /**
+     * Actualiza la contraseña del {@link Cliente}
+     * 
+     * <p>
+     *      Para que el cambio de contraseña tenga efecto, las contraseñas
+     *      deben ser iguales.<br>
+     *      En caso de que no sean iguales, el cambio no se efectuará.
+     * </p>
+     * 
+     * @param p_Cliente El {@link Cliente} que realiza el cambio.
+     * @param p_NewPass La nueva contraseña
+     * @param p_ConfirmNewPass Confirmación de la nueva contraseña.
+     * @return <ul>
+     *              <li>{@code true} si ha sido posible el cambio.</li>
+     *              <li>{@code false} si no ha sido posible el cambio.</li>
+     *          </ul>
+     * @throws IllegalArgumentException si las contraseñas no coinciden.
+     * @throws NoSuchElementException si no encuentra al {@link Cliente} en la base de datos.
+     */
+    public boolean ClientChangePassword(Cliente p_Cliente, String p_NewPass, String p_ConfirmNewPass) throws IllegalArgumentException, NoSuchElementException
+    {
+        String l_Query = "UPDATE `cliente` SET `password` = ? WHERE `DNI` = ?";
+
+        if (!IsClientInDB(p_Cliente))
+            throw new NoSuchElementException("No existe el cliente en la base de datos.");
+
+        if (!p_NewPass.equals(p_ConfirmNewPass))            
+            throw new IllegalArgumentException("Las contraseñas no coinciden.");            
+        
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
+        {
+            p_Conn.setAutoCommit(false);
+
+            p_Stmt.setString(1, p_NewPass);
+            p_Stmt.setString(2, p_Cliente.GetDNI());
+
+            p_Stmt.executeUpdate();
+
+            p_Conn.commit();
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+            return false;
+        }
+
+        return true;
+    }
+
     // CONSULTAS EN BASE DE DATOS
 
+    // AEROPORT
     /**
      * Busca en la base de datos una {@link Company}
      * 
@@ -386,8 +449,11 @@ public class MySQL
     {
         Asiento[][] l_Asientos = null;
         Piloto[] l_Pilotos = new Piloto[2];
+        Avion l_Avion = null;
+        Vuelo l_Vuelo = null;
 
-        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion` WHERE `NumSerie` = ? LIMIT 1";
+        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion` WHERE `NumSerie` = ?";
+        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion` = ?";
 
         try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
                 PreparedStatement p_StmtAvion = p_Conn.prepareStatement(l_QueryAvion)) 
@@ -438,7 +504,7 @@ public class MySQL
     
                     try(PreparedStatement p_StmtAvionPiloto = p_Conn.prepareStatement(l_QueryAvionPiloto))
                     {
-                        p_StmtAvionPiloto.setInt(1, p_ResultAvion.getInt(1));
+                        p_StmtAvionPiloto.setInt(1, p_NumSerie);
                         p_StmtAvionPiloto.setString(2, "Piloto");
     
                         try(ResultSet p_Result = p_StmtAvionPiloto.executeQuery())
@@ -454,11 +520,35 @@ public class MySQL
                     switch (p_ResultAvion.getString(4)) 
                     {
                         case "Público":
-                            return new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                            l_Avion = new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                            try(PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo))
+                            {
+                                p_StmtVuelo.setInt(1, p_NumSerie);
+                                try(ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+                                {
+                                    if (p_ResultVuelo.next())
+                                        l_Vuelo = new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), l_Avion, p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime());
+                                }
+                            }
+                            l_Avion.SetVuelo(l_Vuelo);
+                            break;
                         case "Privado":
-                            return new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                            l_Avion = new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+                            
+                            try(PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo))
+                            {
+                                p_StmtVuelo.setInt(1, p_NumSerie);
+                                try(ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+                                {
+                                    if (p_ResultVuelo.next())
+                                        l_Vuelo = new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), l_Avion, p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime());
+                                }
+                            }
+                            
+                            l_Avion.SetVuelo(l_Vuelo);
+                            break;
                         default:
-                            return new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone());
+                            l_Avion = new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone());
                     }
                 }
             }
@@ -474,7 +564,7 @@ public class MySQL
                                 e.getSQLState()));
         }
 
-        return null;
+        return l_Avion;
     }
 
     /**
@@ -491,8 +581,11 @@ public class MySQL
         TreeSet<Avion> l_Aviones = new TreeSet<>();
         Asiento[][] l_Asientos = null;
         Piloto[] l_Pilotos = new Piloto[2];
+        Avion l_Avion = null;
+        Vuelo l_Vuelo = null;
 
-        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion` ORDER BY `NumSerie`";
+        String l_QueryAvion = "SELECT `NumSerie`, `Nombre`, `Company`, `Tipo` FROM `avion`";
+        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion` = ?";
 
         try (Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
                 PreparedStatement p_StmtAvion = p_Conn.prepareStatement(l_QueryAvion);
@@ -555,17 +648,37 @@ public class MySQL
 
                 switch (p_ResultAvion.getString(4)) 
                 {
-                    case "Público":
-                        if (this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)) == null)
-                            l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                       else
-                           l_Aviones.add(new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)),l_Asientos.clone()));
+                    case "Público":     
+                        l_Avion = new AvionPublico(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+
+                        try(PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo))
+                        {
+                            p_StmtVuelo.setInt(1, p_ResultAvion.getInt(1));
+                            try(ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+                            {
+                                if (p_ResultVuelo.next())
+                                    l_Vuelo = new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), l_Avion, p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime());
+                            }
+                        }
+                            
+
+                        l_Avion.SetVuelo(l_Vuelo);                   
+                        l_Aviones.add(l_Avion);
                         break;
                     case "Privado":
-                        if (this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)) == null)
-                            l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone()));
-                        else
-                        l_Aviones.add(new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), this.GetVueloFromDBByAvion(p_ResultAvion.getInt(1)),l_Asientos.clone()));
+                    l_Avion = new AvionPrivado(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone(), l_Asientos.clone());
+
+                    try(PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo))
+                    {
+                        p_StmtVuelo.setInt(1, p_ResultAvion.getInt(1));
+                        try(ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+                        {
+                            if (p_ResultVuelo.next())
+                                l_Vuelo = new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), l_Avion, p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime());
+                        }
+                    }
+                    l_Avion.SetVuelo(l_Vuelo);                   
+                    l_Aviones.add(l_Avion);
                         break;
                     default:
                         l_Aviones.add(new AvionCarga(p_ResultAvion.getInt(1), p_ResultAvion.getString(2), GetCompanyFromDB(p_ResultAvion.getString(3)), l_Pilotos.clone()));
@@ -662,6 +775,7 @@ public class MySQL
                         break;
                     case "Pública":
                         l_Pistas.add(new PistaPublica(p_Result.getInt(1), "Pista Pública"));
+                        break;
                 }
             }
         }
@@ -694,7 +808,7 @@ public class MySQL
      */
     public Terminal GetTerminalFromDB(int p_NumeroTerminal)
     {
-        String l_Query = "SELECT `NumTerminal`, `Nombre` FROM `terminal` WHERE `NumTerminal` = ? LIMIT 1";
+        String l_Query = "SELECT `NumTerminal`, `Nombre` FROM `terminal` WHERE `NumTerminal` = ?";
 
         try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
@@ -720,6 +834,11 @@ public class MySQL
         return null;
     }
 
+    /**
+     * Obtiene las {@link PuertaEmbarque} desde la base de datos
+     * @param p_Terminal La {@link Terminal} donde están.
+     * @return Un {@link TreeSet}
+     */
     public TreeSet<PuertaEmbarque> GetPuertasEmbarqueFromDB(int p_Terminal)
     {
         TreeSet<PuertaEmbarque> l_Puertas = new TreeSet<>();
@@ -831,26 +950,80 @@ public class MySQL
         return l_Vuelos;
     }
 
-    public Vuelo GetVueloFromDBByAvion(int p_NumSerie)
+    /**
+     * Obtiene y devuelve un {@link Vuelo} desde la base de datos.
+     * 
+     * <p>
+     *      Busca en la base de datos el {@link Vuelo} buscando su identificador
+     *      para ello el campo {@code Hora_Llegada} tiene que estar {@code NULL}.
+     * </p>
+     * 
+     * <p>
+     *      Para que la carga sea efectiva, se debe contar con acceso a la base de datos.
+     *      En caso contrario no se podrá acceder y devolverá {@code null}
+     * </p>
+     * @param p_Identificador El identificadpor del {@link Vuelo}
+     * @return Un {@link Vuelo}
+     */
+    public Vuelo GetVueloSalidaFromDB(String p_Identificador)
     {
-        String l_Query = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Avion` = ?";
+        Vuelo l_Vuelo = null;
+        String l_QueryVuelo = "SELECT `Company`, `Avion`, `Identificador`, `Origen`, `Destino`, `Hora_Salida` FROM `vuelo` WHERE `Identificador` = ? AND `Hora_Llegada` IS NULL";
 
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_StmtVuelo = p_Conn.prepareStatement(l_QueryVuelo))
+        {
+             p_StmtVuelo.setString(1, p_Identificador);
+             
+            try(ResultSet p_ResultVuelo = p_StmtVuelo.executeQuery())
+            {
+                if (p_ResultVuelo.next())            
+                    l_Vuelo = new Vuelo(GetCompanyFromDB(p_ResultVuelo.getString(1)), GetAvionFromDB(p_ResultVuelo.getInt(2)), p_ResultVuelo.getString(3), GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), p_ResultVuelo.getString(4), p_ResultVuelo.getString(5), p_ResultVuelo.getTimestamp(6).toLocalDateTime());
+            }
+            
+            
+        }
+        catch (SQLException e) 
+        {
+            out.println(String.format("%d%n"
+                                + "%s%n"
+                                + "%s%n",
+                                e.getErrorCode(),
+                                e.getMessage(),
+                                e.getSQLState()));
+        }
+
+        return l_Vuelo;
+    }
+
+    // CLIENTE
+    /**
+     * Busca un {@link Cliente} en la base de datos y lo devuelve si existe.
+     * @param p_DNI El DNI del {@link Cliente}
+     * @return <ul>
+     *                  <li>Un {@link Cliente} en caso de que lo encuentre.</li>
+     *                  <li>{@code null} si no ha encontrado ningún {@link Cliente}</li>
+     *              </ul>
+     */
+    public Cliente GetClienteFromDB(String p_DNI)
+    {
+        String l_Query = "SELECT `DNI`, `Nombre`, `Apellidos`, `Fecha_Nacimiento`, `Usuario`, `Password`, `EMail` FROM `cliente` WHERE `DNI` = ?";
         try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
             PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
         {
-            p_Stmt.setInt(1, p_NumSerie);
+            p_Stmt.setString(1, p_DNI);
 
             try(ResultSet p_Result = p_Stmt.executeQuery())
             {
                 if (p_Result.next())
-                return new Vuelo(GetCompanyFromDB(p_Result.getString(1)), 
-                                    GetAvionFromDB(p_Result.getInt(2)), p_Result.getString(3), 
-                                    GetTerminalFromDB(TERMINAL), GetTerminalFromDB(TERMINAL).GetRandomPuertaEmbarque(), 
-                                    p_Result.getString(4), 
-                                    p_Result.getString(5), 
-                                    p_Result.getTimestamp(6).toLocalDateTime());
+                    return new Cliente(p_Result.getString(1),
+                                        p_Result.getString(2),
+                                        p_Result.getString(3),
+                                        p_Result.getDate(4).toLocalDate(),
+                                        p_Result.getString(5),
+                                        p_Result.getString(6),
+                                        p_Result.getString(7));
             }
-            
         }
         catch(SQLException e)
         {
@@ -863,5 +1036,116 @@ public class MySQL
         }
 
         return null;
+    }
+
+
+    /**
+     * Busca y comprueba si un {@link Cliente} existe en la base de datos.
+     * @param p_Cliente {@link Cliente} ha buscar.
+     * @return <ul>
+     *                  <li>{@code true}si existe.</li>
+     *                  <li>{@code false} si no existe.</li>
+     *              </ul>
+     */
+    public boolean IsClientInDB(Cliente p_Cliente)
+    {
+        String l_Query = "SELECT `DNI` FROM `cliente` WHERE `DNI` = ?";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
+        {
+            p_Stmt.setString(1, p_Cliente.GetDNI());
+            
+            try(ResultSet p_Result = p_Stmt.executeQuery())
+            {
+                if (!p_Result.next())
+                    return false;
+            }
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+            + "%s%n"
+            + "%s%n",
+            e.getErrorCode(),
+            e.getMessage(),
+            e.getSQLState()));
+        }
+        
+        return true;
+    }
+
+    /**
+     * Obtiene una cadena de hash en encriptación SHA1 desde la base de datos.
+     * @param p_String La cadena ha convertir.
+     * @return Un {@link String}
+     */
+    public String GetCodEquipajeCrypt(String p_String)
+    {
+        String l_Query = "SELECT LEFT(SHA1(?), 10) as CodigoEquipaje";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD);
+            PreparedStatement p_Stmt = p_Conn.prepareStatement(l_Query))
+        {
+            p_Stmt.setString(1, p_String);
+            
+            try(ResultSet p_Result = p_Stmt.executeQuery())
+            {
+                if (p_Result.next())
+                    return p_Result.getString("CodigoEquipaje");
+            }
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+            + "%s%n"
+            + "%s%n",
+            e.getErrorCode(),
+            e.getMessage(),
+            e.getSQLState()));
+        }
+
+        return Integer.toString(p_String.hashCode());
+    }
+
+    // METODOS ESPECIALES NO SE RECOMIENDA SU INVOCACION
+    /**
+     * Este método es para las fases de prueba. Su uso borra todos
+     * los datos de los {@link Cliente} de la base de datos.<br>
+     *
+     */
+    public void DeleteClientDataFromDB()
+    {
+        String l_DeleteReservaQuery = "DELETE FROM `reserva`";
+        String l_DeleteEquipajeQuery = "DELETE FROM `equipaje`";
+        String l_DeleteClienteQuery = "DELETE FROM `cliente` WHERE `DNI` <> '12345678A'";
+        String l_SetNullAsientoQuery = "UPDATE `avion_asiento` SET `Cliente` = NULL";
+
+        try(Connection p_Conn = DriverManager.getConnection(CONNECTION, USER, PASSWORD))
+        {
+            try(PreparedStatement p_DelReservaStmt = p_Conn.prepareStatement(l_DeleteReservaQuery);
+                PreparedStatement p_DelEquipajeStmt = p_Conn.prepareStatement(l_DeleteEquipajeQuery);
+                PreparedStatement p_DelClienteStmt = p_Conn.prepareStatement(l_DeleteClienteQuery);
+                PreparedStatement p_SetNullAsientoStmt = p_Conn.prepareStatement(l_SetNullAsientoQuery))
+            {
+                p_Conn.setAutoCommit(false);
+                
+                p_DelEquipajeStmt.execute();
+                p_DelReservaStmt.execute();
+                p_DelClienteStmt.execute();
+                p_SetNullAsientoStmt.executeUpdate();
+            }
+
+            p_Conn.commit();
+        }
+        catch(SQLException e)
+        {
+            out.println(String.format("%d%n"
+            + "%s%n"
+            + "%s%n",
+            e.getErrorCode(),
+            e.getMessage(),
+            e.getSQLState()));
+        }
     }
 }
