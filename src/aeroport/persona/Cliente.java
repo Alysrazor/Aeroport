@@ -30,8 +30,9 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 11:51:20
+ * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public class Cliente extends Persona
 {
@@ -53,16 +54,55 @@ public class Cliente extends Persona
     /**
      * El {@link Equipaje} de {@link Cliente}
      */
-    private HashSet<Equipaje> l_Equipaje;
+    private HashSet<Equipaje> l_Equipaje = new HashSet<>();
     
     /**
      * Las {@link Reserva} que tiene el {@link Cliente}
      */
     private HashSet<Reserva> l_Reservas = new HashSet<>();
-    
+
+    /**
+     * Constructor básico de {@link Cliente}
+     * 
+     * <p>
+     *      Este constructor solo tiene la utilidad de buscar un {@link Cliente}
+     *      por su DNI y no debería ser usado para crear un nuevo {@link Cliente}.
+     * </p>
+     * @param p_DNI El DNI.
+     */
+    public Cliente(String p_DNI)
+    {
+        super(p_DNI);
+    }
     
     /**
      * Crea un nuevo {@link Cliente} con su nombre de usuario, contraseña y correo electrónico.
+     * 
+     * <p>
+     *  Por lógica, dos clientes no podrán tener el mismo nombre de usuario, por lo cuál un {@link Cliente} no podrá darse de alta si ya existe
+     *  ese nombre de usuario.<br><br>Adicionalmente, no se podrán crear usuarios si el correo electrónico ya está siendo usado por
+     *  otro {@link Cliente}.
+     * </p>
+     * 
+     * @param p_DNI El DNI del {@link Cliente}
+     * @param p_Nombre El Nombre del {@link Cliente}
+     * @param p_Apellidos Los Apellidos del {@link Cliente}
+     * @param p_FechaNac La Fecha de Nacimiento del {@link Cliente}
+     * @param p_Usuario El nombre de usuario del {@link Cliente}
+     * @param p_Password La contraseña del {@link Cliente}
+     * @param p_Email El Email del {@link Cliente}
+     */
+    public Cliente(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_Usuario, String p_Password, String p_Email)
+    {
+        super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
+        this.l_Usuario = p_Usuario;
+        this.l_Password = p_Password;
+        this.l_Email = p_Email;
+    }
+    
+    
+    /**
+     * Crea un nuevo {@link Cliente} con su nombre de usuario, contraseña, correo electrónico y equipaje.
      * 
      * <p>
      *  Por lógica, dos clientes no podrán tener el mismo nombre de usuario, por lo cuál un {@link Cliente} no podrá darse de alta si ya existe
@@ -81,7 +121,6 @@ public class Cliente extends Persona
      */
     public Cliente(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac, String p_Usuario, String p_Password, String p_Email, HashSet<Equipaje> p_Equipaje)
     {
-        // TODO comprobar si ya existe un dni y / o E-Mail
         super(p_DNI, p_Nombre, p_Apellidos, p_FechaNac);
         this.l_Usuario = p_Usuario;
         this.l_Password = p_Password;
@@ -141,10 +180,11 @@ public class Cliente extends Persona
      * Cambia el E-Mail del {@link Cliente}
      * @param p_Email El nuevo E-Mail
      * @throws IllegalArgumentException Si ya hay un usuario con ese E-Mail.
+     * @deprecated Este método no se usa actualmente.
      */
+    @Deprecated
     public void SetEmail(String p_Email) throws IllegalArgumentException
     {
-        // TODO Comprobar que no existe ya un E-Mail así
         this.l_Email = p_Email;
     }
     
@@ -152,9 +192,9 @@ public class Cliente extends Persona
      * Obtiene la información completa del equipaje del {@link Cliente}
      * @return Un {@link HashSet} de {@link Equipaje}
      */
-    public String GetEquipaje()
+    public HashSet<Equipaje> GetEquipaje()
     {
-        throw new UnsupportedOperationException("Método no implementado.");
+        return this.l_Equipaje;
     }
     
     /**
@@ -167,16 +207,28 @@ public class Cliente extends Persona
      */
     public boolean AddReserva(Reserva p_Reserva)
     {
-        if (l_Reservas.add(p_Reserva)) return true;
-        
-        return false;
+        return l_Reservas.add(p_Reserva);
+    }
+    
+    /**
+     * Elimina una {@link Reserva} de las {@link Reserva} del {@link Cliente}
+     * @param p_Reserva La {@link Reserva} que el {@link Cliente} decide cancelar.
+     * @return <ul>
+     *              <li>{@code true} si se ha podido eliminar.</li>
+     *              <li>{@code false} si no se ha podido eliminar.</li>
+     *          </ul>
+     */
+    public boolean RemoveReserva(Reserva p_Reserva)
+    {
+        return l_Reservas.remove(p_Reserva);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.l_Usuario);
-        hash = 17 * hash + Objects.hashCode(this.l_Email);
+        hash = 17 * hash + Objects.hashCode(this.l_DNI);
+        hash = (l_Usuario != null) ? 17 * hash + Objects.hashCode(this.l_Usuario) : hash;
+        hash = (l_Email != null) ? 17 * hash + Objects.hashCode(this.l_Email) : hash;
         return hash;
     }
 
@@ -191,9 +243,10 @@ public class Cliente extends Persona
         
         final Cliente other = (Cliente) obj;
         
-        if (!Objects.equals(this.l_Usuario, other.l_Usuario)) return false;
+        if (l_Email != null && !Objects.equals(this.l_Email, other.l_Email)) return false;
+        if (l_Usuario != null && !Objects.equals(this.l_Usuario, other.l_Usuario)) return false;
         
-        return Objects.equals(this.l_Email, other.l_Email);
+        return Objects.equals(this.l_DNI, other.l_DNI);
     }
     
     

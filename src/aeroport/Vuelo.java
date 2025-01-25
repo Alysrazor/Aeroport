@@ -8,7 +8,10 @@ package aeroport;
 import aeroport.persona.Cliente;
 import aeroport.persona.Reserva;
 
+import java.io.Serializable;
+
 import java.time.LocalDateTime;
+
 import java.util.Objects;
 
 /**
@@ -27,20 +30,34 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 16:20:03
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  * 
  */
-public class Vuelo 
-{
+public class Vuelo implements Comparable<Vuelo>, Serializable
+{    
+    /**
+     * La {@link Company} que proporciona el {@link Vuelo}
+     */
+    private Company l_Company;
+    
+    /**
+     * El {@link Avion} que realizará el {@link Vuelo}
+     */
+    private Avion l_Avion;
+    
     /**
      * Un identificador único para cada {@link Vuelo}
      */
     private String l_Identificador;
     
     /**
-     * La {@link PuertaEmbarque} que usarán los pasajeros para subirse al {@link Avión}
+     * La {@link Terminal}
+     */
+    private Terminal l_Terminal;
+    /**
+     * La {@link PuertaEmbarque} que usarán los pasajeros para subirse al {@link Avion}
      */
     private PuertaEmbarque l_Puerta;
     
@@ -63,6 +80,11 @@ public class Vuelo
      * Escalas que tiene el {@link Vuelo}
      */
     private int l_Escalas;
+
+    /**
+     * Estado del {@link Vuelo}
+     */
+    private String l_Estado;
     
     /**
      * Constructor principal de {@link Vuelo}
@@ -71,20 +93,27 @@ public class Vuelo
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
      *      por los {@link Cliente}.
      * </p>
+     * @param p_Company La {@link Company} que ofrece el {@link Vuelo}
+     * @param p_Avion El {@link Avion} que realizará el {@link Vuelo}
      * @param p_Identificador El identificador único de cada {@link Vuelo}
+     * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      */
-    public Vuelo(String p_Identificador, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
+    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo)
     {
-        this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Company = p_Company;
+        this.l_Avion = p_Avion;
+        this.l_Identificador = p_Identificador;
+        this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
         this.l_Destino = p_Destino;
         this.l_HoraVuelo = p_HoraVuelo;
         this.l_Escalas = 0;
+        this.l_Estado = "";
     }
     
     /**
@@ -94,21 +123,47 @@ public class Vuelo
      *      Crea una instancia de {@link Vuelo} que puede usarse para hacer la {@link Reserva} de vuelos usables
      *      por los {@link Cliente}.
      * </p>
+     * @param p_Company La {@link Company} que ofrece el {@link Vuelo}
+     * @param p_Avion El {@link Avion} que realizará el {@link Vuelo}
      * @param p_Identificador El identificador único de cada {@link Vuelo}
+     * @param p_Terminal La {@link Terminal}
      * @param p_Puerta La {@link PuertaEmbarque} que estará alojada en su {@link Terminal}
      * @param p_Origen El aeropuerto de origen del {@link Vuelo}.
      * @param p_Destino El destino del {@link Vuelo}.
      * @param p_HoraVuelo La hora de despegue.
      * @param p_Escalas Las escalas del {@link Vuelo}
+     * @param p_Estado El estado del {@link Vuelo}
      */
-    public Vuelo(String p_Identificador, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas)
+    public Vuelo(Company p_Company, Avion p_Avion, String p_Identificador, Terminal p_Terminal, PuertaEmbarque p_Puerta, String p_Origen, String p_Destino, LocalDateTime p_HoraVuelo, int p_Escalas, String p_Estado)
     {
-        this.l_Identificador = "a"; // TODO Generar un string aleatorio.
+        this.l_Company = p_Company;
+        this.l_Avion = p_Avion;
+        this.l_Identificador = p_Identificador;
+        this.l_Terminal = p_Terminal;
         this.l_Puerta = p_Puerta;
         this.l_Origen = p_Origen;
         this.l_Destino = p_Destino;
         this.l_HoraVuelo = p_HoraVuelo;
         this.l_Escalas = p_Escalas;
+        this.l_Estado = p_Estado;
+    }
+    
+    /**
+     * Obtiene la {@link Company} que ofrece el {@link Vuelo}
+     * @return Una {@link Company}
+     */
+    public Company GetCompany()
+    {
+        return this.l_Company;
+    }
+    
+    /**
+     * {@link Avion} que realizará el {@link Vuelo}
+     * @return Un {@link Avion}
+     */
+    public Avion GetAvion()
+    {
+        return this.l_Avion;
     }
     
     /**
@@ -118,6 +173,15 @@ public class Vuelo
     public String GetIdentificador()
     {
         return this.l_Identificador;
+    }
+    
+    /**
+     * Obtiene la {@link Terminal}
+     * @return Una {@link Terminal}
+     */
+    public Terminal GetTerminal()
+    {
+        return this.l_Terminal;
     }
     
     /**
@@ -178,15 +242,35 @@ public class Vuelo
         return this.l_Escalas;
     }
 
+    /**
+     * Obtiene el estado del {@link Vuelo}
+     * @return Un {@link String}
+     */
+    public String GetEstado()
+    {
+        return this.l_Estado;
+    }
+
+    /**
+     * Establece el nuevo estado del {@link Vuelo}
+     * @param p_Estado El nuevo estado del {@link Vuelo}
+     */
+    public void SetEstado(String p_Estado)
+    {
+        this.l_Estado = p_Estado;
+    }
+
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.l_Identificador);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) 
+    {
         if (this == obj) {
             return true;
         }
@@ -200,5 +284,29 @@ public class Vuelo
         return Objects.equals(this.l_Identificador, other.l_Identificador);
     }
     
-    //TODO toString
+    @Override
+    public int compareTo(Vuelo p_Obj)
+    {
+        return this.l_Identificador.compareTo(p_Obj.l_Identificador);
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion del Vuelo:%n"
+                + "\tIdentificador: %s%n"
+                + "\tTerminal: %d%n"
+                + "\tPuerta de Embarque: %d%n"
+                + "\tOrigen: %s%n"
+                + "\tDestino: %s%n"
+                + "\tHora de Salida: %s%n"
+                + "\tEscalas: %d%n",
+                this.l_Identificador,
+                this.l_Terminal.GetNumero(),
+                this.l_Puerta.GetPuerta(),
+                this.l_Origen,
+                this.l_Destino,
+                this.l_HoraVuelo.toString(),
+                this.l_Escalas);
+    }
 }

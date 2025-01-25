@@ -7,6 +7,8 @@ package aeroport;
 
 import aeroport.persona.Cliente;
 
+import java.io.Serializable;
+
 
 /**
  *
@@ -20,18 +22,13 @@ import aeroport.persona.Cliente;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 18:17:20
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 
-public class PuertaEmbarque implements Comparable<PuertaEmbarque>
-{
-    /**
-     * Contador para la {@link PuertaEmbarque}
-     */
-    private static int l_Count = 1;
-    
+public class PuertaEmbarque implements Comparable<PuertaEmbarque>, Serializable
+{    
     /**
      * Terminal donde está instalada esta {@link PuertaEmbarque}
      */
@@ -40,17 +37,21 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     /**
      * Identificador de la Puerta.
      */
-    private final int l_Puerta;
+    private int l_Puerta;
     
     /**
      * Avión que efectuará el {@link Vuelo}
      */
     private Avion l_Avion;
     
-    public PuertaEmbarque(Avion p_Avion)
+    /**
+     * Constructor por defecto de {@link PuertaEmbarque}
+     * @param p_Puerta El número de la {@link PuertaEmbarque}
+     */
+    public PuertaEmbarque(int p_Puerta)
     {
-        this.l_Puerta = l_Count++;
-        this.l_Avion = p_Avion;
+        this.l_Puerta = p_Puerta;
+        this.l_Avion = null;
     }
     
     /**
@@ -60,15 +61,6 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     public int GetPuerta()
     {
         return this.l_Puerta;
-    }
-    
-    /**
-     * Obtiene la {@link Terminal} donde se encuentra alojada la {@link PuertaEmbarque}
-     * @return Una {@link Terminal}
-     */
-    public Terminal GetTerminal()
-    {
-        return null; //TODO Devolver la Terminal correctamente
     }
     
     /**
@@ -114,5 +106,13 @@ public class PuertaEmbarque implements Comparable<PuertaEmbarque>
     public int compareTo(PuertaEmbarque p_Obj)
     {
         return this.l_Puerta < p_Obj.l_Puerta ? this.l_Puerta : p_Obj.l_Puerta;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("Informacion de la Puerta de Embarque: %n"
+                + "Numero de Puerta: %d%n",
+                this.l_Puerta);
     }
 }

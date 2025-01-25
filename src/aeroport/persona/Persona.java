@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package aeroport.persona;
 
 import aeroport.Aeroport;
@@ -10,6 +6,7 @@ import java.io.Serializable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import java.util.Objects;
 
 /**
@@ -23,9 +20,9 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 23 11:08:10
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public abstract class Persona implements Comparable<Persona>, Serializable
 {
@@ -43,15 +40,32 @@ public abstract class Persona implements Comparable<Persona>, Serializable
      * Atributo que identifica los apellidos de {@link Persona}
      */
     protected String l_Apellidos;
-    
+    /**
+     * Atributo que identifica la fecha de nacimeinto de {@link Persona}
+     */
     protected LocalDate l_FechaNac;
+
+    /**
+     * Constructor básico de {@link Persona}
+     * 
+     * <p>
+     *      Este constructor solo tiene la utilidad de buscar {@link Persona}
+     *      por su DNI y no debería ser usado por sus clases hijas para crear nuevas
+     *      {@link Persona}.
+     * </p>
+     * @param p_DNI El DNI.
+     */
+    public Persona(String p_DNI)
+    {
+        this.l_DNI = p_DNI;
+    }
     
     /**
      * Constructor por defecto de Persona con todos sus parámetros
      * @param p_DNI El DNI.
      * @param p_Nombre El nombre.
      * @param p_Apellidos Los apellidos.
-     * @param p_FechaNac La my.fecha de nacimiento.
+     * @param p_FechaNac La fecha de nacimiento.
      */
     public Persona(String p_DNI, String p_Nombre, String p_Apellidos, LocalDate p_FechaNac)
     {

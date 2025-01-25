@@ -6,6 +6,8 @@ package aeroport.persona;
 
 import aeroport.Vuelo;
 
+import java.io.Serializable;
+
 import java.util.Objects;
 
 /**
@@ -19,10 +21,10 @@ import java.util.Objects;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 12:08:50
+ * @since JDK 1.18
  */
-public class Reserva 
+public class Reserva implements Serializable
 {
     /**
      * El {@link Vuelo} que hace referencia esta reserva.
@@ -124,11 +126,13 @@ public class Reserva
                 + "Nombre Billete: %s%n"
                 + "Origen: %s%n"
                 + "Destino: %s%n"
-                + "Tipo de Billete: %s%n",
+                + "Tipo de Billete: %s%n"
+                + "Reservado por: %s%n",
                 this.l_Vuelo,
                 this.l_NombreReserva,
                 this.l_Vuelo.GetOrigen(),
                 this.l_Vuelo.GetDestino(),
-                this.l_TipoBillete.GetNombre());
+                this.l_TipoBillete.GetNombre(),
+                this.l_Cliente.GetDNI());
     }
 }

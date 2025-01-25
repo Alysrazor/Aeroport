@@ -19,9 +19,9 @@ package aeroport.persona;
  * 
  * @author Sergio Capilla Cabadés
  * @dev.main Sergio Capilla Cabadés
- * @dev.codevs
  * @my.fecha 19 may 2023 12:28:20
  * @my.company Ciclo Superior de Informática
+ * @since JDK 1.18
  */
 public enum TipoBillete
 {
@@ -32,13 +32,16 @@ public enum TipoBillete
     /**
      * El billete para la clase de negocios, solamente para aquellos que realicen viajes de negocios.
      */
-    BUSINESS("Negocios"),
+    BUSINESS("Business"),
     /**
      * El billete más común para la Clase Turista.
      */
-    TOURIST("Clase Turista.");
+    TOURIST("Clase Turista");
     
-    private String l_Nombre;
+    /**
+     * Variable para el nombre
+     */
+    private final String l_Nombre;
     
     private TipoBillete(String p_String)
     {
